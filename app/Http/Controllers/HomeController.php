@@ -23,6 +23,16 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        return view('backend.admin.index');
+    }
+
+    public function profile()
+    {
+        return view('backend.admin.profile.index');
+    }
+
+    public function systemSetting()
+    {
+        return view('backend.admin.settings.system_setting');
     }
 }
