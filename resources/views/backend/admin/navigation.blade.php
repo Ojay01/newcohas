@@ -20,7 +20,7 @@
       </a>
     </li>
 
-    <li class="side-nav-item">          <a href="https://cohasbepanda.com/superadmin/online_admission" class="side-nav-link">
+    <li class="side-nav-item">          <a href="{{route('admission')}}" class="side-nav-link">
             <i class="dripicons-graduation"></i>
             <span>Online admission</span>
                           <span class="badge bg-danger float-end">0</span>
@@ -179,7 +179,7 @@
                                     <a href="{{route('setting')}}">System settings</a>
                 </li>
                                           <li>
-                                    <a href="#">Website settings</a>
+                                    <a href="{{route('websiteSettings')}} ">Website settings</a>
                 </li>
                                           <li>
                                     <a href="#">School settings</a>

@@ -38,43 +38,28 @@
                     <p class="text-muted mb-4">Enter Your new Password to Access Account</p>
 
 @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
-                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                                        aria-label="Close">
-                                                    </button>
-                                                    <strong>Oh snap!</strong>{{ session('error') }}
-                                                </div><br>
-
-    @endif
-    @if ($errors->any())
-    <div id="toast-container" class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
-                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                                        aria-label="Close">
-                                                    </button>
-                                                    <strong>Oh Nooo!</strong>@foreach ($errors->all() as $error)
-                        {{ $error }}
-                    @endforeach
-                    <script>
-        // Function to close the toast
-        function closeToast() {
-            var toastContainer = document.getElementById('toast-container');
-            if (toastContainer) {
-                toastContainer.classList.add('hide-toast');
-
-                // Optional: Remove the toast element from the DOM after animation
-                setTimeout(function () {
-                    toastContainer.remove();
-                }, 500);
-            }
-        }
-
-        // Automatically close the toast after 5 seconds
-        setTimeout(function () {
-            closeToast();
-        }, 5000);
-    </script>
-                                                </div><br>
+    <div class="alert alert-danger alert-dismissible fade show position-fixed top-0 end-0 mt-3 me-3" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <strong>Oh snap!</strong> {{ session('error') }}
+    </div>
 @endif
+
+@if ($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show position-fixed top-0 end-0 mt-3 me-3" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <strong>Oh Nooo!</strong>
+        @foreach ($errors->all() as $error)
+            {{ $error }}
+        @endforeach
+    </div>
+@endif
+
+<script>
+    // Automatically close the toast after 5 seconds
+    setTimeout(function () {
+        $('.alert').alert('close');
+    }, 5000);
+</script>
 
                     <!-- form -->
                     <form action="{{route('password.update')}}" method="POST" id="loginForm">
@@ -116,6 +101,11 @@
 
 <!--Notify for ajax-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<!-- Toastr and alert notifications for PHP scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
 
 

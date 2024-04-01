@@ -26,4 +26,10 @@ Route::prefix('admin')->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/profile', [App\Http\Controllers\HomeController::class, 'profile'])->name('profile');
     Route::get('/system-setting', [App\Http\Controllers\HomeController::class, 'systemSetting'])->name('setting');
+    Route::get('/online-admission', [App\Http\Controllers\HomeController::class, 'onlineAdmission'])->name('admission');
+    Route::get('/website-settings', [App\Http\Controllers\HomeController::class, 'websiteSettings'])->name('websiteSettings');
+    Route::get('/about-us-settings', [App\Http\Controllers\HomeController::class, 'aboutUsSettings'])->name('aboutUsSettings');
+    Route::get('/gallery-settings', [App\Http\Controllers\HomeController::class, 'gallerySettings'])->name('gallerySettings');
+    Route::get('/event-settings', [App\Http\Controllers\HomeController::class, 'eventSettings'])->name('eventSettings');
+    Route::get('/gallery-image-settings', [App\Http\Controllers\HomeController::class, 'galleryImageSettings'])->name('galleryImageSettings');
 });
