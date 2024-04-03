@@ -32,6 +32,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/profile', [App\Http\Controllers\HomeController::class, 'profile'])->name('profile');
     Route::get('/system-setting', [App\Http\Controllers\HomeController::class, 'systemSetting'])->name('setting');
     Route::get('/online-admission', [App\Http\Controllers\HomeController::class, 'onlineAdmission'])->name('admission');
+    Route::get('/submitted_marks', [App\Http\Controllers\HomeController::class, 'submittedMarks'])->name('submitted.marks');
     Route::get('/website-settings', [App\Http\Controllers\HomeController::class, 'websiteSettings'])->name('websiteSettings');
     Route::get('/about-us-settings', [App\Http\Controllers\HomeController::class, 'aboutUsSettings'])->name('aboutUsSettings');
     Route::get('/gallery-settings', [App\Http\Controllers\HomeController::class, 'gallerySettings'])->name('gallerySettings');
@@ -56,6 +57,15 @@ Route::prefix('admin')->group(function () {
     Route::get('/subjects', [App\Http\Controllers\HomeController::class, 'subjects'])->name('subjects');
     Route::get('/routine', [App\Http\Controllers\HomeController::class, 'routine'])->name('routine');
     Route::get('/class_room', [App\Http\Controllers\HomeController::class, 'classRoom'])->name('classRoom');
+    Route::get('/syllabus_settings', [App\Http\Controllers\HomeController::class, 'syllabus'])->name('syllabus');
+    Route::get('/departments_settings', [App\Http\Controllers\HomeController::class, 'department'])->name('department');
+    Route::get('/event_callender_settings', [App\Http\Controllers\HomeController::class, 'eventCalender'])->name('eventCalender');
+    Route::get('/student_assignments', [App\Http\Controllers\HomeController::class, 'studentAssignment'])->name('studentAssignment');
+    Route::get('/student_tutorials', [App\Http\Controllers\HomeController::class, 'studentTutorial'])->name('studentTutorial');
+    Route::get('/student_attendance', [App\Http\Controllers\HomeController::class, 'attendance'])->name('attendance');
+    Route::get('/student_promotion', [App\Http\Controllers\HomeController::class, 'promotion'])->name('promotion');
+    Route::get('/student_exam', [App\Http\Controllers\HomeController::class, 'adminExam'])->name('admin.exam');
+    Route::get('/student_marks', [App\Http\Controllers\HomeController::class, 'adminMarks'])->name('admin.marks');
 });
 
 

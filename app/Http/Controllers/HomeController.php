@@ -47,6 +47,11 @@ class HomeController extends Controller
         return view('backend.admin.online_admission.index');
     }
 
+    public function submittedMarks()
+    {
+        return view('backend.admin.submitted_marks.index');
+    }
+
     public function websiteSettings()
     {
         return view('backend.admin.website_settings.general_settings');
@@ -157,6 +162,16 @@ class HomeController extends Controller
         return view('backend.admin.subject.index');
     }
 
+    public function syllabus()
+    {
+        return view('backend.admin.syllabus.index');
+    }
+
+    public function department()
+    {
+        return view('backend.admin.department.index');
+    }
+
     public function singleAdmission()
     {
         return view('backend.admin.student.create');
@@ -165,6 +180,41 @@ class HomeController extends Controller
     public function bulkAdmission()
     {
         return view('backend.admin.student.create');
+    }
+
+    public function studentAssignment()
+    {
+        return view('backend.admin.assignment.index');
+    }
+
+    public function studentTutorial()
+    {
+        return view('backend.admin.tutorial.index');
+    }
+
+    public function eventCalender()
+    {
+        return view('backend.admin.event.index');
+    }
+
+    public function attendance()
+    {
+        return view('backend.admin.attendance.index');
+    }
+
+    public function promotion()
+    {
+        return view('backend.admin.promotion.index');
+    }
+
+    public function adminExam()
+    {
+        return view('backend.admin.exam.index');
+    }
+
+    public function adminMarks()
+    {
+        return view('backend.admin.marks.index');
     }
 
 }

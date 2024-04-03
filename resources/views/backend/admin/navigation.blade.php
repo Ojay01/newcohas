@@ -27,9 +27,9 @@
                       </a>
         </li>
 
-    <li class="side-nav-item">          <a href="{{route('admission')}}" class="side-nav-link">
+    <li class="side-nav-item">          <a href="{{route('submitted.marks')}}" class="side-nav-link">
             <i class="dripicons-to-do"></i>
-            <span>Marks Submitted</span>
+            <span> Submitted Marks</span>
                           <span class="badge bg-danger float-end">0</span>
                       </a>
         </li>
@@ -70,7 +70,7 @@
         <div class="collapse" id="academic">
           <ul class="side-nav-second-level">
                                         <li>
-                                    <a href="https://cohasbepanda.com/superadmin/attendance">Daily attendance</a>
+                                    <a href="{{route('attendance')}}">Daily attendance</a>
                 </li>
                                           <li>
                                     <a href="{{route('routine')}}">Class Routine / Timetable</a>
@@ -79,7 +79,7 @@
                                     <a href="{{route('subjects')}}">Subject</a>
                 </li>
                                           <li>
-                                    <a href="https://cohasbepanda.com/superadmin/syllabus">Syllabus</a>
+                                    <a href="{{route('syllabus')}}">Syllabus</a>
                 </li>
                                           <li>
                                     <a href="{{route('classes')}}">Class</a>
@@ -88,11 +88,18 @@
                                     <a href="{{route('classRoom')}}">Class room</a>
                 </li>
                                           <li>
-                                    <a href="https://cohasbepanda.com/superadmin/department">Department</a>
+                                    <a href="{{route('department')}}">Department</a>
                 </li>
                                           <li>
-                                    <a href="https://cohasbepanda.com/superadmin/event_calendar">Event calender</a>
+                                    <a href="{{route('eventCalender')}}">Event calender</a>
                 </li>
+                                          <li>
+                                    <a href="{{route('studentAssignment')}}">Assignments</a>
+                </li>
+                                          <li>
+                                    <a href="{{route('studentTutorial')}}">Tutorials</a>
+                </li>
+                                         
                                     </ul>
         </div>
 
@@ -104,14 +111,14 @@
         <div class="collapse" id="exam">
           <ul class="side-nav-second-level">
                                         <li>
-                                    <a href="https://cohasbepanda.com/superadmin/mark">Marks</a>
+                                    <a href="{{route('admin.marks')}}">Marks</a>
                 </li>
                                           <li>
-                                    <a href="https://cohasbepanda.com/superadmin/exam">Exam</a>
+                                    <a href="{{route('admin.exam')}}">Exam</a>
                 </li>
                                           
                                           <li>
-                                    <a href="https://cohasbepanda.com/superadmin/promotion">Promotion</a>
+                                    <a href="{{route('promotion')}}">Promotion</a>
                 </li>
                                     </ul>
         </div>
