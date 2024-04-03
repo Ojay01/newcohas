@@ -20,18 +20,19 @@
 <!-- end page title -->
 <div class="row">
   <div class="col-md-3">
-    <a href="#" class="btn  btn-dark  btn-secondary  btn-rounded d-block mb-1">Noticeboard <i class="mdi mdi-arrow-right float-end"></i></a>
-    <a href="{{route('eventSettings')}} " class="btn  btn-dark  btn-secondary  btn-rounded d-block mb-1">Events <i class="mdi mdi-arrow-right float-end"></i></a>
-    <a href="#" class="btn  btn-dark  btn-secondary  btn-rounded d-block mb-1">Teachers <i class="mdi mdi-arrow-right float-end"></i></a>
-    <a href="{{route('gallerySettings')}} " class="btn  btn-dark btn-secondary  btn-rounded d-block mb-1">Gallery <i class="mdi mdi-arrow-right float-end"></i></a>
-    <a href="{{route('aboutUsSettings')}}" class="btn  btn-dark  btn-secondary  btn-rounded d-block mb-1">About Us <i class="mdi mdi-arrow-right float-end"></i></a>
-    <a href="#" class="btn btn-dark  btn-secondary btn-rounded d-block mb-1">Terms And Conditions <i class="mdi mdi-arrow-right float-end"></i></a>
-    <a href="#" class="btn  btn-dark  btn-secondary  btn-rounded d-block mb-1">Privacy Policy <i class="mdi mdi-arrow-right float-end"></i></a>
-    <a href="#" class="btn  btn-dark  btn-secondary  btn-rounded d-block mb-1">Homepage Slider <i class="mdi mdi-arrow-right float-end"></i></a>
-    <a href="" class="btn  btn-dark  btn-secondary  btn-rounded d-block mb-1">Laboratory Slider <i class="mdi mdi-arrow-right float-end"></i></a>
-    <a href="{{route('websiteSettings')}} " class="btn  btn-dark  btn-secondary  btn-rounded d-block mb-1">General Settings <i class="mdi mdi-arrow-right float-end"></i></a>
-    <a href="#" class="btn  btn-secondary btn-rounded d-block mb-1">Others <i class="mdi mdi-arrow-right float-end"></i></a>
-  </div>
+    <a href="{{ route('noticeboardSettings') }}" class="btn btn-secondary btn-rounded d-block mb-1 {{ Route::currentRouteName() == 'noticeboardSettings' ? 'btn-dark' : '' }}">Noticeboard <i class="mdi mdi-arrow-right float-end"></i></a>
+    <a href="{{ route('eventSettings') }}" class="btn btn-secondary btn-rounded d-block mb-1 {{ Route::currentRouteName() == 'eventSettings' ? 'btn-dark' : '' }}">Events <i class="mdi mdi-arrow-right float-end"></i></a>
+    <a href="{{ route('teachers') }}" class="btn btn-secondary btn-rounded d-block mb-1 {{ Route::currentRouteName() == 'teachers' ? 'btn-dark' : '' }}">Teachers <i class="mdi mdi-arrow-right float-end"></i></a>
+    <a href="{{ route('gallerySettings') }}" class="btn btn-secondary btn-rounded d-block mb-1 {{ Route::currentRouteName() == 'gallerySettings' ? 'btn-dark' : '' }}">Gallery <i class="mdi mdi-arrow-right float-end"></i></a>
+    <a href="{{ route('aboutUsSettings') }}" class="btn btn-secondary btn-rounded d-block mb-1 {{ Route::currentRouteName() == 'aboutUsSettings' ? 'btn-dark' : '' }}">About Us <i class="mdi mdi-arrow-right float-end"></i></a>
+    <a href="{{ route('termsSettings') }}" class="btn btn-secondary btn-rounded d-block mb-1 {{ Route::currentRouteName() == 'termsSettings' ? 'btn-dark' : '' }}">Terms And Conditions <i class="mdi mdi-arrow-right float-end"></i></a>
+    <a href="{{ route('privacySettings') }}" class="btn btn-secondary btn-rounded d-block mb-1 {{ Route::currentRouteName() == 'privacySettings' ? 'btn-dark' : '' }}">Privacy Policy <i class="mdi mdi-arrow-right float-end"></i></a>
+    <a href="{{ route('homepageSettings') }}" class="btn btn-secondary btn-rounded d-block mb-1 {{ Route::currentRouteName() == 'homepageSettings' ? 'btn-dark' : '' }}">Homepage Slider <i class="mdi mdi-arrow-right float-end"></i></a>
+    <a href="{{ route('labSettings') }}" class="btn btn-secondary btn-rounded d-block mb-1 {{ Route::currentRouteName() == 'labSettings' ? 'btn-dark' : '' }}">Laboratory Slider <i class="mdi mdi-arrow-right float-end"></i></a>
+    <a href="{{ route('websiteSettings') }}" class="btn btn-secondary btn-rounded d-block mb-1 {{ Route::currentRouteName() == 'websiteSettings' ? 'btn-dark' : '' }}">General Settings <i class="mdi mdi-arrow-right float-end"></i></a>
+    <a href="{{ route('others') }}" class="btn btn-secondary btn-rounded d-block mb-1 {{ Route::currentRouteName() == 'others' ? 'btn-dark' : '' }}">Others <i class="mdi mdi-arrow-right float-end"></i></a>
+</div>
+
   <div class="col-md-9 page_content">
    @yield('settings')
   </div>

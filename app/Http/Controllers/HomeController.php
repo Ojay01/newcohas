@@ -23,7 +23,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('backend.admin.index');
+        $user = auth()->user(); // Retrieve the currently logged-in user
+
+    if ($user->role == 'admin') {
+            return view('backend.admin.index');
+        } else {
+        return view('backend.teacher.index');
+        }
     }
 
     public function profile()
@@ -65,4 +71,100 @@ class HomeController extends Controller
     {
         return view('backend.admin.website_settings.gallery_image');
     }
+
+    public function others()
+    {
+        return view('backend.admin.website_settings.others');
+    }
+
+    public function noticeboardSettings()
+    {
+        return view('backend.admin.noticeboard.index');
+    }
+
+    public function termsSettings()
+    {
+        return view('backend.admin.website_settings.terms_settings');
+    }
+
+    public function privacySettings()
+    {
+        return view('backend.admin.website_settings.privacy_settings');
+    }
+
+    public function homepageSettings()
+    {
+        return view('backend.admin.website_settings.homepage_settings');
+    }
+
+    public function schoolSettings()
+    {
+        return view('backend.admin.website_settings.school_settings');
+    }
+
+    public function teachers()
+    {
+        return view('backend.admin.teacher.index');
+    }
+
+    public function students()
+    {
+        return view('backend.admin.student.index');
+    }
+
+    public function labSettings()
+    {
+        return view('backend.admin.website_settings.lab_settings');
+    }
+
+    public function studentAdmission()
+    {
+        return view('backend.admin.student.index');
+    }
+
+    public function teacherPermission()
+    {
+        return view('backend.admin.permission.index');
+    }
+
+    public function parents()
+    {
+        return view('backend.admin.parent.index');
+    }
+
+    public function admins()
+    {
+        return view('backend.admin.admins.index');
+    }
+    
+    public function classes()
+    {
+        return view('backend.admin.class.index');
+    }
+    
+    public function routine()
+    {
+        return view('backend.admin.routine.index');
+    }
+    
+    public function classRoom()
+    {
+        return view('backend.admin.class_room.index');
+    }
+
+    public function subjects()
+    {
+        return view('backend.admin.subject.index');
+    }
+
+    public function singleAdmission()
+    {
+        return view('backend.admin.student.create');
+    }
+
+    public function bulkAdmission()
+    {
+        return view('backend.admin.student.create');
+    }
+
 }
