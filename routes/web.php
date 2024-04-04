@@ -2,9 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('frontend.index');
-});
+
+Route::get('/', [App\Http\Controllers\Controller::class, 'index']);
 Route::get('/about_us', [App\Http\Controllers\Controller::class, 'about'])->name('about');
 Route::get('/noticeboard', [App\Http\Controllers\Controller::class, 'noticeboard'])->name('noticeboard');
 Route::get('/galleries', [App\Http\Controllers\Controller::class, 'gallery'])->name('gallery');
@@ -66,6 +65,25 @@ Route::prefix('admin')->group(function () {
     Route::get('/student_promotion', [App\Http\Controllers\HomeController::class, 'promotion'])->name('promotion');
     Route::get('/student_exam', [App\Http\Controllers\HomeController::class, 'adminExam'])->name('admin.exam');
     Route::get('/student_marks', [App\Http\Controllers\HomeController::class, 'adminMarks'])->name('admin.marks');
+
+    Route::post('profile/update', 'App\Http\Controllers\AdminController@update')->name('update-profile');
+    Route::post('profile/update-password', 'App\Http\Controllers\AdminController@updatePassword')->name('admin.update_password');
+    Route::post('settings/update', 'App\Http\Controllers\FrontendController@updateSettings')->name('update-settings');
+    Route::post('upload-logos', 'App\Http\Controllers\FrontendController@uploadLogos')->name('upload-logos');
+    Route::post('/update-general-settings', [App\Http\Controllers\FrontendController::class, 'updateGeneralSettings'])->name('update-general-settings');
+    Route::post('/login_banner-settings', [App\Http\Controllers\FrontendController::class, 'loginBanner'])->name('loginBanner');
+    Route::post('/about_us_update', [App\Http\Controllers\FrontendController::class, 'updateAboutUs'])->name('updateAboutUs');
+    Route::post('/update_privacy_policy', [App\Http\Controllers\FrontendController::class, 'updatePrivactPolicySettings'])->name('updatePrivactPolicySettings');
+    Route::post('/update_terms_and_condition', [App\Http\Controllers\FrontendController::class, 'updateTermsAndConditionSettings'])->name('updateTermsAndConditionSettings');
+    Route::post('/update-homepage-slider-settings', 'App\Http\Controllers\FrontendController@updateSliders')->name('updateSliders');
+    Route::post('/school_settings', 'App\Http\Controllers\FrontendController@schoolSetting')->name('schoolSetting');
+    Route::post('/add-class', [App\Http\Controllers\AdminController::class, 'addClass'])->name('addClass');
+    Route::post('/add-section', [App\Http\Controllers\AdminController::class, 'addSection'])->name('addSection');
+    Route::post('/add-subject', [App\Http\Controllers\AdminController::class, 'addSubject'])->name('addSubject');
+
+
+
+
 });
 
 

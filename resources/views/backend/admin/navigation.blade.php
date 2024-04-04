@@ -6,8 +6,12 @@
 
   <div class="leftbar-user">
     <a href="javascript: void(0);">
+     @if(Auth::user()->profile_image)
+      <img src="{{ asset('storage/app/public/profiles/' . Auth::user()->profile_image) }}" alt="user-image" height="42" class="rounded-circle shadow-sm">
+     @else
       <img src="https://cohasbepanda.com/uploads/users/placeholder.jpg" alt="user-image" height="42" class="rounded-circle shadow-sm">
-            <span class="leftbar-user-name">Co.H.A.S</span>
+      @endif
+            <span class="leftbar-user-name">{{ Auth::user()->name }}</span>
     </a>
   </div>
   <!--- Sidemenu -->

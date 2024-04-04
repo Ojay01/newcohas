@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Setting;
+use App\Models\Logo;
+use App\Models\GeneralSetting;
+use App\Models\SchoolSetting;
+
 
 class HomeController extends Controller
 {
@@ -39,7 +44,9 @@ class HomeController extends Controller
 
     public function systemSetting()
     {
-        return view('backend.admin.settings.system_setting');
+        $settings = Setting::first();
+        $logos = Logo::first();
+        return view('backend.admin.settings.system_setting', compact('settings', 'logos'));
     }
 
     public function onlineAdmission()
@@ -54,12 +61,17 @@ class HomeController extends Controller
 
     public function websiteSettings()
     {
-        return view('backend.admin.website_settings.general_settings');
+        $settings = GeneralSetting::first();
+    
+        return view('backend.admin.website_settings.general_settings', [
+        'settings' => $settings,
+    ]);
     }
 
     public function aboutUsSettings()
     {
-        return view('backend.admin.website_settings.about_us');
+                $settings = GeneralSetting::first();
+        return view('backend.admin.website_settings.about_us', compact('settings'));
     }
 
     public function gallerySettings()
@@ -79,7 +91,8 @@ class HomeController extends Controller
 
     public function others()
     {
-        return view('backend.admin.website_settings.others');
+        $settings = GeneralSetting::first();
+        return view('backend.admin.website_settings.others', compact('settings'));
     }
 
     public function noticeboardSettings()
@@ -89,22 +102,31 @@ class HomeController extends Controller
 
     public function termsSettings()
     {
-        return view('backend.admin.website_settings.terms_settings');
+        $settings = GeneralSetting::first();
+        return view('backend.admin.website_settings.terms_settings', compact('settings'));
     }
 
     public function privacySettings()
     {
-        return view('backend.admin.website_settings.privacy_settings');
+        $settings = GeneralSetting::first();
+        return view('backend.admin.website_settings.privacy_settings', compact('settings'));
     }
 
     public function homepageSettings()
     {
-        return view('backend.admin.website_settings.homepage_settings');
+        $sliderSettings = GeneralSetting::first();        
+         $sliderImages = $sliderSettings->slider_images;
+            $sliderImages = json_decode($sliderImages, true);
+        return view('backend.admin.website_settings.homepage_settings', [
+        'sliderImages' => $sliderImages,
+    ]);
     }
+
 
     public function schoolSettings()
     {
-        return view('backend.admin.website_settings.school_settings');
+         $schoolSettings = SchoolSetting::first();
+        return view('backend.admin.website_settings.school_settings', compact('schoolSettings'));
     }
 
     public function teachers()

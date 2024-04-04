@@ -5,69 +5,118 @@ namespace App\Http\Controllers;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use App\Models\GeneralSetting;
+use App\Models\SchoolSetting;
+use App\Models\Setting;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
+    public function index()
+    {
+         $sliderSettings = GeneralSetting::first(); 
+         $schoolSettings = SchoolSetting::first(); 
+         $settings = Setting::first(); 
+         $sliderImages = $sliderSettings->slider_images;
+        $sliderImages = json_decode($sliderImages, true);
+        return view('frontend.index', compact('sliderImages', 'sliderSettings', 'schoolSettings', 'settings'));
+    }
+
     public function about()
     {
-        return view('frontend.about');
+         $schoolSettings = SchoolSetting::first();
+         $sliderSettings = GeneralSetting::first(); 
+         $settings = Setting::first(); 
+        return view('frontend.about', compact('schoolSettings', 'settings', 'sliderSettings'));
     }
 
     public function noticeboard()
     {
-        return view('frontend.noticeboard');
+         $schoolSettings = SchoolSetting::first();
+         $sliderSettings = GeneralSetting::first(); 
+         $settings = Setting::first();    
+        return view('frontend.noticeboard', compact('schoolSettings', 'settings', 'sliderSettings'));
     }
 
     public function gallery()
     {
-        return view('frontend.gallery');
+         $schoolSettings = SchoolSetting::first();
+         $sliderSettings = GeneralSetting::first(); 
+         $settings = Setting::first(); 
+        return view('frontend.gallery', compact('schoolSettings', 'settings', 'sliderSettings'));
     }
 
     public function events()
     {
-        return view('frontend.events');
+         $schoolSettings = SchoolSetting::first();
+         $sliderSettings = GeneralSetting::first(); 
+         $settings = Setting::first();   
+        return view('frontend.events', compact('schoolSettings', 'settings', 'sliderSettings'));
     }
 
     public function teachers()
     {
-        return view('frontend.teachers');
+         $schoolSettings = SchoolSetting::first();
+         $sliderSettings = GeneralSetting::first(); 
+         $settings = Setting::first(); 
+        return view('frontend.teachers', compact('schoolSettings', 'settings', 'sliderSettings'));
     }
 
     public function contact()
     {
-        return view('frontend.contact');
+         $schoolSettings = SchoolSetting::first(); 
+         $sliderSettings = GeneralSetting::first(); 
+         $settings = Setting::first();  
+        return view('frontend.contact', compact('schoolSettings', 'settings', 'sliderSettings'));
     }
 
     public function privacy()
     {
-        return view('frontend.privacy');
+         $schoolSettings = SchoolSetting::first();
+         $sliderSettings = GeneralSetting::first(); 
+         $settings = Setting::first(); 
+        return view('frontend.privacy', compact('schoolSettings', 'settings', 'sliderSettings'));
     }
 
     public function terms()
     {
-        return view('frontend.terms');
+         $schoolSettings = SchoolSetting::first();
+         $sliderSettings = GeneralSetting::first(); 
+         $settings = Setting::first();    
+        return view('frontend.terms', compact('schoolSettings', 'settings', 'sliderSettings'));
     }
 
     public function admission()
     {
-        return view('frontend.admission');
+         $schoolSettings = SchoolSetting::first();
+         $sliderSettings = GeneralSetting::first(); 
+         $settings = Setting::first();  
+        return view('frontend.admission', compact('schoolSettings', 'settings', 'sliderSettings'));
     }
 
     public function discipline()
     {
-        return view('frontend.discipline');
+         $schoolSettings = SchoolSetting::first(); 
+         $sliderSettings = GeneralSetting::first(); 
+         $settings = Setting::first();    
+        return view('frontend.discipline', compact('schoolSettings', 'settings', 'sliderSettings'));
     }
 
     public function assignments()
     {
-        return view('frontend.assignments');
+         $schoolSettings = SchoolSetting::first();
+         $sliderSettings = GeneralSetting::first(); 
+         $settings = Setting::first();    
+        return view('frontend.assignments', compact('schoolSettings', 'settings', 'sliderSettings'));
     }
 
     public function tutorials()
     {
-        return view('frontend.tutorials');
+         $schoolSettings = SchoolSetting::first();
+         $sliderSettings = GeneralSetting::first(); 
+         $settings = Setting::first();    
+        return view('frontend.tutorials', compact('schoolSettings', 'settings', 'sliderSettings'));
     }
 
 }

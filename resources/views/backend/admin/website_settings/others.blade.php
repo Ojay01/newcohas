@@ -7,7 +7,7 @@
 <div class="card">
   <div class="card-body">
     <h4 class="header-title">Other Settings</h4>
-    <form method="POST" class="col-12 otherSettingsAjaxForm" action="#" enctype="multipart/form-data">
+    <form method="POST" class="col-12 otherSettingsAjaxForm" action="{{route('loginBanner')}} " enctype="multipart/form-data">
     @csrf
       <div class="row justify-content-left">
         <div class="col-12">
@@ -16,7 +16,7 @@
             <div class="col-md-9 custom-file-upload">
               <div class="wrapper-image-preview" style="margin-left: -6px;">
                 <div class="box" style="width: 250px;">
-                  <div class="js--image-preview" style="background-image: url(); background-color: #F5F5F5;"></div>
+                  <div class="js--image-preview" style="background-image: url('{{ asset('storage/app/public/logos/' . $settings->login_banner) }}'); background-color: #F5F5F5;"></div>
                   <div class="upload-options">
                     <label for="login_banner" class="btn"> <i class="mdi mdi-camera"></i> Upload Banner <small>(2000 X 1350)</small></label>
                     <input id="login_banner" style="visibility:hidden;" type="file" class="image-upload" name="login_banner" accept="image/*">

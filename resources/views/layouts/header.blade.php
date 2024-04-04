@@ -52,7 +52,7 @@ data-header-fix-effect="slide">
       <div class="u-header-center-aligned-nav__col">
         <!-- Logo -->
         <a class="navbar-brand u-header__navbar-brand u-header__navbar-brand-center u-header__navbar-brand-text-white" href="/">
-          <img src="#"
+          <img src="{{ asset('storage/app/public/logos/' . $sliderSettings->header_logo) }}"
           style="height:35px;" />
         </a>
         <!-- End Logo -->

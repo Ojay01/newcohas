@@ -3,34 +3,34 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="header-title">Update Profile</h4>
-                <form method="POST" class="col-12 profileAjaxForm" action="#" id = "profileAjaxForm" enctype="multipart/form-data">
-                @csrf
+                <form method="POST" class="col-12 profileAjaxForm" action="{{ route('update-profile') }}" id="profileAjaxForm" enctype="multipart/form-data">
+                    @csrf
                     <div class="col-12">
                         <div class="form-group row mb-3">
                             <label class="col-md-3 col-form-label" for="name"> Name</label>
                             <div class="col-md-9">
-                                <input type="text" id="name" name="name" class="form-control"  value="#" required>
+                                <input type="text" id="name" name="name" class="form-control" value="{{ Auth::user()->name }}" required>
                             </div>
                         </div>
 
                         <div class="form-group row mb-3">
                             <label class="col-md-3 col-form-label" for="email">Email</label>
                             <div class="col-md-9">
-                                <input type="email" id="email" name="email" class="form-control"  value="#" required>
+                                <input type="email" id="email" name="email" class="form-control" value="{{ Auth::user()->email }}" required>
                             </div>
                         </div>
 
                         <div class="form-group row mb-3">
                             <label class="col-md-3 col-form-label" for="phone"> Phone Number</label>
                             <div class="col-md-9">
-                                <input type="text" id="phone" name="phone" class="form-control"  value="#">
+                                <input type="number" id="phone" name="phone" class="form-control" value="{{ Auth::user()->phone }}" required>
                             </div>
                         </div>
 
                         <div class="form-group row mb-3">
                             <label class="col-md-3 col-form-label" for="address"> Address</label>
                             <div class="col-md-9">
-                                <textarea class="form-control" id="address" name = "address" rows="5">#</textarea>
+                                <textarea class="form-control" id="address" name="address" rows="5" required>{{ Auth::user()->address }}</textarea>
                             </div>
                         </div>
 
@@ -38,11 +38,11 @@
                             <label class="col-md-3 col-form-label" for="example-fileinput">Profile Image</label>
                             <div class="col-md-9 custom-file-upload">
                                 <div class="wrapper-image-preview" style="margin-left: -6px;">
-                                    <div class="box" style="width: 250px;">
-                                        <div class="js--image-preview" style="background-image: url(); background-color: #F5F5F5;"></div>
+                                    <div class="box" style="width: 250px;"> 
+                                        <div class="js--image-preview" style="background-image: url({{ asset('storage/app/public/profiles/' . Auth::user()->profile_image) }}); background-color: #F5F5F5;"></div>
                                         <div class="upload-options">
                                             <label for="profile_image" class="btn"> <i class="mdi mdi-camera"></i> Upload an image </label>
-                                            <input id="profile_image" style="visibility:hidden;" type="file" class="image-upload" name="profile_image" accept="image/*">
+                                            <input id="profile_image" reqiured style="visibility:hidden;" type="file" class="image-upload" name="profile_image" accept="image/*">
                                         </div>
                                     </div>
                                 </div>
@@ -63,27 +63,27 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="header-title">Change Password</h4>
-                <form method="POST" class="col-12 changePasswordAjaxForm" action="#" id = "changePasswordAjaxForm" enctype="multipart/form-data">
+                <form method="POST" class="col-12 changePasswordAjaxForm" action="{{ route('admin.update_password') }}" id = "changePasswordAjaxForm" enctype="multipart/form-data">
                 @csrf
                     <div class="col-12">
                         <div class="form-group row mb-3">
                             <label class="col-md-3 col-form-label" for="current_password"> Current Password</label>
                             <div class="col-md-9">
-                                <input type="password" id="current_password" name="current_password" class="form-control"  value="" required>
+                                <input type="password" id="current_password" placeholder="Current Password" name="current_password" class="form-control"  value="" required>
                             </div>
                         </div>
 
                         <div class="form-group row mb-3">
                             <label class="col-md-3 col-form-label" for="new_password"> New Password</label>
                             <div class="col-md-9">
-                                <input type="password" id="new_password" name="new_password" class="form-control"  value="" required>
+                                <input type="password" id="new_password" placeholder="New Password" name="password" class="form-control"  value="" required>
                             </div>
                         </div>
 
                         <div class="form-group row mb-3">
                             <label class="col-md-3 col-form-label" for="confirm_password"> Confirm New Password</label>
                             <div class="col-md-9">
-                                <input type="password" id="confirm_password" name="confirm_password" class="form-control"  value="" required>
+                                <input type="password" id="confirm_password" placeholder="Confirm New Password" name="password_confirmation" class="form-control"  value="" required>
                             </div>
                         </div>
 

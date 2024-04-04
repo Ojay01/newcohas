@@ -10,16 +10,19 @@
         <!-- Address -->
         <address >
           <ul class="list-group list-group-flush list-group-borderless mb-0">
-            <li class="" style="color: #77838f;" >
-              number
-            </li>
+                <li class="" style="color: #77838f;">
+            <a href="tel:{{$schoolSettings->phone}}">
+                {{$schoolSettings->phone}}
+            </a>
+        </li>
+
             <li class="" style="color: #77838f;">
-              <a href="mailto:email">
-               Email
+              <a href="mailto:{{$settings->system_email}}">
+              {{$settings->system_email}}
               </a>
             </li>
             <li class="" style="color: #77838f;">
-              Address
+              {{$schoolSettings->address}} 
             </li>
           </ul>
         </address>
@@ -59,17 +62,17 @@
                   <div class="col-sm-6 col-lg-4 order-sm-1">
                     <div class="mb-1">
                       <select class="form-control" style="background-color: #77838f;" name="" >
-                        <option value="cohas" selected>College of Hopes, Arts and Science</option>
+                        <option value="cohas" selected>{{$schoolSettings->school_name}}</option>
                     </select>
                   </div>
                   <!-- Logo -->
                   <a class="d-inline-flex align-items-center mb-2" href="/">
-                    <img src="#" style="height:45px;" />
+                    <img src="{{ asset('storage/app/public/logos/' . $sliderSettings->footer_logo) }}" style="height:45px;" />
                   </a>
                   <!-- End Logo -->
 
                   <div class="mb-4">
-                    <p class="small text-muted">© Copyright</p>
+                    <p class="small text-muted">© {{$sliderSettings->copyright_text}}</p>
                   </div>
 
                   <!-- Social Networks -->

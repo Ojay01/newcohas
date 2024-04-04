@@ -20,31 +20,6 @@
     </div>
 </div>
 
-<script>
-function updateProfileInfo() {
-    $(".profileAjaxForm").validate({});
-    $(".profileAjaxForm").submit(function(e) {
-        var form = $(this);
-        ajaxSubmit(e, form, reload);
-    });
-}
-
-function changePassword() {
-    $(".changePasswordAjaxForm").validate({});
-    $(".changePasswordAjaxForm").submit(function(e) {
-        var form = $(this);
-        ajaxSubmit(e, form, reload);
-    });
-}
-
-function reload() {
-    setTimeout(
-        function()
-        {
-            location.reload();
-        }, 1000);
-    }
-    </script>
 
     @extends('backend.admin.header')
 @extends('backend.admin.navigation')

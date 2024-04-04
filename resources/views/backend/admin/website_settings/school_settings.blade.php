@@ -22,32 +22,32 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="header-title">School Settings</h4>
-                    <form method="POST" class="col-12 schoolForm" action="#" id = "schoolForm">
+                    <form method="POST" class="col-12 schoolForm" action="{{route('schoolSetting')}}" id = "schoolForm">
                     @csrf
                         <div class="col-12">
                             <div class="form-group row mb-3">
                                 <label class="col-md-3 col-form-label" for="school_name"> School Name</label>
                                 <div class="col-md-9">
-                                    <input type="text" id="school_name" name="school_name" class="form-control"  value="#" required>
+                                    <input type="text" id="school_name" name="school_name" class="form-control"  value="{{$schoolSettings->school_name}}" required>
                                 </div>
                             </div>
 
                             <div class="form-group row mb-3">
                                 <label class="col-md-3 col-form-label" for="phone">Phone</label>
                                 <div class="col-md-9">
-                                    <input type="text" id="phone" name="phone" class="form-control"  value="#" required>
+                                    <input type="number" id="phone" name="phone" class="form-control"  value="{{$schoolSettings->phone}}" required>
                                 </div>
                             </div>
 
                             <div class="form-group row mb-3">
                                 <label class="col-md-3 col-form-label" for="address"> Address</label>
                                 <div class="col-md-9">
-                                    <textarea class="form-control" id="address" name = "address" rows="5" required>Address</textarea>
+                                    <textarea class="form-control" id="address" name = "address" rows="5" required>{{$schoolSettings->address}}</textarea>
                                 </div>
                             </div>
 
                             <div class="text-center">
-                                <button type="submit" class="btn btn-secondary col-xl-4 col-lg-4 col-md-12 col-sm-12" onclick="updateSchoolInfo()">Update Settings</button>
+                                <button type="submit" class="btn btn-secondary col-xl-4 col-lg-4 col-md-12 col-sm-12" >Update Settings</button>
                             </div>
                         </div>
                     </form>
