@@ -1,10 +1,10 @@
-<form method="POST" class="d-block ajaxForm" action="#">
+<form method="POST" class="d-block ajaxForm" action="{{ route('subject.update', ['subject_id' => $subject->id]) }}">
 @csrf
   <div class="form-row">
 
     <div class="form-group mb-1">
       <label for="name">Subject Name</label>
-      <input type="text" class="form-control" id="name" name="name" required>
+      <input type="text" class="form-control" id="name" value="{{$subject->name}}" name="name" required>
       <small id="name_help" class="form-text text-muted">Provide Subject Name</small>
     </div>
 

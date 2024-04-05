@@ -26,20 +26,7 @@
     </div>
 </div>
 
-<script>
-    var showAllClasses = function () {
-        var url = '#';
 
-        $.ajax({
-            type : 'GET',
-            url: url,
-            success : function(response) {
-                $('.class_content').html(response);
-                initDataTable('basic-datatable');
-            }
-        });
-    }
-</script>
 
 
 

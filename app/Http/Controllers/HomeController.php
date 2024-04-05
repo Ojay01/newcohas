@@ -7,6 +7,11 @@ use App\Models\Setting;
 use App\Models\Logo;
 use App\Models\GeneralSetting;
 use App\Models\SchoolSetting;
+use App\Models\SchoolClass;
+use App\Models\Section;
+use App\Models\Department;
+use App\Models\Subject;
+use App\Models\User;
 
 
 class HomeController extends Controller
@@ -31,7 +36,11 @@ class HomeController extends Controller
         $user = auth()->user(); // Retrieve the currently logged-in user
 
     if ($user->role == 'admin') {
-            return view('backend.admin.index');
+        $studentCount = User::where('role', 'student')->count();
+        $teacherCount = User::where('role', 'teacher')->count();
+        $parentCount = User::where('role', 'parent')->count();
+
+            return view('backend.admin.index', compact('studentCount', 'teacherCount', 'parentCount'));
         } else {
         return view('backend.teacher.index');
         }
@@ -166,8 +175,11 @@ class HomeController extends Controller
     
     public function classes()
     {
-        return view('backend.admin.class.index');
+        $classes = SchoolClass::all();
+        $sections = Section::all();
+        return view('backend.admin.class.index', compact('classes', 'sections'));
     }
+
     
     public function routine()
     {
@@ -181,7 +193,8 @@ class HomeController extends Controller
 
     public function subjects()
     {
-        return view('backend.admin.subject.index');
+        $subjects = Subject::all();
+        return view('backend.admin.subject.index', compact('subjects'));
     }
 
     public function syllabus()
@@ -191,7 +204,8 @@ class HomeController extends Controller
 
     public function department()
     {
-        return view('backend.admin.department.index');
+        $departments = Department::all();
+        return view('backend.admin.department.index', compact('departments'));
     }
 
     public function singleAdmission()

@@ -66,6 +66,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/student_exam', [App\Http\Controllers\HomeController::class, 'adminExam'])->name('admin.exam');
     Route::get('/student_marks', [App\Http\Controllers\HomeController::class, 'adminMarks'])->name('admin.marks');
 
+
     Route::post('profile/update', 'App\Http\Controllers\AdminController@update')->name('update-profile');
     Route::post('profile/update-password', 'App\Http\Controllers\AdminController@updatePassword')->name('admin.update_password');
     Route::post('settings/update', 'App\Http\Controllers\FrontendController@updateSettings')->name('update-settings');
@@ -77,9 +78,18 @@ Route::prefix('admin')->group(function () {
     Route::post('/update_terms_and_condition', [App\Http\Controllers\FrontendController::class, 'updateTermsAndConditionSettings'])->name('updateTermsAndConditionSettings');
     Route::post('/update-homepage-slider-settings', 'App\Http\Controllers\FrontendController@updateSliders')->name('updateSliders');
     Route::post('/school_settings', 'App\Http\Controllers\FrontendController@schoolSetting')->name('schoolSetting');
-    Route::post('/add-class', [App\Http\Controllers\AdminController::class, 'addClass'])->name('addClass');
-    Route::post('/add-section', [App\Http\Controllers\AdminController::class, 'addSection'])->name('addSection');
-    Route::post('/add-subject', [App\Http\Controllers\AdminController::class, 'addSubject'])->name('addSubject');
+    Route::post('/add_class', [App\Http\Controllers\AdminController::class, 'addClass'])->name('addClass');
+    Route::post('/add_section', [App\Http\Controllers\AdminController::class, 'addSection'])->name('addSection');
+    Route::post('/add_subject', [App\Http\Controllers\AdminController::class, 'addSubject'])->name('addSubject');
+    Route::post('/add_department', [App\Http\Controllers\AdminController::class, 'addDepartment'])->name('addDepartment');
+    Route::post('/classes/edit/{id}', 'App\Http\Controllers\AdminController@updateClass')->name('classes.edit');
+    Route::post('/classes/{class_id}/sections', [App\Http\Controllers\AdminController::class, 'addSection'])->name('sections.store');
+    Route::post('/update/department/{department_id}', [App\Http\Controllers\AdminController::class, 'updateDepartment'])->name('department.update');
+    Route::post('/update/subject/{subject_id}', [App\Http\Controllers\AdminController::class, 'updateSubject'])->name('subject.update');
+    Route::delete('/sections/{section}', 'App\Http\Controllers\AdminController@deleteSection')->name('sections.destroy');
+    Route::delete('/classes/{class}', 'App\Http\Controllers\AdminController@deleteClass')->name('classes.destroy');
+    Route::delete('/departments/{department}', 'App\Http\Controllers\AdminController@deleteDepartment')->name('department.destroy');
+    Route::delete('/subject/{subject}', 'App\Http\Controllers\AdminController@deleteSubject')->name('subject.destroy');
 
 
 

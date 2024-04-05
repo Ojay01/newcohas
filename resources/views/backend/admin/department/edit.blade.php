@@ -1,9 +1,9 @@
-<form method="POST" class="d-block ajaxForm" action="#">
+<form method="POST" class="d-block ajaxForm" action="{{ route('department.update', ['department_id' => $department->id]) }}">
 @csrf
     <div class="form-row">
         <div class="form-group mb-1">
             <label for="name">Department Name</label>
-            <input type="text" class="form-control" id="name" name = "name" required>
+            <input type="text" class="form-control" value="{{$department->name}}" id="name" name = "name" required>
             <small id="name_help" class="form-text text-muted">Provide department name</small>
         </div>
 

@@ -1,66 +1,69 @@
+@foreach ($class->sections as $section)
+    <form method="POST" class="d-block ajaxForm" action="{{ route('sections.destroy', $section) }}">
+        @csrf
+        @method('DELETE')
+        <div class="input-group me-2 mb-2" id="sectionDatabase{{ $section->id }}">
+            <input type="text" readonly class="form-control" name="name" value="{{ $section->name }}" required>
+            <button class="btn btn-icon btn-danger delete-section" type="button" data-url="{{ route('sections.destroy', $section) }}"><i class="mdi mdi-window-close"></i></button>
+        </div>
+    </form>
+@endforeach
 
-<form method="POST" class="d-block ajaxForm" action="#">
-@csrf
-            <div class="input-group me-2 mb-2">
-                    <input type="hidden" class="form-control" id="section" name = "section_id[]" value="#">
-                    <input type="text" class="form-control" id="name" name = "name[]" value="#" required>
+<div id="section_area"></div> <hr>
 
-                    <!-- <button class="btn btn-icon btn-danger" type="button" onclick="deleteSection(this)"><i class="mdi mdi-window-close"></i></button> -->
-                    <button class="btn btn-icon btn-success" type="button" onclick="appendSection()"><i class="mdi mdi-plus"></i></button>
-            </div>
-
-            <div class="input-group me-2 mb-2" id="sectionDatabase#">
-                    <input type="hidden" class="form-control" id="section#" name = "section_id[]" value="#">
-                    <input type="text" class="form-control" name = "name[]" value="#" required>
-
-                    <button class="btn btn-icon btn-danger" type="button" onclick="removeSectionDatabase('#')"><i class="mdi mdi-window-close"></i></button>
-            </div>
-    <div id = "section_area"></div>
-    <div class="row no-gutters">
-    <div class="form-group  col-md-12 p-0 mt-2">
-        <button class="btn btn-block btn-primary ms-2" type="submit">Update</button>
+<form method="POST" class="d-block ajaxForm" action="{{ route('sections.store', $class->id) }}">
+    @csrf
+    <input type="hidden" name="class_id" value="{{ $class->id }}">
+    <div class="input-group me-2 mb-2">
+        <input type="text" class="form-control" id="name" name="name" value="" placeholder="Add Section" required>
+        <button class="btn btn-icon btn-success" type="submit"><i class="mdi mdi-plus"></i></button>
     </div>
-</div>
 </form>
 
-<!--div id = "blank_section">
-    <div class="input-group me-2 mb-2">
-
-            <input type="hidden" class="form-control" name = "section_id[]" value="0">
-            <input type="text" class="form-control" name = "name[]" value="" required>
-
-            <button class="btn btn-icon btn-danger" type="button" onclick="removeSection(this)"><i class="mdi mdi-window-close"></i></button>
-    </div>
-</div-->
-
+<!-- Info Alert Modal -->
+<div id="alert-modal-redirect" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body p-4">
+                <div class="text-center">
+                    <i class="dripicons-information h1 text-info"></i>
+                    <h4 class="mt-2">Heads Up!</h4>
+                    <p class="mt-3">Are you sure?</p>
+                    <button type="button" class="btn btn-info my-2" data-bs-dismiss="modal">Cancel</button>
+                    <a href="" id="alert-modal-redirect-url" class="btn btn-danger my-2">Continue</a>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <script>
-
-//update form
- // Jquery form validation initialization
-$(".ajaxForm").validate({});
-$(".ajaxForm").submit(function(e) {
-    var form = $(this);
-    ajaxSubmit(e, form, showAllClasses);
-});
-
-var blank_section_field = $('#blank_section').html();
-
 $(document).ready(function() {
-    $('#blank_section').hide();
+    $('.delete-section').click(function() {
+        var url = $(this).data('url');
+        $('#alert-modal-redirect-url').attr('data-url', url); // Set data-url attribute
+        $('#alert-modal-redirect').modal('show');
+    });
+
+    // Handle click on "Continue" button in the modal
+    $('#alert-modal-redirect-url').click(function() {
+        var url = $(this).attr('data-url'); // Get the URL from data-url attribute
+        $.ajax({
+            url: url,
+            type: 'DELETE', // Send a DELETE request
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Add CSRF token
+            },
+            success: function(response) {
+                // Handle success response
+                console.log(response);
+            },
+            error: function(xhr, status, error) {
+                // Handle error response
+                console.error(xhr.responseText);
+            }
+        });
+    });
 });
-
-
-function appendSection() {
-    $('#section_area').append(blank_section_field);
-}
-
-function removeSection(elem) {
-    $(elem).closest('.input-group').remove();
-}
-
-function removeSectionDatabase(#) {
-    $('#sectionDatabase'+section_id).hide();
-    $('#section'+section_id).val(section_id+'delete');
-}
 </script>
+

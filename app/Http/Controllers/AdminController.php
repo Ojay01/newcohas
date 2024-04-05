@@ -7,9 +7,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Setting;
-use App\Models\Class;
+use App\Models\SchoolClass;
 use App\Models\Subject;
 use App\Models\Section;
+use App\Models\Department;
 
 class AdminController extends Controller
 {
@@ -85,7 +86,7 @@ class AdminController extends Controller
         'name' => 'required|string',
     ]);
 
-    $class = new Class();
+    $class = new SchoolClass();
         $class->name = $validatedData['name'];
         // $class->description = $validatedData['description'];
         $class->save();
@@ -94,21 +95,21 @@ class AdminController extends Controller
 }
 
 
-    public function addSection(Request $request)
+    public function addSection(Request $request, $class_id)
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'class_id' => 'required|exists:classes,id',
         ]);
 
         $section = new Section();
         $section->name = $validatedData['name'];
-        $section->class_id = $validatedData['class_id'];
+        $section->class_id = $class_id;
         // Add other fields as needed
         $section->save();
 
         return redirect()->back()->with('success', 'Section added successfully.');
     }
+
 
     public function addSubject(Request $request)
     {
@@ -123,4 +124,87 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'Subject added successfully.');
     }
+
+    public function updateClass(Request $request, $id)
+    {
+        // Validate the request data if needed
+        $request->validate([
+            'name' => 'required|string|max:25',
+            // Add more validation rules if needed
+        ]);
+
+        // Find the class by ID
+        $class = SchoolClass::findOrFail($id);
+
+        // Update class name
+        $class->name = $request->input('name');
+        // Update other class properties if needed
+
+        // Save the updated class
+        $class->save();
+
+        // Redirect back with a success message or any other response
+        return redirect()->back()->with('success', 'Class updated successfully');
+    }
+
+    public function addDepartment(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $department = new Department();
+        $department->name = $validatedData['name'];
+        // Add other fields as needed
+        $department->save();
+
+        return redirect()->back()->with('success', 'Department added successfully.');
+    }
+
+    public function updateDepartment(Request $request, $department_id)
+    {
+        $department = Department::findOrFail($department_id);
+        $department->name = $request->input('name');
+        $department->save();
+
+        return redirect()->back()->with('success', 'Department updated successfully.');
+    }
+
+    public function updateSubject(Request $request, $subject_id)
+    {
+        $subject = Subject::findOrFail($subject_id);
+        $subject->name = $request->input('name');
+        $subject->save();
+
+        return redirect()->back()->with('success', 'Subject updated successfully.');
+    }
+
+    public function deleteSection(Section $section)
+    {
+        $section->delete();
+
+        return redirect()->back()->with('success', 'Section deleted successfully.');
+    }
+
+    public function deleteClass(SchoolClass $class)
+    {
+        $class->delete();
+
+        return response()->json(['message' => 'Class deleted successfully']);
+    }
+
+    public function deleteDepartment(Department $department)
+    {
+        $department->delete();
+
+        return response()->json(['message' => 'department deleted successfully']);
+    }
+
+    public function deleteSubject(Subject $subject)
+    {
+        $subject->delete();
+
+        return response()->json(['message' => 'subject deleted successfully']);
+    }
+
 }

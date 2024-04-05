@@ -28,9 +28,9 @@
                 <div class="float-end">
                   <i class="mdi mdi-account-multiple widget-icon"></i>
                 </div>
-                <h5 class="text-muted font-weight-normal mt-0" title="Number of Student"> <i class="mdi mdi-account-group title_icon"></i>  Students <a href="#" style="color: #6c757d; display: none;" id = "student_list"><i class = "mdi mdi-export"></i></a></h5>
+                <h5 class="text-muted font-weight-normal mt-0" title="Number of Student"> <i class="mdi mdi-account-group title_icon"></i>  Students <a href="{{route('students')}}" style="color: #6c757d; display: none;" id = "student_list"><i class = "mdi mdi-export"></i></a></h5>
                 <h3 class="mt-3 mb-3">
-                  0
+                  {{$studentCount}}
                 </h3>
                 <p class="mb-0 text-muted">
                   <span class="text-nowrap">{{('Total number of Students')}}</span>
@@ -45,9 +45,9 @@
                 <div class="float-end">
                   <i class="mdi mdi-account-multiple widget-icon"></i>
                 </div>
-                <h5 class="text-muted font-weight-normal mt-0" title="Number of Teacher"> <i class="mdi mdi-account-group title_icon"></i>Teachers  <a href="#" style="color: #6c757d; display: none;" id = "teacher_list"><i class = "mdi mdi-export"></i></a></h5>
+                <h5 class="text-muted font-weight-normal mt-0" title="Number of Teacher"> <i class="mdi mdi-account-group title_icon"></i>Teachers  <a href="{{ route('teachers') }}" style="color: #6c757d; display: none;" id = "teacher_list"><i class = "mdi mdi-export"></i></a></h5>
                 <h3 class="mt-3 mb-3">
-                  0
+                  {{$teacherCount}}
                 </h3>
                 <p class="mb-0 text-muted">
                   <span class="text-nowrap">total number of teachers</span>
@@ -64,9 +64,9 @@
                 <div class="float-end">
                   <i class="mdi mdi-account-multiple widget-icon"></i>
                 </div>
-                <h5 class="text-muted font-weight-normal mt-0" title="Number of Parents"> <i class="mdi mdi-account-group title_icon"></i> Parents <a href="#" style="color: #6c757d; display: none;" id = "parent_list"><i class = "mdi mdi-export"></i></a></h5>
+                <h5 class="text-muted font-weight-normal mt-0" title="Number of Parents"> <i class="mdi mdi-account-group title_icon"></i> Parents <a href="{{route('parents')}}" style="color: #6c757d; display: none;" id = "parent_list"><i class = "mdi mdi-export"></i></a></h5>
                 <h3 class="mt-3 mb-3">
-                0
+                {{$parentCount}}
                 </h3>
                 <p class="mb-0 text-muted">
                   <span class="text-nowrap">total number of parents</span>

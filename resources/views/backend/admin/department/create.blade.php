@@ -1,4 +1,4 @@
-<form method="POST" class="d-block ajaxForm" action="#">
+<form method="POST" class="d-block ajaxForm" action="{{route('addDepartment')}} ">
 @csrf
     <div class="form-row">
         <div class="form-group mb-1">

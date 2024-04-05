@@ -1,4 +1,4 @@
-<form method="POST" class="d-block ajaxForm" action="{{route('addSubject')}}">
+<form method="POST" class="d-block ajaxForm" action="{{route('addClass')}}">
 @csrf
     <div class="form-row">
         <div class="form-group mb-1">
