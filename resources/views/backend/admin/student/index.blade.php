@@ -22,34 +22,41 @@
                 <div class="row mt-3">
                     <div class="col-md-1 mb-1"></div>
                     <div class="col-md-4 mb-1">
-                        <select name="class" id="class_id" class="form-control " required onchange="classWiseSection(this.value)">
-                            <option value="">Class Name</option>
-                                <option value="#"selected>
-                                    Class Name
-                                    99
-                                </option>
-                        </select>
-                    </div>
-                    <div class="col-md-4 mb-1">
-                        <select name="section" id="section_id" class="form-control " required>
-                                    <option value="#" >Section Name</option>
-                              
-                                <option value="">Select Section</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <button class="btn btn-block btn-secondary" onclick="filter_student()" >Filter</button>
-                    </div>
+                    <select name="class" id="class_id" class="form-control  select2" data-toggle = "select2" required onchange="classWiseSection()">
+                        <option value="" >Select Class</option>
+                        @foreach ($classes as $class)
+                            <option value="{{ $class->id }}">{{ $class->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
-                <div class="card-body student_content">
-                      @include('backend.admin.student.list')
+               <div class="col-md-4 mb-1">
+    <select name="section" id="section_id" class="form-control select2" data-toggle="select2" required>
+        <option value="" >Select Section</option> <!-- Default option -->
+
+        @if ($class_id != "")
+            @foreach ($sections as $section)
+                
+                    <option value="{{ $section->id }}">{{ $section->name }}</option>
                
+            @endforeach
+        @endif
+    </select>
+</div>
+
+                <div class="col-md-2">
+                    <button class="btn btn-block btn-secondary" onclick="fetchStudents()">Filter</button>
+                </div>
+
+                <div class="card-body student_content">
+        @if ($class_id !== "")  
+                      @include('backend.admin.student.list')
+               @else
                         <div class="empty_box text-center">
                              <img class="mb-3" width="150px" src="/public/assets/backend/images/empty_box.png" />
                             <br>
                             <span class="">No Data Found</span>
                         </div>
-                    
+                    @endif
                 </div>
             </div>
         </div>
@@ -58,42 +65,51 @@
 
 
 <script>
-$('document').ready(function(){
-
-});
 
 function classWiseSection(classId) {
+    var classId = $('#class_id').val(); // Get the selected class ID
+ if (!classId) {
+        $('#section_id').empty(); // Clear existing options
+        $('#section_id').append($('<option>', { value: '', text: 'No Section Found' })); // Add default option
+        return; // Exit the function
+    }
     $.ajax({
-        url: "#",
+        url: "{{ route('section.list', ['class_id' => ':class_id']) }}".replace(':class_id', classId),
         success: function(response){
-            $('#section_id').html(response);
+            $('#section_id').empty(); // Clear existing options
+            $.each(response, function (index, section) {
+                $('#section_id').append($('<option>', { value: section.id, text: section.name }));
+            });
         }
     });
 }
 
-function filter_student(){
-    var class_id = $('#class_id').val();
-    var section_id = $('#section_id').val();
-    if(class_id != "" && section_id!= ""){
-        showAllStudents();
-    }else{
-        toastr.error('#');
-    }
-}
 
-var showAllStudents = function() {
-    var class_id = $('#class_id').val();
-    var section_id = $('#section_id').val();
-    if(class_id != "" && section_id!= ""){
-        $.ajax({
-            url: '#',
-            success: function(response){
-                $('.student_content').html(response);
-            }
-        });
-    }
+</script>
+
+<script>
+function fetchStudents() {
+    var classId = $('#class_id').val();
+    var sectionId = $('#section_id').val();
+    $.ajax({
+        url: "{{ route('filterStudents') }}",
+        method: 'GET',
+        data: {
+            class_id: classId,
+            section_id: sectionId
+        },
+        success: function(response) {
+            // Handle successful response here
+              $('.student_content').html(response);
+        },
+        error: function(xhr, status, error) {
+            // Handle error here
+            // console.error(xhr.responseText);
+        }
+    });
 }
 </script>
+
 
 @extends('backend.admin.header')
 @extends('backend.admin.navigation')

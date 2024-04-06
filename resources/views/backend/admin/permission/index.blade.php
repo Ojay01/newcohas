@@ -24,22 +24,29 @@
                     <select name="class" id="class_id" class="form-control select2" data-toggle = "select2" onchange="classWiseSection(this.value)" required>
                         <option value="">Select a Class</option>
                            
-                                <option value="#">
-                                    Name
-                                    55
-                                </option>
+                                @foreach ($classes as $class)
+                            <option value="{{ $class->id }}">{{ $class->name }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="col-md-2 mb-1">
                     <select name="section" id="section_id" class="form-control select2" data-toggle = "select2"  required>
-                        <option value="">Section</option>
+        <option value="" >Select Section</option> <!-- Default option -->
+                       @if ($class_id != "")
+            @foreach ($sections as $section)
+                    <option value="{{ $section->id }}">{{ $section->name }}</option>
+            @endforeach
+        @endif
                     </select>
                 </div>
-                 <div class="col-md-2 mb-1">
-                    <select name="subject" id="subject_id" class="form-control select2" data-toggle = "select2" required>
-                        <option value="">Subject</option>
-                    </select>
-                </div>
+                <div class="col-md-2 mb-1" id="subject_select_wrapper" style="display: none;">
+    <select name="subject" id="subject_id" class="form-control select2" data-toggle="select2" required>
+        <option value="">Select Subject</option>
+        @foreach ($subjects as $subject)
+            <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+        @endforeach
+    </select>
+</div>
                 <div class="col-md-2">
                     <button class="btn btn-block btn-secondary" onclick="filter()" >Filter</button>
                 </div>
@@ -58,51 +65,46 @@
     </div>
 </div>
 
-<!-- modyfy section -->
 <script>
-    $('document').ready(function(){
-
-    });
-
-    function classWiseSection(classId) {
-    $.ajax({
-        url: "#",
-        success: function(response){
-            $('#section_id').html(response);
-            classWiseSubject(classId);
-        }
-    });
-}
-
-function classWiseSubject(classId) {
-    $.ajax({
-        url: "#",
-        success: function(response){
-            $('#subject_id').html(response);
-        }
-    });
-}
-    function filter(){
-        var class_id = $('#class_id').val();
-        var section_id = $('#section_id').val();
-        var subject_id = $('#subject_id').val();
-    
-    // Display selected IDs
-    $('#selected_class_id').text(class_id);
-    $('#selected_section_id').text(section_id);
-    $('#selected_subject_id').text(subject_id);
-
-        if(class_id != "" && section_id!= "" && subject_id!= ""){
-            $.ajax({
-                url: '#',
-                success: function(response){
-                    $('.permission_content').html(response);
-                }
-            });
-        }else{
-            toastr.error('#');
-        }
+function classWiseSection(classId) {
+    var classId = $('#class_id').val(); // Get the selected class ID
+ if (!classId) {
+        $('#section_id').empty(); // Clear existing options
+        $('#section_id').append($('<option>', { value: '', text: 'No Section Found' })); // Add default option
+        return; // Exit the function
     }
+    $.ajax({
+        url: "{{ route('section.list', ['class_id' => ':class_id']) }}".replace(':class_id', classId),
+        success: function(response){
+            $('#section_id').empty(); // Clear existing options
+            $.each(response, function (index, section) {
+                $('#section_id').append($('<option>', { value: section.id, text: section.name }));
+            });
+             $('#subject_select_wrapper').show(); 
+        }
+    });
+}
+
+function fetchStudents() {
+    var classId = $('#class_id').val();
+    var sectionId = $('#section_id').val();
+    $.ajax({
+        url: "{{ route('filterStudents') }}",
+        method: 'GET',
+        data: {
+            class_id: classId,
+            section_id: sectionId
+        },
+        success: function(response) {
+            // Handle successful response here
+              $('.student_content').html(response);
+        },
+        error: function(xhr, status, error) {
+            // Handle error here
+            // console.error(xhr.responseText);
+        }
+    });
+}
 </script>
 
 <!-- permission insert and update -->

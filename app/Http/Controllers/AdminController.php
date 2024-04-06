@@ -11,6 +11,8 @@ use App\Models\SchoolClass;
 use App\Models\Subject;
 use App\Models\Section;
 use App\Models\Department;
+use App\Models\Enrollment;
+use App\Models\User;
 
 class AdminController extends Controller
 {
@@ -206,5 +208,70 @@ class AdminController extends Controller
 
         return response()->json(['message' => 'subject deleted successfully']);
     }
+
+
+    public function fetchSections(Request $request, $class_id)
+{
+    // Fetch sections based on the provided class ID
+    $sections = Section::where('class_id', $class_id)->get();
+    
+    // Redirect to another route with the sections and the selected class ID
+    return response()->json($sections);
+}
+
+// public function filterStudents(Request $request)
+// {
+//     $classId = $request->input('class_id');
+//     $sectionId = $request->input('section_id');
+
+//     // Retrieve enrollments based on class and section IDs
+//     $enrollments = Enrollment::where('class_id', $classId)
+//                              ->where('section_id', $sectionId)
+//                              ->get();
+
+//     // Initialize an array to store student details
+//     $students = [];
+
+//     // Iterate over each enrollment record
+//     foreach ($enrollments as $enrollment) {
+//         // Fetch the student details from the users table based on student_id
+//         $student = User::find($enrollment->student_id);
+
+//         // If the student exists, add their details to the array
+//         if ($student) {
+//             $studentDetails = [
+//                 'name' => $student->name, // Retrieve the name from the users table
+//                 'status' => $student->status, // Assuming status exists in the users table
+//                 // Add other details as needed
+//             ];
+
+//             // Add the student details to the array
+//             $students[] = $studentDetails;
+//         }
+//     }
+
+//     // Return the filtered students as JSON response
+//     return response()->json($students);
+// }
+
+public function filterStudents(Request $request)
+{
+    $classId = $request->input('class_id');
+    $sectionId = $request->input('section_id');
+
+    // Check if class ID or section ID is invalid
+    if (!$classId || !$sectionId) {
+        return view('backend.admin.empty') ;
+    }
+
+    // Retrieve students based on class and section IDs
+    $students = Enrollment::where('class_id', $classId)
+                       ->where('section_id', $sectionId)
+                       ->get();
+
+    return view('backend.admin.student.list', compact('students'));
+}
+
+
 
 }

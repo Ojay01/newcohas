@@ -23,14 +23,14 @@
                         <div class="form-group row mb-3">
                             <label class="col-md-3 col-form-label" for="name">Name</label>
                             <div class="col-md-9">
-                                <input type="text" id="name" name="name" class="form-control"  value="#" placeholder="name" required>
+                                <input type="text" id="name" name="name" class="form-control"  value="{{$user->name}}" placeholder="name" required>
                             </div>
                         </div>
 
                         <div class="form-group row mb-3">
                             <label class="col-md-3 col-form-label" for="email">Email</label>
                             <div class="col-md-9">
-                                <input type="email" class="form-control" id="email" name="email" value="#" placeholder="email" required>
+                                <input type="email" class="form-control" id="email" name="email" value="{{$user->email}}" placeholder="email" required>
                             </div>
                         </div>
 
@@ -47,38 +47,32 @@
                         <div class="form-group row mb-3">
                             <label class="col-md-3 col-form-label" for="class_id">Class</label>
                             <div class="col-md-9">
-                                <select name="class_id" id="class_id" class="form-control" required onchange="classWiseSectionOnStudentEdit(this.value)">
-                                    <option value="">Select a Class</option>
-                                        <option value="#" >Class Name</option>
-                                </select>
+                                <input type="text" id="class_name" name="class_id" class="form-control" value="{{ $user->enrollment->class->name  }}" placeholder="Class Name" required readonly>
                             </div>
                         </div>
 
                         <div class="form-group row mb-3">
                             <label class="col-md-3 col-form-label" for="section_id">Sections</label>
                             <div class="col-md-9" id = "section_content">
-                                <select name="section_id" id="section_id" class="form-control" required >
-                                    <option value="">Select a Section</option>
-                                        <option value="#">Section name</option>
-                                </select>
+                                 <input type="text" id="class_name" name="section_id" class="form-control" value="{{ $user->enrollment->section->name  }}" placeholder="Class Name" required readonly>
                             </div>
                         </div>
 
                         <div class="form-group row mb-3">
                             <label class="col-md-3 col-form-label" for="birthdatepicker">Birthday</label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control date" id="birthdatepicker" data-bs-toggle="date-picker" data-single-date-picker="true" name = "birthday"  value="#" required>
+                                <input type="text" class="form-control date" id="birthdatepicker" data-bs-toggle="date-picker" data-single-date-picker="true" name = "birthday"  value="{{$user->birthday}}" required>
                             </div>
                         </div>
 
                         <div class="form-group row mb-3">
                             <label class="col-md-3 col-form-label" for="gender">Gender</label>
                             <div class="col-md-9">
-                                <select name="gender" id="gender" class="form-control" required>
+                                <select name="gender" id="gender" class="form-control select2"  data-bs-toggle="select2" required>
                                     <option value="">Select Gender</option>
-                                    <option value="Male" >Male</option>
-                                    <option value="Female" >Female</option>
-                                   
+                                    <option value="M" @if($user->gender == 'M') selected @endif>Male</option>
+                                    <option value="F" @if($user->gender == 'F') selected @endif>Female</option>
+
                                 </select>
                             </div>
                         </div>
@@ -87,14 +81,14 @@
                         <div class="form-group row mb-3">
                             <label class="col-md-3 col-form-label" for="example-textarea">Address</label>
                             <div class="col-md-9">
-                                <textarea class="form-control" id="example-textarea" rows="5" name = "address" placeholder="address">Student Address</textarea>
+                                <textarea class="form-control" id="example-textarea" rows="5" name = "address" placeholder="address">{{$user->address}}</textarea>
                             </div>
                         </div>
 
                         <div class="form-group row mb-3">
                             <label class="col-md-3 col-form-label" for="phone">Phone</label>
                             <div class="col-md-9">
-                                <input type="text" id="phone" name="phone" class="form-control" value="#" placeholder="phone" required>
+                                <input type="text" id="phone" name="phone" class="form-control" value="{{$user->phone}}" placeholder="phone" required>
                             </div>
                         </div>
 
@@ -103,7 +97,11 @@
                             <div class="col-md-9 custom-file-upload">
                                 <div class="wrapper-image-preview" style="margin-left: -6px;">
                                     <div class="box" style="width: 250px;">
-                                        <div class="js--image-preview" style="background-image: url(); background-color: #F5F5F5;"></div>
+                                    @if($user->profile_image)
+                                        <div class="js--image-preview" style="background-image: url({{ asset('storage/app/public/profiles/' . $user->profile_image) }}); background-color: #F5F5F5;"></div>
+                     @else
+                             <div class="js--image-preview" style="background-image: url({{ asset('/public/images/placeholder.jpg')}}); background-color: #F5F5F5;"></div>
+                        @endif
                                         <div class="upload-options">
                                             <label for="student_image" class="btn"> <i class="mdi mdi-camera"></i> Upload Image </label>
                                             <input id="student_image" style="visibility:hidden;" type="file" class="image-upload" name="student_image" accept="image/*">

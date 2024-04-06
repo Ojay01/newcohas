@@ -65,6 +65,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/student_promotion', [App\Http\Controllers\HomeController::class, 'promotion'])->name('promotion');
     Route::get('/student_exam', [App\Http\Controllers\HomeController::class, 'adminExam'])->name('admin.exam');
     Route::get('/student_marks', [App\Http\Controllers\HomeController::class, 'adminMarks'])->name('admin.marks');
+    Route::get('/edit_student/{id} ', [App\Http\Controllers\HomeController::class, 'editStudent'])->name('admin.edit.student');
 
 
     Route::post('profile/update', 'App\Http\Controllers\AdminController@update')->name('update-profile');
@@ -90,6 +91,8 @@ Route::prefix('admin')->group(function () {
     Route::delete('/classes/{class}', 'App\Http\Controllers\AdminController@deleteClass')->name('classes.destroy');
     Route::delete('/departments/{department}', 'App\Http\Controllers\AdminController@deleteDepartment')->name('department.destroy');
     Route::delete('/subject/{subject}', 'App\Http\Controllers\AdminController@deleteSubject')->name('subject.destroy');
+    Route::get('/section/list/{class_id}', 'App\Http\Controllers\AdminController@fetchSections')->name('section.list');
+    Route::get('/filter-students', 'App\Http\Controllers\AdminController@filterStudents')->name('filterStudents');
 
 
 

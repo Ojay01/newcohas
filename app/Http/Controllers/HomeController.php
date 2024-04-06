@@ -12,6 +12,8 @@ use App\Models\Section;
 use App\Models\Department;
 use App\Models\Subject;
 use App\Models\User;
+use App\Models\Enrollment;
+use App\Models\Teacher;
 
 
 class HomeController extends Controller
@@ -139,13 +141,35 @@ class HomeController extends Controller
     }
 
     public function teachers()
-    {
-        return view('backend.admin.teacher.index');
+{
+    $teachers = Teacher::all();
+    $socialLinks = [];
+
+    foreach ($teachers as $teacher) {
+        $decodedLinks = json_decode($teacher->social_links, true);
+        $twitter = $decodedLinks['twitter'] ?? '';
+        $facebook = $decodedLinks['facebook'] ?? '';
+        $linkedin = $decodedLinks['linkedin'] ?? '';
+
+        // Store the social links in an array for each teacher
+        $socialLinks[$teacher->id] = [
+            'twitter' => $twitter,
+            'facebook' => $facebook,
+            'linkedin' => $linkedin,
+        ];
     }
+
+    return view('backend.admin.teacher.index', compact('teachers', 'socialLinks'));
+}
+
 
     public function students()
     {
-        return view('backend.admin.student.index');
+        $classes = SchoolClass::all();
+        $sections = Section::all();
+        $class_id = '';
+        $students = Enrollment::all();
+        return view('backend.admin.student.index', compact('classes', 'sections', 'class_id', 'students'));
     }
 
     public function labSettings()
@@ -160,7 +184,11 @@ class HomeController extends Controller
 
     public function teacherPermission()
     {
-        return view('backend.admin.permission.index');
+        $classes = SchoolClass::all();
+        $sections = Section::all();
+        $subjects = Subject::all();
+        $class_id = '';
+        return view('backend.admin.permission.index', compact('classes', 'sections', 'class_id', 'subjects'));
     }
 
     public function parents()
@@ -252,5 +280,11 @@ class HomeController extends Controller
     {
         return view('backend.admin.marks.index');
     }
+
+    public function editStudent($id) {
+    $user = User::findOrFail($id);
+    return view('backend.admin.student.update', compact('user'));
+}
+
 
 }

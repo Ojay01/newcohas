@@ -3,14 +3,14 @@
     <div class="row align-items-center h-100">
         <div class="col-md-4 pb-2">
             <div class="text-center">
-                <img class="rounded-circle" width="50" height="50" src="#">
+                <img class="rounded-circle" width="50" height="50" src="/public/images/placeholder.jpg">
                 <br>
                 <span style="font-weight: bold;">
-                    Name: Student Name
+                    Name: {{$student->user->name}}
                 </span>
                 <br>
                 <span style="font-weight: bold;">
-                    Student Code
+                    Student Code: COHAS{{$student->student_id}}ST
                 </span>
             </div>
         </div>
@@ -32,18 +32,18 @@
                         <tbody>
                             <tr>
                                 <td style="font-weight: bold;">Student:</td>
-                                <td>student name</td>
+                                <td>{{$student->user->name}}</td>
                             </tr>
                             <tr>
                                 <td style="font-weight: bold;">Class:</td>
                                 <td>
-                                   Class name
+                                   {{$student->class->name}}
                                 </td>
                             </tr>
                             <tr>
                                 <td style="font-weight: bold;">Section:</td>
                                 <td>
-                                    Section name
+                                    {{$student->section->name}}
                                 </td>
                             </tr>
                         </tbody>
