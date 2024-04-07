@@ -144,12 +144,12 @@ public function loginBanner(Request $request)
     // Find or create the general settings record
     $bannerSettings = GeneralSetting::firstOrNew();
 
-
     if ($request->hasFile('login_banner')) {
         $banner = $request->file('login_banner');
-        $bannerName = Str::uuid() . '.' . $banner->getClientOriginalExtension();
-        $banner->storeAs('logos', $bannerName, 'public');
-        $bannerSettings->login_banner = $bannerName;
+        $bannerName = 'bg-auth.jpg'; // Set the image name
+        $bannerPath = public_path('assets/backend/images/' . $bannerName);
+        $banner->move(public_path('assets/backend/images/'), $bannerName);
+        $bannerSettings->login_banner = asset('public/assets/backend/images/' . $bannerName);
     }
 
     // Save the changes
@@ -158,6 +158,7 @@ public function loginBanner(Request $request)
     // Redirect back with success message
     return redirect()->back()->with('success', 'Banner updated successfully.');
 }
+
 
 public function updateAboutUs(Request $request)
 {
@@ -266,6 +267,178 @@ public function updateSliders(Request $request)
     GeneralSetting::where('id', 1)->update(['slider_images' => $updatedSliderImages]);
 
     return redirect()->back()->with('success', 'Homepage slider settings updated successfully.');
+}
+
+
+public function physicsLab(Request $request)
+{
+    // Retrieve slider images from the database
+    $currentImagesJson = GeneralSetting::value('physics_lab');
+    $currentImages = json_decode($currentImagesJson, true);
+
+    // Initialize an array to hold updated slider data
+    $sliders = [];
+
+    // Loop through each slider setting and add it to the sliders array
+    for ($i = 0; $i < 4; $i++) {
+        // Check if the current image exists in the array
+        $image = isset($currentImages[$i]['image']) ? $currentImages[$i]['image'] : null;
+
+        // Create an array for the current slider
+        $slider = [
+            'title' => $request->input("title_$i"),
+            'description' => $request->input("description_$i"),
+            'image' => $image, // Set to null if not exist
+        ];
+
+        // Check if a new image is uploaded
+        if ($request->hasFile("physics_lab_$i")) {
+            $uploadedImage = $request->file("physics_lab_$i");
+            $imageName = time() . '_' . $uploadedImage->getClientOriginalName();
+            $uploadedImage->storeAs('slider_images', $imageName, 'public');
+            $slider['image'] = $imageName;
+        }
+
+        // Add the slider to the sliders array
+        $sliders[] = $slider;
+    }
+
+    // Encode the sliders array to JSON
+    $updatedSliderImages = json_encode($sliders);
+
+    // Update the slider images field in general settings
+    GeneralSetting::where('id', 1)->update(['physics_lab' => $updatedSliderImages]);
+
+    return redirect()->back()->with('success', 'Physics Lab images updated successfully.');
+}
+
+
+public function chemistryLab(Request $request)
+{
+    // Retrieve slider images from the database
+    $currentImagesJson = GeneralSetting::value('physics_lab');
+    $currentImages = json_decode($currentImagesJson, true);
+
+    // Initialize an array to hold updated slider data
+    $sliders = [];
+
+    // Loop through each slider setting and add it to the sliders array
+    for ($i = 0; $i < 4; $i++) {
+        // Check if the current image exists in the array
+        $image = isset($currentImages[$i]['image']) ? $currentImages[$i]['image'] : null;
+
+        // Create an array for the current slider
+        $slider = [
+            'title' => $request->input("title_$i"),
+            'description' => $request->input("description_$i"),
+            'image' => $image, // Set to null if not exist
+        ];
+
+        // Check if a new image is uploaded
+        if ($request->hasFile("physics_lab_$i")) {
+            $uploadedImage = $request->file("physics_lab_$i");
+            $imageName = time() . '_' . $uploadedImage->getClientOriginalName();
+            $uploadedImage->storeAs('slider_images', $imageName, 'public');
+            $slider['image'] = $imageName;
+        }
+
+        // Add the slider to the sliders array
+        $sliders[] = $slider;
+    }
+
+    // Encode the sliders array to JSON
+    $updatedSliderImages = json_encode($sliders);
+
+    // Update the slider images field in general settings
+    GeneralSetting::where('id', 1)->update(['chemistry_lab' => $updatedSliderImages]);
+
+    return redirect()->back()->with('success', 'Chemistry Lab images updated successfully.');
+}
+
+
+public function computerLab(Request $request)
+{
+    // Retrieve slider images from the database
+    $currentImagesJson = GeneralSetting::value('physics_lab');
+    $currentImages = json_decode($currentImagesJson, true);
+
+    // Initialize an array to hold updated slider data
+    $sliders = [];
+
+    // Loop through each slider setting and add it to the sliders array
+    for ($i = 0; $i < 4; $i++) {
+        // Check if the current image exists in the array
+        $image = isset($currentImages[$i]['image']) ? $currentImages[$i]['image'] : null;
+
+        // Create an array for the current slider
+        $slider = [
+            'title' => $request->input("title_$i"),
+            'description' => $request->input("description_$i"),
+            'image' => $image, // Set to null if not exist
+        ];
+
+        // Check if a new image is uploaded
+        if ($request->hasFile("physics_lab_$i")) {
+            $uploadedImage = $request->file("physics_lab_$i");
+            $imageName = time() . '_' . $uploadedImage->getClientOriginalName();
+            $uploadedImage->storeAs('slider_images', $imageName, 'public');
+            $slider['image'] = $imageName;
+        }
+
+        // Add the slider to the sliders array
+        $sliders[] = $slider;
+    }
+
+    // Encode the sliders array to JSON
+    $updatedSliderImages = json_encode($sliders);
+
+    // Update the slider images field in general settings
+    GeneralSetting::where('id', 1)->update(['computer_lab' => $updatedSliderImages]);
+
+    return redirect()->back()->with('success', 'Computer Lab images updated successfully.');
+}
+
+
+public function biologyLab(Request $request)
+{
+    // Retrieve slider images from the database
+    $currentImagesJson = GeneralSetting::value('physics_lab');
+    $currentImages = json_decode($currentImagesJson, true);
+
+    // Initialize an array to hold updated slider data
+    $sliders = [];
+
+    // Loop through each slider setting and add it to the sliders array
+    for ($i = 0; $i < 4; $i++) {
+        // Check if the current image exists in the array
+        $image = isset($currentImages[$i]['image']) ? $currentImages[$i]['image'] : null;
+
+        // Create an array for the current slider
+        $slider = [
+            'title' => $request->input("title_$i"),
+            'description' => $request->input("description_$i"),
+            'image' => $image, // Set to null if not exist
+        ];
+
+        // Check if a new image is uploaded
+        if ($request->hasFile("physics_lab_$i")) {
+            $uploadedImage = $request->file("physics_lab_$i");
+            $imageName = time() . '_' . $uploadedImage->getClientOriginalName();
+            $uploadedImage->storeAs('slider_images', $imageName, 'public');
+            $slider['image'] = $imageName;
+        }
+
+        // Add the slider to the sliders array
+        $sliders[] = $slider;
+    }
+
+    // Encode the sliders array to JSON
+    $updatedSliderImages = json_encode($sliders);
+
+    // Update the slider images field in general settings
+    GeneralSetting::where('id', 1)->update(['biology_lab' => $updatedSliderImages]);
+
+    return redirect()->back()->with('success', 'Bilology Lab images updated successfully.');
 }
 
 

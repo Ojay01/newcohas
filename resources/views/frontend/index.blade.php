@@ -106,34 +106,139 @@
     <!-- End Intro Section -->
     <hr class="my-o">
     <!-- Slider Section -->
-    <div class="bg-light">
+<div class="bg-light">
     <div class="container space-2 space-md-3">
-      <!-- Title -->
-      <div class="w-md-80 w-lg-50 text-center mx-md-auto mb-9">
-        <span class="btn btn-xs btn-soft-success btn-pill mb-2">Laboratories</span>
-        <h2 class="primary">Our Science Laboratories</span></h2>
-      </div>
-      <!-- Slick carousal starts -->
-      <div class="js-slick-carousel u-slick"
-           data-autoplay="true"
-           data-speed="10000"
-           data-infinite="true"
-           data-adaptive-height="true"
-           data-arrows-classes="d-none d-lg-inline-block u-slick__arrow-classic u-slick__arrow-centered--y rounded-circle"
-           data-arrow-left-classes="fas fa-arrow-left u-slick__arrow-classic-inner u-slick__arrow-classic-inner--left ml-lg-2 ml-xl-4"
-           data-arrow-right-classes="fas fa-arrow-right u-slick__arrow-classic-inner u-slick__arrow-classic-inner--right mr-lg-2 mr-xl-4">
-
-        <div class="js-slide bg-img-hero-center" style="background-image: ;">
-          <div class="text-center space-3">
-           
-          </div>
+        <!-- Title -->
+        <div class="w-md-80 w-lg-50 text-center mx-md-auto mb-9">
+            <span class="btn btn-xs btn-soft-success btn-pill mb-2">Laboratories</span>
+            <h2 class="primary">Our Laboratories</h2>
         </div>
+        <!-- Slick carousel starts -->
+        <div class="row">
+            <!-- First Row -->
+            <div class="col-md-6 mb-4">
+                <div class="js-slick-carousel u-slick"
+                    data-autoplay="true"
+                    data-speed="10000"
+                    data-infinite="true"
+                    data-adaptive-height="true"
+                    data-arrows-classes="d-none d-lg-inline-block u-slick__arrow-classic u-slick__arrow-centered--y rounded-circle"
+                    data-arrow-left-classes="fas fa-arrow-left u-slick__arrow-classic-inner u-slick__arrow-classic-inner--left ml-lg-2 ml-xl-4"
+                    data-arrow-right-classes="fas fa-arrow-right u-slick__arrow-classic-inner u-slick__arrow-classic-inner--right mr-lg-2 mr-xl-4">
 
+                    @foreach ($phyLab as $sliderImage)
+    <div class="js-slide bg-img-hero-center" style="background-image: url({{ asset('storage/app/public/slider_images/'.$sliderImage['image']) }});">
+      <div class="text-center space-3">
+        <h2 class="text-white font-weight-light mb-2"
+            data-scs-animation-in="fadeInUp" style="padding-top: 100px;">
+         {{ $sliderImage['title'] }}
+        </h2>
+
+        <p class="text-white mx-auto w-50 d-none d-sm-block"
+           data-scs-animation-in="fadeInUp"
+           data-scs-animation-delay="200">
+             {!! htmlspecialchars_decode(stripslashes($sliderImage['description'])) !!}
+           </p>
       </div>
-      <!-- Slick carousal ends -->
     </div>
+@endforeach
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="js-slick-carousel u-slick"
+                    data-autoplay="true"
+                    data-speed="10000"
+                    data-infinite="true"
+                    data-adaptive-height="true"
+                    data-arrows-classes="d-none d-lg-inline-block u-slick__arrow-classic u-slick__arrow-centered--y rounded-circle"
+                    data-arrow-left-classes="fas fa-arrow-left u-slick__arrow-classic-inner u-slick__arrow-classic-inner--left ml-lg-2 ml-xl-4"
+                    data-arrow-right-classes="fas fa-arrow-right u-slick__arrow-classic-inner u-slick__arrow-classic-inner--right mr-lg-2 mr-xl-4">
+
+                    @foreach ($bioLab as $sliderImage)
+    <div class="js-slide bg-img-hero-center" style="background-image: url({{ asset('storage/app/public/slider_images/'.$sliderImage['image']) }});">
+      <div class="text-center space-3">
+        <h2 class="text-white font-weight-light mb-2"
+            data-scs-animation-in="fadeInUp" style="padding-top: 100px;">
+         {{ $sliderImage['title'] }}
+        </h2>
+
+        <p class="text-white mx-auto w-50 d-none d-sm-block"
+           data-scs-animation-in="fadeInUp"
+           data-scs-animation-delay="200">
+             {!! htmlspecialchars_decode(stripslashes($sliderImage['description'])) !!}
+           </p>
+      </div>
     </div>
-    <!-- End Slider Section -->
+@endforeach
+
+                </div>
+            </div>
+        </div>
+        <!-- Second Row -->
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="js-slick-carousel u-slick"
+                    data-autoplay="true"
+                    data-speed="10000"
+                    data-infinite="true"
+                    data-adaptive-height="true"
+                    data-arrows-classes="d-none d-lg-inline-block u-slick__arrow-classic u-slick__arrow-centered--y rounded-circle"
+                    data-arrow-left-classes="fas fa-arrow-left u-slick__arrow-classic-inner u-slick__arrow-classic-inner--left ml-lg-2 ml-xl-4"
+                    data-arrow-right-classes="fas fa-arrow-right u-slick__arrow-classic-inner u-slick__arrow-classic-inner--right mr-lg-2 mr-xl-4">
+
+                    @foreach ($chemLab as $sliderImage)
+    <div class="js-slide bg-img-hero-center" style="background-image: url({{ asset('storage/app/public/slider_images/'.$sliderImage['image']) }});">
+      <div class="text-center space-3">
+        <h2 class="text-white font-weight-light mb-2"
+            data-scs-animation-in="fadeInUp" style="padding-top: 100px;">
+         {{ $sliderImage['title'] }}
+        </h2>
+
+        <p class="text-white mx-auto w-50 d-none d-sm-block"
+           data-scs-animation-in="fadeInUp"
+           data-scs-animation-delay="200">
+             {!! htmlspecialchars_decode(stripslashes($sliderImage['description'])) !!}
+           </p>
+      </div>
+    </div>
+@endforeach
+
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="js-slick-carousel u-slick"
+                    data-autoplay="true"
+                    data-speed="10000"
+                    data-infinite="true"
+                    data-adaptive-height="true"
+                    data-arrows-classes="d-none d-lg-inline-block u-slick__arrow-classic u-slick__arrow-centered--y rounded-circle"
+                    data-arrow-left-classes="fas fa-arrow-left u-slick__arrow-classic-inner u-slick__arrow-classic-inner--left ml-lg-2 ml-xl-4"
+                    data-arrow-right-classes="fas fa-arrow-right u-slick__arrow-classic-inner u-slick__arrow-classic-inner--right mr-lg-2 mr-xl-4">
+
+                    @foreach ($compLab as $sliderImage)
+    <div class="js-slide bg-img-hero-center" style="background-image: url({{ asset('storage/app/public/slider_images/'.$sliderImage['image']) }});">
+      <div class="text-center space-3">
+        <h2 class="text-white font-weight-light mb-2"
+            data-scs-animation-in="fadeInUp" style="padding-top: 100px;">
+         {{ $sliderImage['title'] }}
+        </h2>
+
+        <p class="text-white mx-auto w-50 d-none d-sm-block"
+           data-scs-animation-in="fadeInUp"
+           data-scs-animation-delay="200">
+             {!! htmlspecialchars_decode(stripslashes($sliderImage['description'])) !!}
+           </p>
+      </div>
+    </div>
+@endforeach
+
+                </div>
+            </div>
+        </div>
+        <!-- Slick carousel ends -->
+    </div>
+</div>
+
 
     <!--Principal-->
     <hr class="my-0">

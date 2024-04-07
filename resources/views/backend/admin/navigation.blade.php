@@ -54,7 +54,7 @@
                                     <a href="{{route('singleAdmission')}}">Admission</a>
                 </li>
                                           <li>
-                                    <a href="{{ route('teachers') }}">Teacher</a>
+                                    <a href="{{ route('admin.teachers') }}">Teacher</a>
                 </li>
                                           <li>
                                     <a href="{{route('teacherPermission')}}">Teacher permission</a>

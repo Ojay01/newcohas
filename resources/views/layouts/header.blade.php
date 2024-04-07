@@ -30,13 +30,16 @@
 <link rel="stylesheet" href="/public/assets/frontend/ultimate/css/custom.css">
 
 <script src="/public/assets/frontend/ultimate/vendor/jquery/dist/jquery.min.js"></script>
-
+@php
+$favicon = \App\Models\Logo::first()->favicon;
+@endphp
 <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="College of Hopes, Arts and Sciences Official Website" name="description" />
     <meta content="Amene Academy" name="author" />
     <!-- App favicon -->
-<link rel="shortcut icon" href="#">
+    <link rel="shortcut icon" href="{{ asset('storage/app/public/logos/' . $favicon) }}">
+
 
 </head>
 

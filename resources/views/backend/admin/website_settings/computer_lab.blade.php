@@ -1,12 +1,12 @@
 @extends('backend.admin.website_settings.index')
-@section('title', 'Physics Laboratory')
+@section('title', 'Computer Laboratory')
 
 @section('settings')
 
 <div class="card">
   <div class="card-body">
-    <h4 class="header-title">Physics Lab Images</h4>
-    <form method="POST" class="col-12 homepageSliderSettings" action="{{ route('physicsLab') }}" id = "homepage_slider_settings" enctype="multipart/form-data">
+    <h4 class="header-title">Computer Lab Images</h4>
+    <form method="POST" class="col-12 homepageSliderSettings" action="{{ route('computerLab') }}" id = "homepage_slider_settings" enctype="multipart/form-data">
     @csrf
       <div class="row justify-content-left">
         <div class="col-12">

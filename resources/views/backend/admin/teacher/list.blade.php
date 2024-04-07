@@ -79,5 +79,3 @@
         $('#editPermissionModal').modal('show');
     }
 </script>
-
-@include('backend.admin.empty')

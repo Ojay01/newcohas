@@ -19,8 +19,16 @@ class Controller extends BaseController
          $schoolSettings = SchoolSetting::first(); 
          $settings = Setting::first(); 
          $sliderImages = $sliderSettings->slider_images;
+         $chemLab = $sliderSettings->chemistry_lab;
+         $phyLab = $sliderSettings->physics_lab;
+         $compLab = $sliderSettings->computer_lab;
+         $bioLab = $sliderSettings->biology_lab;
         $sliderImages = json_decode($sliderImages, true);
-        return view('frontend.index', compact('sliderImages', 'sliderSettings', 'schoolSettings', 'settings'));
+        $chemLab = json_decode($chemLab, true);
+        $phyLab = json_decode($phyLab, true);
+        $compLab = json_decode($compLab, true);
+        $bioLab = json_decode($bioLab, true);
+        return view('frontend.index', compact('sliderImages', 'sliderSettings', 'schoolSettings', 'settings', 'compLab', 'bioLab', 'phyLab', 'chemLab'));
     }
 
     public function about()

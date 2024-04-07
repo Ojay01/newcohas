@@ -41,9 +41,12 @@ Route::prefix('admin')->group(function () {
     Route::get('/noticeboard-settings', [App\Http\Controllers\HomeController::class, 'noticeboardSettings'])->name('noticeboardSettings');
     Route::get('/terms_and_Conditions-settings', [App\Http\Controllers\HomeController::class, 'termsSettings'])->name('termsSettings');
     Route::get('/privacy_policy-settings', [App\Http\Controllers\HomeController::class, 'privacySettings'])->name('privacySettings');
-    Route::get('/teachers', [App\Http\Controllers\HomeController::class, 'teachers'])->name('teachers');
+    Route::get('/teachers', [App\Http\Controllers\HomeController::class, 'teachers'])->name('admin.teachers');
     Route::get('/homepage_settings', [App\Http\Controllers\HomeController::class, 'homepageSettings'])->name('homepageSettings');
-    Route::get('/laboratory_settings', [App\Http\Controllers\HomeController::class, 'labSettings'])->name('labSettings');
+    Route::get('/Physics_lab', [App\Http\Controllers\HomeController::class, 'labSettings'])->name('labSettings');
+    Route::get('/bio_lab', [App\Http\Controllers\HomeController::class, 'bioLab'])->name('bioLab');
+    Route::get('/chem_lab', [App\Http\Controllers\HomeController::class, 'chemLab'])->name('chemLab');
+    Route::get('/computer_lab', [App\Http\Controllers\HomeController::class, 'comLab'])->name('comLab');
     Route::get('/school_settings', [App\Http\Controllers\HomeController::class, 'schoolSettings'])->name('schoolSettings');
     Route::get('/teachers_permission', [App\Http\Controllers\HomeController::class, 'teacherPermission'])->name('teacherPermission');
     Route::get('/student_admission', [App\Http\Controllers\HomeController::class, 'studentAdmission'])->name('studentAdmission');
@@ -78,6 +81,10 @@ Route::prefix('admin')->group(function () {
     Route::post('/update_privacy_policy', [App\Http\Controllers\FrontendController::class, 'updatePrivactPolicySettings'])->name('updatePrivactPolicySettings');
     Route::post('/update_terms_and_condition', [App\Http\Controllers\FrontendController::class, 'updateTermsAndConditionSettings'])->name('updateTermsAndConditionSettings');
     Route::post('/update-homepage-slider-settings', 'App\Http\Controllers\FrontendController@updateSliders')->name('updateSliders');
+    Route::post('/update_physics_lab', 'App\Http\Controllers\FrontendController@physicsLab')->name('physicsLab');
+    Route::post('/update_chemistry_lab', 'App\Http\Controllers\FrontendController@chemistryLab')->name('chemistryLab');
+    Route::post('/update_chem_lab', 'App\Http\Controllers\FrontendController@biologyLab')->name('biologyLab');
+    Route::post('/update_computer_lab', 'App\Http\Controllers\FrontendController@computerLab')->name('computerLab');
     Route::post('/school_settings', 'App\Http\Controllers\FrontendController@schoolSetting')->name('schoolSetting');
     Route::post('/add_class', [App\Http\Controllers\AdminController::class, 'addClass'])->name('addClass');
     Route::post('/add_section', [App\Http\Controllers\AdminController::class, 'addSection'])->name('addSection');
@@ -93,6 +100,8 @@ Route::prefix('admin')->group(function () {
     Route::delete('/subject/{subject}', 'App\Http\Controllers\AdminController@deleteSubject')->name('subject.destroy');
     Route::get('/section/list/{class_id}', 'App\Http\Controllers\AdminController@fetchSections')->name('section.list');
     Route::get('/filter-students', 'App\Http\Controllers\AdminController@filterStudents')->name('filterStudents');
+    Route::get('/filter_teachers_permission', 'App\Http\Controllers\AdminController@filterTeachers')->name('filterTeachers');
+    Route::post('/toggle-permission', 'App\Http\Controllers\AdminController@togglePermission')->name('toggle.permission');
 
 
 

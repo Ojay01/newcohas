@@ -1,5 +1,8 @@
 @section('header')
-
+@php
+$lightlogo = \App\Models\Logo::first()->light_logo;
+$smalllogo = \App\Models\Logo::first()->small_logo;
+@endphp
     <!-- Topbar Start -->
 <div class="navbar-custom topnav-navbar topnav-navbar-dark">
     <div class="container-fluid">
@@ -7,10 +10,10 @@
         <!-- LOGO -->
         <a href="{{route('home')}}" class="topnav-logo" style = "min-width: unset;">
             <span class="topnav-logo-lg">
-                <img src="https://cohasbepanda.com/uploads/system/logo/logo-light.png" alt="" height="40">
+                <img src="{{ asset('storage/app/public/logos/' . $lightlogo) }}" alt="" height="40">
             </span>
             <span class="topnav-logo-sm">
-                <img src="https://cohasbepanda.com/uploads/system/logo/logo-light-sm.png" alt="" height="40">
+                <img src="{{ asset('storage/app/public/logos/' . $smalllogo) }}" alt="" height="40">
             </span>
         </a>
 

@@ -41,25 +41,26 @@
                 </div>
                 <div class="col-md-2 mb-1" id="subject_select_wrapper" style="display: none;">
     <select name="subject" id="subject_id" class="form-control select2" data-toggle="select2" required>
-        <option value="">Select Subject</option>
         @foreach ($subjects as $subject)
             <option value="{{ $subject->id }}">{{ $subject->name }}</option>
         @endforeach
     </select>
 </div>
                 <div class="col-md-2">
-                    <button class="btn btn-block btn-secondary" onclick="filter()" >Filter</button>
+                    <button class="btn btn-block btn-secondary" onclick="fetchTeachers()" >Filter</button>
                 </div>
             </div>
 
-    @include('backend.admin.permission.list')
-
             <div class="card-body permission_content">
+                    @if ($class_id !== "")  
+    @include('backend.admin.permission.list')
+@else
             	<div class="empty_box text-center">
                     <img class="mb-3" width="150px" src="/public/assets/backend/images/empty_box.png" />
                     <br>
                     <span class="">No Data Found</span>
                 </div>
+                @endif
             </div>
         </div>
     </div>
@@ -85,19 +86,21 @@ function classWiseSection(classId) {
     });
 }
 
-function fetchStudents() {
+function fetchTeachers() {
     var classId = $('#class_id').val();
     var sectionId = $('#section_id').val();
+    var subjectId = $('#subject_id').val();
     $.ajax({
-        url: "{{ route('filterStudents') }}",
+        url: "{{ route('filterTeachers') }}",
         method: 'GET',
         data: {
             class_id: classId,
-            section_id: sectionId
+            section_id: sectionId,
+            subject_id: subjectId
         },
         success: function(response) {
             // Handle successful response here
-              $('.student_content').html(response);
+              $('.permission_content').html(response);
         },
         error: function(xhr, status, error) {
             // Handle error here
@@ -107,31 +110,7 @@ function fetchStudents() {
 }
 </script>
 
-<!-- permission insert and update -->
-<script>
-    function togglePermission(checkbox_id, column_name, teacher_id){
 
-        var value = $('#'+checkbox_id).val();
-        if(value == 1){
-            value = 0;
-        }else{
-            value = 1;
-        }
-        var class_id = $('#class_id').val();
-        var section_id = $('#section_id').val();
-
-        $.ajax({
-            type: 'POST',
-            url: '#',
-            data: {class_id : class_id, section_id : section_id, teacher_id : teacher_id, column_name : column_name,  value : value},
-            success: function(response){
-                $('.permission_content').html(response);
-                success_notify('#');
-            }
-        });
-
-    }
-</script>
 
 @extends('backend.admin.header')
 @extends('backend.admin.navigation')

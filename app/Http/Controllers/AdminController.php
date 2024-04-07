@@ -13,6 +13,8 @@ use App\Models\Section;
 use App\Models\Department;
 use App\Models\Enrollment;
 use App\Models\User;
+use App\Models\Teacher;
+use App\Models\Permission;
 
 class AdminController extends Controller
 {
@@ -219,40 +221,6 @@ class AdminController extends Controller
     return response()->json($sections);
 }
 
-// public function filterStudents(Request $request)
-// {
-//     $classId = $request->input('class_id');
-//     $sectionId = $request->input('section_id');
-
-//     // Retrieve enrollments based on class and section IDs
-//     $enrollments = Enrollment::where('class_id', $classId)
-//                              ->where('section_id', $sectionId)
-//                              ->get();
-
-//     // Initialize an array to store student details
-//     $students = [];
-
-//     // Iterate over each enrollment record
-//     foreach ($enrollments as $enrollment) {
-//         // Fetch the student details from the users table based on student_id
-//         $student = User::find($enrollment->student_id);
-
-//         // If the student exists, add their details to the array
-//         if ($student) {
-//             $studentDetails = [
-//                 'name' => $student->name, // Retrieve the name from the users table
-//                 'status' => $student->status, // Assuming status exists in the users table
-//                 // Add other details as needed
-//             ];
-
-//             // Add the student details to the array
-//             $students[] = $studentDetails;
-//         }
-//     }
-
-//     // Return the filtered students as JSON response
-//     return response()->json($students);
-// }
 
 public function filterStudents(Request $request)
 {
@@ -271,6 +239,79 @@ public function filterStudents(Request $request)
 
     return view('backend.admin.student.list', compact('students'));
 }
+
+
+public function filterTeachers(Request $request)
+{
+    $classId = $request->input('class_id');
+    $sectionId = $request->input('section_id');
+    $subjectId = $request->input('subject_id');
+
+    // Check if class ID or section ID is invalid
+    if (!$classId || !$sectionId || !$subjectId) {
+        return view('backend.admin.empty');
+    }
+
+    // Retrieve all teachers
+    $teachers = Teacher::all();
+
+    // Fetch permissions for the given class, section, and subject
+    $permissions = Permission::whereIn('user_id', $teachers->pluck('user_id'))
+        ->where('class_id', $classId)
+        ->where('section_id', $sectionId)
+        ->where('subject_id', $subjectId)
+        ->get();
+
+    // Associate each teacher with their permission (if exists)
+    $teacherPermissions = [];
+    foreach ($teachers as $teacher) {
+        $permission = $permissions->where('user_id', $teacher->user_id)->first();
+        $teacherPermissions[$teacher->user_id] = $permission ?? null;
+    }
+
+    return view('backend.admin.permission.list', compact('teachers', 'teacherPermissions'));
+}
+
+        public function togglePermission(Request $request)
+        {
+            $userId = $request->input('user_id');
+            $classId = $request->input('class_id');
+            $sectionId = $request->input('section_id');
+            $subjectId = $request->input('subject_id');
+            $columnName = $request->input('column_name');
+            $value = $request->input('value');
+
+            // Check if the permission record already exists
+            $permission = Permission::where('user_id', $userId)
+                ->where('class_id', $classId)
+                ->where('section_id', $sectionId)
+                ->where('subject_id', $subjectId)
+                ->first();
+
+            if ($permission) {
+                // Update the specific permission
+                $permission->$columnName = $value;
+                $permission->save();
+            } else {
+                // Create a new permission record
+                $permission = new Permission();
+                $permission->user_id = $userId;
+                $permission->class_id = $classId;
+                $permission->section_id = $sectionId;
+                $permission->subject_id = $subjectId;
+                $permission->$columnName = $value;
+                $permission->save();
+            }
+
+            //  return response()->json(['success' => true]);
+            return response()->json(['success' => true, 'message' => 'Your success message here']);
+
+        // // return redirect()->with('success', 'Department added successfully.');
+        // // return view('backend.admin.permission.list', compact('teachers', 'teacherPermissions'))->with('success', 'Permission toggled successfully.');
+        // return $this->filterTeachers($request)->with('success', 'Permission toggled successfully.');
+        }
+
+
 
 
 

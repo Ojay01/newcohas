@@ -14,6 +14,7 @@ use App\Models\Subject;
 use App\Models\User;
 use App\Models\Enrollment;
 use App\Models\Teacher;
+use App\Models\Permission;
 
 
 class HomeController extends Controller
@@ -157,9 +158,10 @@ class HomeController extends Controller
             'facebook' => $facebook,
             'linkedin' => $linkedin,
         ];
+        $teacherPermissions[$teacher->user_id] = Permission::where('user_id', $teacher->user_id)->get();
     }
 
-    return view('backend.admin.teacher.index', compact('teachers', 'socialLinks'));
+    return view('backend.admin.teacher.index', compact('teachers', 'socialLinks', 'teacherPermissions'));
 }
 
 
@@ -174,7 +176,42 @@ class HomeController extends Controller
 
     public function labSettings()
     {
-        return view('backend.admin.website_settings.lab_settings');
+        $sliderSettings = GeneralSetting::first();        
+         $sliderImages = $sliderSettings->physics_lab;
+            $sliderImages = json_decode($sliderImages, true);
+        return view('backend.admin.website_settings.lab_settings', [
+        'sliderImages' => $sliderImages,
+    ]);
+    }
+
+    public function bioLab()
+    {
+        $sliderSettings = GeneralSetting::first();        
+         $sliderImages = $sliderSettings->biology_lab;
+            $sliderImages = json_decode($sliderImages, true);
+        return view('backend.admin.website_settings.biology_lab', [
+        'sliderImages' => $sliderImages,
+    ]);
+    }
+
+    public function chemLab()
+    {
+        $sliderSettings = GeneralSetting::first();        
+         $sliderImages = $sliderSettings->chemistry_lab;
+            $sliderImages = json_decode($sliderImages, true);
+        return view('backend.admin.website_settings.chemistry_lab', [
+        'sliderImages' => $sliderImages,
+    ]);
+    }
+
+    public function comLab()
+    {
+        $sliderSettings = GeneralSetting::first();        
+         $sliderImages = $sliderSettings->computer_lab;
+            $sliderImages = json_decode($sliderImages, true);
+        return view('backend.admin.website_settings.computer_lab', [
+        'sliderImages' => $sliderImages,
+    ]);
     }
 
     public function studentAdmission()

@@ -25,6 +25,10 @@ class GeneralSetting extends Model
         'privacy_policy',
         'about_us',
         'slider_images',
+        'physics_lab',
+        'chemistry_lab',
+        'biology_lab',
+        'computer_lab',
     ];
 
     protected $casts = [

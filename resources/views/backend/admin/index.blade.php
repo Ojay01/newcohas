@@ -45,7 +45,7 @@
                 <div class="float-end">
                   <i class="mdi mdi-account-multiple widget-icon"></i>
                 </div>
-                <h5 class="text-muted font-weight-normal mt-0" title="Number of Teacher"> <i class="mdi mdi-account-group title_icon"></i>Teachers  <a href="{{ route('teachers') }}" style="color: #6c757d; display: none;" id = "teacher_list"><i class = "mdi mdi-export"></i></a></h5>
+                <h5 class="text-muted font-weight-normal mt-0" title="Number of Teacher"> <i class="mdi mdi-account-group title_icon"></i>Teachers  <a href="{{ route('admin.teachers') }}" style="color: #6c757d; display: none;" id = "teacher_list"><i class = "mdi mdi-export"></i></a></h5>
                 <h3 class="mt-3 mb-3">
                   {{$teacherCount}}
                 </h3>

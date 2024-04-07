@@ -1,4 +1,7 @@
-
+@php
+$logo = \App\Models\Logo::first()->regular_logo;
+$favicon = \App\Models\Logo::first()->favicon;
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +12,7 @@
     <meta content="College of Hopes, Arts and Science Official Website" name="description" />
     <meta content="Coderthemes" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="https://cohasbepanda.com/uploads/system/logo/favicon.png">
+    <link rel="shortcut icon" href="{{ asset('storage/app/public/logos/' . $favicon) }}">
 
     <!-- App css -->
     <link href="/public/assets/backend/css/icons.min.css" rel="stylesheet" type="text/css" />
@@ -29,7 +32,7 @@
                     <!-- Logo -->
                     <div class="text-center text-lg-left mb-3">
                         <a href="/">
-                            <span><img src="https://cohasbepanda.com/uploads/system/logo/logo-dark.png" alt="" height="35"></span>
+                            <span><img src="{{ asset('storage/app/public/logos/' . $logo) }}" alt="logo" height="35"></span>
                         </a>
                     </div>
                     <!-- title-->

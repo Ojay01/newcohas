@@ -12,12 +12,14 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-
+@php
+$favicon = \App\Models\Logo::first()->favicon;
+@endphp
 
     <meta content="College of Hopes, Arts and Sciences Admin Dashboard" name="description" />
     <meta content="Creativeitem" name="author" />
-    <!-- App favicon -->
-<link rel="shortcut icon" href="#">
+    <!-- App favicon -->    
+    <link rel="shortcut icon" href="{{ asset('storage/app/public/logos/' . $favicon) }}">
 
 <!-- App css -->
 <link href="/public/assets/backend/css/icons.min.css" rel="stylesheet" type="text/css" />
