@@ -25,7 +25,7 @@
   <!-- About section starts -->
   <div class="gradient-half-primary-v3">
     <div class="container space-2 space-md-3">
-      Our Terms
+                   {!! htmlspecialchars_decode(stripslashes($sliderSettings['terms_and_conditions'])) !!}
     </div>
   </div>
   <!-- About section ends -->

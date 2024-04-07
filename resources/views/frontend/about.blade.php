@@ -27,9 +27,9 @@
 
 
       <img class="rounded" alt="About Us" style="width: 100%;"
-        src="#">
+        src="{{ asset('storage/app/public/logos/' . $sliderSettings->about_us_image) }}">
 
-     This is about us
+             {!! htmlspecialchars_decode(stripslashes($sliderSettings['about_us'])) !!}
 
     </div>
   </div>

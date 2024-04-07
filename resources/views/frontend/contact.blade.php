@@ -39,7 +39,7 @@
           </figure>
           <h2 class="h6 mb-0">{{('Address')}}</h2>
           <p class="mb-0">
-            Douala
+            {{$settings->address}}
           </p>
         </div>
         <!-- End Contacts Info -->
@@ -54,7 +54,7 @@
           </figure>
           <h3 class="h6 mb-0">{{('Email')}}</h3>
           <p class="mb-0">
-            example@gmail.com
+            {{$settings->system_email}}
           </p>
         </div>
         <!-- End Contacts Info -->
@@ -69,7 +69,7 @@
           </figure>
           <h3 class="h6 mb-0">{{('Phone ')}}</h3>
           <p class="mb-0">
-            +237
+           {{$settings->phone}}
           </p>
         </div>
         <!-- End Contacts Info -->
@@ -82,9 +82,9 @@
             <img class="js-svg-injector" src="/public/assets/frontend/ultimate/svg/icons/icon-17.svg" alt="SVG"
                  data-parent="#icon17">
           </figure>
-          <h3 class="h6 mb-0">{{('fax')}}</h3>
+          <h3 class="h6 mb-0">{{('Registration')}}</h3>
           <p class="mb-0">
-            {{('000000')}}
+           {{$settings->registration}}
           </p>
         </div>
         <!-- End Contacts Info -->
@@ -92,6 +92,85 @@
     </div>
   </div>
   <!-- End Contacts Info Section -->
+@if(session('success'))
+    <div id="success-alert" class="alert alert-success alert-dismissible fade show mb-0 text-center" role="alert">
+        <strong>Bravo! </strong>{{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <br>
+    <style>
+        #success-alert {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+            z-index: 1000;
+        }
+    </style>
+    <script>
+        // Auto hide the success alert after 5 seconds
+        setTimeout(function() {
+            document.getElementById('success-alert').style.display = 'none';
+        }, 5000);
+    </script>
+@endif
+
+@if(session('error'))
+    <div id="success-alert" class="alert alert-danger alert-dismissible fade show mb-0 text-center" role="alert">
+        <strong>ooops! </strong>{{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <br>
+    <style>
+        #success-alert {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+            z-index: 1000;
+        }
+    </style>
+    <script>
+        // Auto hide the success alert after 5 seconds
+        setTimeout(function() {
+            document.getElementById('success-alert').style.display = 'none';
+        }, 5000);
+    </script>
+@endif
+ @if ($errors->any())
+    <div id="success-alert" class="alert alert-danger alert-dismissible fade show mb-0 text-center" role="alert">
+        <strong>ooops! </strong>@foreach ($errors->all() as $error)
+                        {{ $error }}
+                    @endforeach
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <br>
+    <style>
+        #success-alert {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+            z-index: 1000;
+        }
+    </style>
+    <script>
+        // Auto hide the success alert after 5 seconds
+        setTimeout(function() {
+            document.getElementById('success-alert').style.display = 'none';
+        }, 5000);
+    </script>
+@endif
+
 
   <hr class="my-0">
 
@@ -108,7 +187,7 @@
 
     <div class="w-lg-80 mx-auto">
       <!-- Contacts Form -->
-      <form action="#" method="post" class="js-validate">
+      <form action="{{route('contactForm')}} " method="post" class="js-validate">
       @csrf
         <div class="row">
           <!-- Input -->
@@ -119,7 +198,7 @@
                 <span class="text-danger">*</span>
               </label>
 
-              <input type="text" class="form-control" name="first_name"  required
+              <input type="text" class="form-control" name="first_name" placeholder="Your First Name" required
                      data-msg="Please enter your first name."
                      data-error-class="u-has-error"
                      data-success-class="u-has-success">
@@ -135,7 +214,7 @@
                 <span class="text-danger">*</span>
               </label>
 
-              <input type="text" class="form-control" name="last_name"  required
+              <input type="text" class="form-control" name="last_name" placeholder="Your Last Name" required
                      data-msg="Please enter your last name."
                      data-error-class="u-has-error"
                      data-success-class="u-has-success">
@@ -151,7 +230,7 @@
                 <span class="text-danger">*</span>
               </label>
 
-              <input type="email" class="form-control" name="email" required
+              <input type="email" class="form-control" name="email" placeholder="Your  email" required
                      data-msg="Please enter a valid email address."
                      data-error-class="u-has-error"
                      data-success-class="u-has-success">
@@ -167,7 +246,7 @@
                 <span class="text-danger">*</span>
               </label>
 
-              <input type="number" class="form-control" name="phone" required
+              <input type="number" class="form-control" name="phone" placeholder="Your Phone number" required
                      data-msg="Please enter a valid phone number."
                      data-error-class="u-has-error"
                      data-success-class="u-has-success">
@@ -185,7 +264,7 @@
                 <span class="text-danger">*</span>
               </label>
 
-              <input type="text" class="form-control" name="address" required
+              <input type="text" class="form-control" name="address" placeholder="Your home address" required
                      data-msg="Please enter your location."
                      data-error-class="u-has-error"
                      data-success-class="u-has-success">
@@ -202,7 +281,7 @@
           </label>
 
           <div class="input-group">
-            <textarea class="form-control" rows="4" name="comment" required
+            <textarea class="form-control" rows="4" name="comment" placeholder="How can we help you?" required
                       data-msg="Please enter your message."
                       data-error-class="u-has-error"
                       data-success-class="u-has-success"></textarea>

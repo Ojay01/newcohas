@@ -8,6 +8,10 @@ use Illuminate\Routing\Controller as BaseController;
 use App\Models\GeneralSetting;
 use App\Models\SchoolSetting;
 use App\Models\Setting;
+use App\Models\Teacher;
+use App\Mail\ContactFormMail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\Request;
 
 class Controller extends BaseController
 {
@@ -35,7 +39,7 @@ class Controller extends BaseController
     {
          $schoolSettings = SchoolSetting::first();
          $sliderSettings = GeneralSetting::first(); 
-         $settings = Setting::first(); 
+         $settings = Setting::first();
         return view('frontend.about', compact('schoolSettings', 'settings', 'sliderSettings'));
     }
 
@@ -67,8 +71,23 @@ class Controller extends BaseController
     {
          $schoolSettings = SchoolSetting::first();
          $sliderSettings = GeneralSetting::first(); 
-         $settings = Setting::first(); 
-        return view('frontend.teachers', compact('schoolSettings', 'settings', 'sliderSettings'));
+         $settings = Setting::first();
+        $teachers = Teacher::where('show_on_website', 1)->get();
+        
+        foreach ($teachers as $teacher) {
+        $decodedLinks = json_decode($teacher->social_links, true);
+        $twitter = $decodedLinks['twitter'] ?? '';
+        $facebook = $decodedLinks['facebook'] ?? '';
+        $linkedin = $decodedLinks['linkedin'] ?? '';
+
+        // Store the social links in an array for each teacher
+        $socialLinks[$teacher->id] = [
+            'twitter' => $twitter,
+            'facebook' => $facebook,
+            'linkedin' => $linkedin,
+        ];
+    }
+        return view('frontend.teachers', compact('schoolSettings', 'settings', 'sliderSettings', 'teachers', 'socialLinks'));
     }
 
     public function contact()
@@ -126,5 +145,30 @@ class Controller extends BaseController
          $settings = Setting::first();    
         return view('frontend.tutorials', compact('schoolSettings', 'settings', 'sliderSettings'));
     }
+
+    public function contactForm(Request $request)
+{
+    // Validate the form data
+   $request->validate([
+        'first_name' => 'required|string',
+        'last_name' => 'required|string',
+        'email' => 'required|email',
+        'phone' => 'required|numeric',
+        'address' => 'required|string',
+        'comment' => 'required|string',
+    ]);
+
+    $data = [
+    'name' => $request->input('first_name') . ' ' . $request->input('last_name'),
+    'email' => $request->input('email'),
+    'phone' => $request->input('phone'),
+    'location' => $request->input('address'),
+    'message' => $request->input('comment'),
+];
+
+\Mail::to('okellykings220@gmail.com')->send(new ContactFormMail($data));
+    // Redirect back with a success message
+    return redirect()->back()->with('success', 'Your message has been submitted successfully.');
+}
 
 }

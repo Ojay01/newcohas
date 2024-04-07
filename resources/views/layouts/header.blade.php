@@ -95,8 +95,8 @@ data-header-fix-effect="slide">
     <li class="nav-item u-header__nav-item {{ Request::is('contact') ? 'active' : '' }}">
         <a class="nav-link u-header__nav-link" href="{{ route('contact') }}">Contact</a>
     </li>
-    <li class="nav-item u-header__nav-item {{ Request::is('admission') ? 'active' : '' }}">
-        <a class="nav-link u-header__nav-link btn-primary text-white text-center font-weight-bold btn-sm py-2 px-3" href="{{ route('admission') }}">Online Admission</a>
+    <li class="nav-item u-header__nav-item {{ Request::is('online.admission') ? 'active' : '' }}">
+        <a class="nav-link u-header__nav-link btn-primary text-white text-center font-weight-bold btn-sm py-2 px-3" href="{{ route('online.admission') }}">Online Admission</a>
     </li>
 </ul>
 

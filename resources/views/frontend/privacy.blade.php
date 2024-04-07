@@ -26,7 +26,7 @@
   <div class="gradient-half-primary-v3">
     <div class="container space-2 space-md-3">
 
-      Our Privacy Policy
+                   {!! htmlspecialchars_decode(stripslashes($sliderSettings['privacy_policy'])) !!}
 
     </div>
   </div>

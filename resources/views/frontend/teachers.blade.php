@@ -31,8 +31,8 @@
         <h2 class="text-primary">Our Professional Teachers</span></h2>
       </div>
       <!-- End Title -->
-
         <div class="row">
+        @foreach ($teachers as $teacher)
             <div class="col-md-6" style="padding: 30px;">
               <!-- Slick Carousel -->
               <div class="js-slick-carousel u-slick u-slick--gutters-3"
@@ -53,33 +53,33 @@
                     <div class="col-sm-6 d-sm-flex align-content-sm-start flex-sm-column text-center text-sm-left mb-7 mb-sm-0">
                       <div class="w-100">
                         <h3 class="h5 mb-4">
-                          name
+                          {{$teacher->user->name}}
                         </h3>
                       </div>
                       <div class="d-inline-block">
                         <span class="badge badge-primary badge-pill badge-bigger mb-3">
-                          designation
+                          {{$teacher->designation}}
                         </span>
                       </div>
-                      <p class="font-size-1">about</p>
+                      <p class="font-size-1">{{$teacher->about}}</p>
 
                       <!-- Social Networks -->
                       <ul class="list-inline mt-auto mb-0">
                         <li class="list-inline-item mx-0">
                           <a class="btn btn-sm btn-icon btn-soft-secondary"
-                            href="#">
+                            href="{{ $socialLinks[$teacher->id]['facebook'] ?? '#' }}">
                             <span class="fab fa-facebook-f btn-icon__inner"></span>
                           </a>
                         </li>
                         <li class="list-inline-item mx-0">
                           <a class="btn btn-sm btn-icon btn-soft-secondary"
-                            href="#">
+                            href="{{ $socialLinks[$teacher->id]['linkedin'] ?? '#' }}">
                             <span class="fab fa-linkedin btn-icon__inner"></span>
                           </a>
                         </li>
                         <li class="list-inline-item mx-0">
                           <a class="btn btn-sm btn-icon btn-soft-secondary"
-                            href="#">
+                            href="{{ $socialLinks[$teacher->id]['twitter'] ?? '#' }}">
                             <span class="fab fa-twitter btn-icon__inner"></span>
                           </a>
                         </li>
@@ -87,9 +87,15 @@
                       <!-- End Social Networks -->
                     </div>
                     <div class="col-sm-5">
+                    @if ($teacher->user->profile_image)
                       <img class="img-fluid rounded mx-auto"
-                        src="#"
-                        alt="<#" style="border-radius: 100px !important;">
+                        src="{{ asset('storage/app/public/profiles/' . $teacher->user->profile_image) }}"
+                        alt="teacher image" style="border-radius: 100px !important;">
+                        @else
+                        <img class="img-fluid rounded mx-auto"
+                        src="/public/images/placeholder.jpg"
+                        alt="teacher image" style="border-radius: 100px !important;">
+                        @endif
                     </div>
                   </div>
                   <!-- End Team -->
@@ -97,9 +103,9 @@
               </div>
               <!-- End Slick Carousel -->
             </div>
+@endforeach
            
         </div>
-
       </div>
 
     </div>
