@@ -32,18 +32,18 @@
       <!-- End Title -->
 
       <div class="row mx-gutters-2">
-
+        @foreach ($gallery as $gallery)
         <!-- Gallery thumb starts -->
         <div class="col-md-4 mb-3">
-          <a class="d-flex align-items-end bg-img-hero gradient-overlay-half-dark-v1 transition-3d-hover height-450 rounded-pseudo" href="#"
-          style="background-image: ;">
+          <a class="d-flex align-items-end bg-img-hero gradient-overlay-half-dark-v1 transition-3d-hover height-450 rounded-pseudo" href="{{route('galleryImages', ['id' => $gallery->id])}}"
+          style="background-image: url({{ asset('storage/app/public/' . $gallery->cover_image) }});">
             <article class="w-100 text-center p-6">
               <h3 class="h4 text-white">
-                Title
+               {{$gallery->title}}
               </h3>
               <div class="mt-4" style="margin-top:0px !important;">
                 <strong class="d-block text-white-70 mb-2">
-                  9 images
+                 {{$gallery->images->count() }} images
                 </strong>
               </div>
             </article>
@@ -51,7 +51,7 @@
         </div>
         <!-- Gallery thumb ends -->
       
-
+@endforeach
       </div>
 
     </div>

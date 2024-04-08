@@ -17,7 +17,7 @@ Route::get('/student-assignmnets', [App\Http\Controllers\Controller::class, 'ass
 Route::get('/tutorials', [App\Http\Controllers\Controller::class, 'tutorials'])->name('tutorials');
 Route::get('/our-discipline', [App\Http\Controllers\Controller::class, 'discipline'])->name('discipline');
 Route::post('/contact_us', [App\Http\Controllers\Controller::class, 'contactForm'])->name('contactForm');
-
+Route::get('/gallery/{id}/images/', [App\Http\Controllers\Controller::class, 'galleryImages'])->name('galleryImages');
 
     Auth::routes();
 
@@ -37,7 +37,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/about-us-settings', [App\Http\Controllers\HomeController::class, 'aboutUsSettings'])->name('aboutUsSettings');
     Route::get('/gallery-settings', [App\Http\Controllers\HomeController::class, 'gallerySettings'])->name('gallerySettings');
     Route::get('/event-settings', [App\Http\Controllers\HomeController::class, 'eventSettings'])->name('eventSettings');
-    Route::get('/gallery-image-settings', [App\Http\Controllers\HomeController::class, 'galleryImageSettings'])->name('galleryImageSettings');
+    Route::get('/gallery/{id}/images/', [App\Http\Controllers\HomeController::class, 'galleryImageSettings'])->name('galleryImageSettings');
     Route::get('/login-image-settings', [App\Http\Controllers\HomeController::class, 'others'])->name('others');
     Route::get('/noticeboard-settings', [App\Http\Controllers\HomeController::class, 'noticeboardSettings'])->name('noticeboardSettings');
     Route::get('/terms_and_Conditions-settings', [App\Http\Controllers\HomeController::class, 'termsSettings'])->name('termsSettings');
@@ -103,8 +103,11 @@ Route::prefix('admin')->group(function () {
     Route::get('/filter-students', 'App\Http\Controllers\AdminController@filterStudents')->name('filterStudents');
     Route::get('/filter_teachers_permission', 'App\Http\Controllers\AdminController@filterTeachers')->name('filterTeachers');
     Route::post('/toggle-permission', 'App\Http\Controllers\AdminController@togglePermission')->name('toggle.permission');
-
-
+    Route::post('/create_gallery', 'App\Http\Controllers\AdminController@createGallery')->name('create.gallery');
+    Route::post('/galleries/{id}', [App\Http\Controllers\AdminController::class, 'updateGallery'])->name('updateGallery');
+    Route::post('/galleries/{id}/add-photo', [App\Http\Controllers\AdminController::class, 'addPhoto'])->name('addPhotoToGallery');
+    Route::delete('/delete/gallery/images/{id}', [App\Http\Controllers\AdminController::class, 'deleteImage'])->name('deleteImage');
+    Route::delete('/galleries/{id}', [App\Http\Controllers\AdminController::class, 'deleteGallery'])->name('deleteGallery');
 
 
 });

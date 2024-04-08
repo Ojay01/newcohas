@@ -4,7 +4,6 @@
 
 @section('content')
 
-
 <!-- ========== MAIN ========== -->
 <main id="content" role="main">
   <!-- Hero Section -->
@@ -13,13 +12,14 @@
       <!-- Title -->
       <div class="w-md-80 w-lg-50 mx-auto mb-5">
         <h1 class="h1 text-white">
-          <span class="font-weight-semi-bold">Gallery</span>
+          <span class="font-weight-semi-bold">Gallery Images</span>
         </h1>
       </div>
       <!-- End Title -->
     </div>
   </div>
   <!-- End Hero Section -->
+@if ($gallery->images->count() > 0)
 
   <!-- Gallery section starts -->
   <div class="container space-2 space-md-2">
@@ -27,13 +27,13 @@
       <!-- Title -->
       <div class="w-md-80 w-lg-50 text-center mx-md-auto mb-5">
         <span class="btn btn-xs btn-soft-success btn-pill mb-2">
-          Date
+         {{ \Carbon\Carbon::parse($gallery->date_added)->format('F j, Y') }}
         </span>
         <h2 class="text-primary">
-          Title
+          {{$gallery-> title}}
         </h2>
       </div>
-      <p class="font-size-1">Description</p>
+      <p class="font-size-1">{{$gallery->description}}</p>
 
       <!-- End Title -->
 
@@ -62,15 +62,15 @@
           {"width": 480, "cols": 2},
           {"width": 300, "cols": 1}
             ]'>
-
+        @foreach ($gallery->images as $image)
         <!-- Item -->
         <div class="cbp-item rounded abstract">
           <div class="cbp-caption">
             <a class="cbp-lightbox u-media-viewer"
-              href="/public/uploads/images/gallery_images/....."
-              data-title="<?php echo $row['title']; ?>">
-              <img src="/public/uploads/images/gallery_images/...."
-              alt="<?php echo $row['title']; ?>">
+              href="{{ asset('storage/app/public/' . $image->image) }}"
+              data-title="#">
+              <img src="{{ asset('storage/app/public/' . $image->image) }}"
+              alt="gallery image">
               <span class="u-media-viewer__container">
                 <span class="u-media-viewer__icon">
                   <span class="fas fa-plus u-media-viewer__icon-inner"></span>
@@ -80,13 +80,18 @@
           </div>
         </div>
         <!-- End Item -->
+        @endforeach
        
       </div>
       <!-- End Content -->
   </div>
   <!-- Gallery section ends -->
+  @else
+  <div class="container space-2 space-md-2">
+  <h2 class=" text-center my-3 text-primary" > No Images found </h2> </div>
+@endif
+
 </main>
   <!-- ========== END MAIN ========== -->
-
 @extends('frontend.footer')
 @endsection

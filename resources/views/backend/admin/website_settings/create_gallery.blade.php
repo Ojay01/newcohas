@@ -1,4 +1,4 @@
-<form method="POST" class="d-block ajaxForm" action="#">
+<form method="POST" class="d-block ajaxForm" action="{{route('create.gallery')}}" enctype="multipart/form-data">
 @csrf
   <div class="form-row">
     <div class="form-group mb-1">
@@ -15,7 +15,7 @@
 
     <div class="form-group mb-1">
       <label class="col-form-label" for="date_added">Date</label>
-      <input type="text" class="form-control date" id="date_added" data-bs-toggle="date-picker" data-single-date-picker="true" name = "date_added"   value="#" required>
+      <input type="text" class="form-control date" id="date_added" data-bs-toggle="date-picker" data-single-date-picker="true" name = "date_added"   value="<?php echo date('m/d/Y'); ?>" required>
     </div>
 
     <div class="form-group mb-1">
@@ -28,7 +28,7 @@
     </div>
 
     <div class="form-group mb-1">
-        <label for="cover_image">Cover Image</label>
+        <label for="cover_image">Cover Image</label><br>
         <div class="custom-file-upload d-inline-block">
             <input type="file" class="form-control" id="cover_image" name = "cover_image" required>
         </div>

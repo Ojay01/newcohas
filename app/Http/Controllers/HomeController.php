@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Models\Enrollment;
 use App\Models\Teacher;
 use App\Models\Permission;
+use App\Models\Gallery;
 
 
 class HomeController extends Controller
@@ -88,17 +89,20 @@ class HomeController extends Controller
 
     public function gallerySettings()
     {
-        return view('backend.admin.website_settings.gallery');
+        $galleries = Gallery::all();
+        return view('backend.admin.website_settings.gallery', compact('galleries'));
     }
 
     public function eventSettings()
     {
+
         return view('backend.admin.website_settings.event');
     }
 
-    public function galleryImageSettings()
+    public function galleryImageSettings($id)
     {
-        return view('backend.admin.website_settings.gallery_image');
+        $gallery = Gallery::find($id);
+        return view('backend.admin.website_settings.gallery_image', compact('gallery'));
     }
 
     public function others()

@@ -1,24 +1,24 @@
 
-<form method="POST" class="d-block ajaxForm" action="#">
+<form method="POST" class="d-block ajaxForm" action="{{ route('updateGallery', ['id' => $gallery->id]) }}" enctype="multipart/form-data">
 @csrf
   <div class="form-row">
     <div class="form-group mb-1">
       <label for="title">Gallery Title</label>
-      <input type="text" class="form-control" id="title" name = "title" value="#" required>
+      <input type="text" class="form-control" id="title" name = "title" value="{{$gallery->title}}" required>
       <small id="name_help" class="form-text text-muted">Title Name</small>
     </div>
 
     <div class="form-group mb-1">
       <label for="title">Description</label>
-      <textarea name="description" class="form-control" rows="8" cols="80" required>#</textarea>
+      <textarea name="description" class="form-control" rows="8" cols="80" required>{{$gallery->description}}</textarea>
       <small id="description_help" class="form-text text-muted">Provide Description</small>
     </div>
 
     <div class="form-group mb-1">
         <label for="show_on_website">Show On Website</label>
         <select name="show_on_website" id="show_on_website" class="form-control select2" data-toggle = "select2">
-            <option value="1" >show</option>
-            <option value="0" >Do not Show</option>
+            <option value="1"  @if($gallery->show_on_website == 1) selected @endif>show</option>
+            <option value="0"  @if($gallery->show_on_website == 0) selected @endif >Do not Show</option>
         </select>
         <small id="" class="form-text text-muted">Visibility on Website</small>
     </div>
@@ -26,7 +26,7 @@
     <div class="form-group mb-1">
         <label for="cover_image">Cover Image</label>
         <div class="custom-file-upload d-inline-block">
-            <input type="file" class="form-control" id="cover_image" name = "cover_image" required>
+            <input type="file" class="form-control" id="cover_image" name = "cover_image" >
         </div>
     </div>
 

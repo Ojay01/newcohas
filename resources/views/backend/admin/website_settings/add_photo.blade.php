@@ -1,10 +1,10 @@
-<form method="POST" class="d-block ajaxForm" action="#">
+<form method="POST" class="d-block ajaxForm" action="{{ route('addPhotoToGallery', ['id' => $gallery->id]) }}" enctype="multipart/form-data">
 @csrf
   <div class="form-row">
     <div class="form-group mb-1">
-        <label for="addon_zip">Upload Gallery Photo</label>
+        <label for="addon_zip">Upload Gallery Photo</label> <br>
         <div class="custom-file-upload d-inline-block">
-            <input type="file" class="form-control" id="gallery_photo" name = "gallery_photo">
+            <input type="file" class="form-control" id="gallery_photo" name="gallery_photo">
         </div>
     </div>
 

@@ -20,21 +20,22 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-
+        @if ($gallery->images->count() > 0)
             <div class="row">
+            @foreach ($gallery->images as $image)
                 <div class="col-md-6 col-xl-3">
                   <div class="card d-block">
-                    <img class="card-img-top" src="#" alt="project image cap">
+                    <img class="card-img-top" src="{{ asset('storage/app/public/' . $image->image) }}" alt="project image cap">
                     <div class="card-img-overlay">
                       <div style="float: right;">
-                        <button type="button" class="btn btn-icon btn-warning btn-sm"onclick="confirmModal('#', showAllGalleryPhotos)"> <i class="mdi mdi-delete"></i> </button>
-                      </div>
+                        <button type="button" class="btn btn-icon btn-warning btn-sm" onclick="confirmDelete('{{route('deleteImage', ['id' => $image->id])}}')"> <i class="mdi mdi-delete"></i> </button>
+            </div>
                     </div>
                   </div>
                 </div>
-          
+          @endforeach
             </div>
-          
+          @else
             <div class="row">
               <div class="col-12">
                 <div class="card">
@@ -44,7 +45,7 @@
                 </div>
               </div>
             </div>
-         
+         @endif
 
         </div>
       </div>
@@ -67,6 +68,34 @@
         </div>
     </div>
 </div>
+
+
+<!-- Info Alert Modal -->
+<div id="confirmationModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body p-4">
+                <div class="text-center">
+                    <i class="dripicons-information h1 text-info"></i>
+                    <h4 class="mt-2">Heads Up!</h4>
+                    <p class="mt-3">Are you sure you want to delete this image?</p>
+                    <button type="button" class="btn btn-info my-2" data-bs-dismiss="modal">Cancel</button>
+                   <form id="deleteForm" method="POST" action="">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger my-2">Delete</button>
+                </form>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>
+    function confirmDelete(url) {
+        $('#deleteForm').attr('action', url);
+        $('#confirmationModal').modal('show');
+    }
+</script>
 
 <script>
     function addPhotoModal() {

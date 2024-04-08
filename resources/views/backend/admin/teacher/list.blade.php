@@ -14,7 +14,7 @@
             <tr>
                 <td>
                                     @if($teacher->user->profile_image)                
-                <img class="rounded-circle" width="50" height="50" src="{{ asset('storage/app/public/profiles/' . $teacher->profile_image) }}">
+                <img class="rounded-circle" width="50" height="50" src="{{ asset('storage/app/public/profiles/' . $teacher->user->profile_image) }}">
                 @else
                 <img class="rounded-circle" width="50" height="50" src="{{ asset('/public/images/placeholder.jpg')}}">                
                 @endif

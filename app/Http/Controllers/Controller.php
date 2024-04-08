@@ -12,6 +12,8 @@ use App\Models\Teacher;
 use App\Mail\ContactFormMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
+use App\Models\Gallery;
+use App\Models\GalleryImage;
 
 class Controller extends BaseController
 {
@@ -55,8 +57,9 @@ class Controller extends BaseController
     {
          $schoolSettings = SchoolSetting::first();
          $sliderSettings = GeneralSetting::first(); 
-         $settings = Setting::first(); 
-        return view('frontend.gallery', compact('schoolSettings', 'settings', 'sliderSettings'));
+        $settings = Setting::first();
+        $gallery = Gallery::where('show_on_website', 1)->get();
+        return view('frontend.gallery', compact('schoolSettings', 'settings', 'sliderSettings', 'gallery'));
     }
 
     public function events()
@@ -170,5 +173,14 @@ class Controller extends BaseController
     // Redirect back with a success message
     return redirect()->back()->with('success', 'Your message has been submitted successfully.');
 }
+
+  public function galleryImages($id)
+    {
+        $schoolSettings = SchoolSetting::first();
+         $sliderSettings = GeneralSetting::first(); 
+         $settings = Setting::first();
+        $gallery = Gallery::find($id);
+        return view('frontend.gallery_view', compact('schoolSettings', 'gallery', 'sliderSettings', 'settings'));
+    }
 
 }

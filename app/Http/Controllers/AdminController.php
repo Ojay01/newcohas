@@ -15,6 +15,8 @@ use App\Models\Enrollment;
 use App\Models\User;
 use App\Models\Teacher;
 use App\Models\Permission;
+use App\Models\Gallery;
+use App\Models\GalleryImage;
 
 class AdminController extends Controller
 {
@@ -306,13 +308,105 @@ public function filterTeachers(Request $request)
             //  return response()->json(['success' => true]);
             return response()->json(['success' => true, 'message' => 'Your success message here']);
 
-        // // return redirect()->with('success', 'Department added successfully.');
-        // // return view('backend.admin.permission.list', compact('teachers', 'teacherPermissions'))->with('success', 'Permission toggled successfully.');
-        // return $this->filterTeachers($request)->with('success', 'Permission toggled successfully.');
         }
 
+        public function createGallery(Request $request)
+    {
+        // Validate the form data
+        $request->validate([
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'date_added' => 'required|date',
+            'show_on_website' => 'required|in:0,1',
+            'cover_image' => 'required|image|mimes:jpeg,png,jpg,gif',
+        ]);
 
+        // Handle file upload
+        if ($request->hasFile('cover_image')) {
+            $imagePath = $request->file('cover_image')->store('gallery', 'public');
+        } else {
+            $imagePath = null;
+        }
 
+        $date_added = date('Y-m-d', strtotime($request->input('date_added')));
 
+        // Create a new gallery instance
+        $gallery = new Gallery();
+        $gallery->title = $request->input('title');
+        $gallery->description = $request->input('description');
+        $gallery->date_added = $date_added;
+        $gallery->show_on_website = $request->input('show_on_website');
+        $gallery->cover_image = $imagePath;
+        $gallery->save();
 
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Gallery created successfully.');
+    }
+
+    public function updateGallery(Request $request, $id)
+{
+    // Validate the form data
+    $request->validate([
+        // Validation rules...
+    ]);
+
+    // Find the gallery by ID
+    $gallery = Gallery::findOrFail($id);
+
+    // Update the gallery title, description, and show_on_website status
+    $gallery->title = $request->input('title');
+    $gallery->description = $request->input('description');
+    $gallery->show_on_website = $request->input('show_on_website');
+
+    // Check if a new cover image is uploaded
+    if ($request->hasFile('cover_image')) {
+        $coverImage = $request->file('cover_image');
+        $coverImagePath = $coverImage->store('gallery', 'public');
+        $gallery->cover_image = $coverImagePath;
+    }
+
+    // Save the updated gallery
+    $gallery->save();
+
+    // Redirect back with a success message
+    return redirect()->back()->with('success', 'Gallery updated successfully.');
+}
+
+        public function addPhoto(Request $request, $id)
+            {
+                // Validate the form data
+                $request->validate([
+                    'gallery_photo' => 'required|image|mimes:jpeg,png,jpg,gif',
+                ]);
+
+                // Get the gallery
+                $gallery = Gallery::findOrFail($id);
+
+                // Store the uploaded photo
+                $imagePath = $request->file('gallery_photo')->store('gallery_photos', 'public');
+
+                // Create a new GalleryImage model
+                $galleryImage = new GalleryImage();
+                $galleryImage->gallery_id = $gallery->id;
+                $galleryImage->image = $imagePath;
+                $galleryImage->save();
+
+                // Redirect back with a success message
+                return redirect()->back()->with('success', 'Photo added to gallery successfully.');
+            }
+
+            public function deleteImage($id)
+        {
+            $image = GalleryImage::findOrFail($id);
+            $image->delete();
+            return redirect()->back()->with('success', 'Image deleted successfully.');
+        }
+
+    public function deleteGallery($id)
+    {
+        $gallery = Gallery::findOrFail($id);
+        $gallery->images()->delete();
+        $gallery->delete();
+        return redirect()->back()->with('success', 'Gallery deleted successfully.');
+    }
 }
