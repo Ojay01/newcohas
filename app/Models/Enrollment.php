@@ -39,4 +39,9 @@ class Enrollment extends Model
             ->with('students') // Load students relationship
             ->get();
     }
+
+     public function teachers()
+    {
+        return $this->hasMany(Teacher::class);
+    }
 }

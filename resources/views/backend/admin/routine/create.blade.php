@@ -1,20 +1,29 @@
-<form method="POST" class="d-block ajaxForm" action="#" style="min-width: 300px;">
+<form method="POST" class="d-block ajaxForm" action="{{ route('addTimetable') }}" style="min-width: 300px;">
 @csrf
     <div class="form-group row mb-2">
         <label for="class_id_on_routine_creation" class="col-md-3 col-form-label">Class</label>
         <div class="col-md-9">
-            <select name="class_id" id="class_id_on_routine_creation" class="form-control "  required onchange="classWiseSectionForRoutineCreate(this.value)">
-                <option value="">Select a Class</option>
-                    <option value="#">Class Name</option>
-            </select>
+           <select name="class_id" id="classes_id" class="form-control " required onchange="createClassWiseSection(this.value)">
+                        <option value="" >Select Class</option>
+                        @foreach ($classes as $class)
+                            <option value="{{ $class->id }}">{{ $class->name }}</option>
+                        @endforeach
+                    </select>
         </div>
     </div>
 
     <div class="form-group row mb-2">
         <label for="section_id_on_routine_creation" class="col-md-3 col-form-label">Sections</label>
         <div class="col-md-9">
-            <select name="section_id" id = "section_id_on_routine_creation" class="form-control "   required>
-                <option value="">Section</option>
+            <select name="section_id" id = "sections_id" class="form-control "   required>
+                <option value="">Select Section</option>
+                 @if ($class_id != "")
+            @foreach ($sections as $section)
+                
+                    <option value="{{ $section->id }}">{{ $section->name }}</option>
+               
+            @endforeach
+        @endif
             </select>
         </div>
     </div>
@@ -23,7 +32,9 @@
         <label for="subject_id_on_routine_creation" class="col-md-3 col-form-label">Subject</label>
         <div class="col-md-9">
             <select name="subject_id" id = "subject_id_on_routine_creation" class="form-control "  required>
-                <option value="">select a section</option>
+                 @foreach ($subjects as $subject)
+                            <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                        @endforeach
             </select>
         </div>
     </div>
@@ -32,8 +43,9 @@
         <label for="teacher" class="col-md-3 col-form-label">Teacher</label>
         <div class="col-md-9">
             <select name="teacher_id" id = "teacher_on_routine_creation" class="form-control "   required>
-                <option value="">Assign Teacher</option>
-                    <option value="#">User Name</option>
+                  @foreach ($teachers as $teacher)
+                            <option value="{{ $teacher->id }}">{{ $teacher->user->name }}</option>
+                        @endforeach
             </select>
         </div>
     </div>
@@ -41,9 +53,10 @@
     <div class="form-group row mb-2">
         <label for="class_room_id" class="col-md-3 col-form-label">Class Room</label>
         <div class="col-md-9">
-            <select name="class_room_id" id = "class_room_id_on_routine_creation" class="form-control "   required>
-                <option value="">Select Class Room</option>
-                    <option value="#">Class Name</option>
+            <select name="room_id" id = "class_room_id_on_routine_creation" class="form-control "   required>
+                 @foreach ($classrooms as $classroom)
+                            <option value="{{ $classroom->id }}">{{ $classroom->name }}</option>
+                        @endforeach
             </select>
         </div>
     </div>
@@ -144,6 +157,48 @@
     </div>
 </form>
 
+<script>
+
+function classWiseSection(classId) {
+    var classId = $('#class_id').val(); // Get the selected class ID
+
+ if (!classId) {
+        $('#section_id').empty(); // Clear existing options
+        $('#section_id').append($('<option>', { value: '', text: 'No Section Found' })); // Add default option
+        return; // Exit the function
+    }
+    $.ajax({
+        url: "{{ route('section.list', ['class_id' => ':class_id']) }}".replace(':class_id', classId),
+        success: function(response){
+            $('#section_id').empty(); // Clear existing options
+            $.each(response, function (index, section) {
+                $('#section_id').append($('<option>', { value: section.id, text: section.name }));
+            });
+        }
+    });
+}
+
+function createClassWiseSection(classId) {
+    var classId = $('#classes_id').val(); // Get the selected class ID
+
+ if (!classId) {
+        $('#sections_id').empty(); // Clear existing options
+        $('#sections_id').append($('<option>', { value: '', text: 'No Section Found' })); // Add default option
+        return; // Exit the function
+    }
+    $.ajax({
+        url: "{{ route('section.list', ['class_id' => ':classes_id']) }}".replace(':classes_id', classId),
+        success: function(response){
+            $('#sections_id').empty(); // Clear existing options
+            $.each(response, function (index, section) {
+                $('#sections_id').append($('<option>', { value: section.id, text: section.name }));
+            });
+        }
+    });
+}
+
+
+</script>
 
 <script>
 $(document).ready(function () {

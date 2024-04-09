@@ -16,6 +16,8 @@ use App\Models\Enrollment;
 use App\Models\Teacher;
 use App\Models\Permission;
 use App\Models\Gallery;
+use App\Models\ClassRoom;
+use App\Models\Timetable;
 
 
 class HomeController extends Controller
@@ -239,7 +241,8 @@ class HomeController extends Controller
 
     public function admins()
     {
-        return view('backend.admin.admins.index');
+        $admins = User::where('role', 'admin')->get();
+        return view('backend.admin.admins.index', compact('admins'));
     }
     
     public function classes()
@@ -252,12 +255,20 @@ class HomeController extends Controller
     
     public function routine()
     {
-        return view('backend.admin.routine.index');
+         $classes = SchoolClass::all();
+        $sections = Section::all();
+        $class_id = '';
+        $subjects = Subject::all();
+        $teachers = Teacher::all();
+        $classrooms = ClassRoom::all();
+        $timetables = Timetable::all();
+        return view('backend.admin.routine.index', compact('classes', 'sections', 'class_id', 'subjects', 'teachers', 'classrooms', 'timetables'));
     }
     
     public function classRoom()
     {
-        return view('backend.admin.class_room.index');
+        $classrooms = ClassRoom::all();
+        return view('backend.admin.class_room.index', compact('classrooms'));
     }
 
     public function subjects()

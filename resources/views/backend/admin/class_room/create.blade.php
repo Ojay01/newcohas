@@ -1,7 +1,6 @@
-<form method="POST" class="d-block ajaxForm" action="#">
+<form method="POST" class="d-block ajaxForm" action="{{route('addClassRoom')}} ">
 @csrf
     <div class="form-row">
-        <input type="hidden" name="school_id" value="#">
         <div class="form-group mb-1">
             <label for="name">Class Room Name</label>
             <input type="text" class="form-control" id="name" name = "name" required>

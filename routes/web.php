@@ -88,15 +88,18 @@ Route::prefix('admin')->group(function () {
     Route::post('/update_computer_lab', 'App\Http\Controllers\FrontendController@computerLab')->name('computerLab');
     Route::post('/school_settings', 'App\Http\Controllers\FrontendController@schoolSetting')->name('schoolSetting');
     Route::post('/add_class', [App\Http\Controllers\AdminController::class, 'addClass'])->name('addClass');
+    Route::post('/add_class_rooms', [App\Http\Controllers\AdminController::class, 'addClassRoom'])->name('addClassRoom');
     Route::post('/add_section', [App\Http\Controllers\AdminController::class, 'addSection'])->name('addSection');
     Route::post('/add_subject', [App\Http\Controllers\AdminController::class, 'addSubject'])->name('addSubject');
     Route::post('/add_department', [App\Http\Controllers\AdminController::class, 'addDepartment'])->name('addDepartment');
     Route::post('/classes/edit/{id}', 'App\Http\Controllers\AdminController@updateClass')->name('classes.edit');
+    Route::post('/classroom/edit/{id}', 'App\Http\Controllers\AdminController@updateClassroom')->name('classroom.edit');
     Route::post('/classes/{class_id}/sections', [App\Http\Controllers\AdminController::class, 'addSection'])->name('sections.store');
     Route::post('/update/department/{department_id}', [App\Http\Controllers\AdminController::class, 'updateDepartment'])->name('department.update');
     Route::post('/update/subject/{subject_id}', [App\Http\Controllers\AdminController::class, 'updateSubject'])->name('subject.update');
     Route::delete('/sections/{section}', 'App\Http\Controllers\AdminController@deleteSection')->name('sections.destroy');
     Route::delete('/classes/{class}', 'App\Http\Controllers\AdminController@deleteClass')->name('classes.destroy');
+    Route::delete('/classrooms/{classroom}', 'App\Http\Controllers\AdminController@deleteClassroom')->name('classroom.destroy');
     Route::delete('/departments/{department}', 'App\Http\Controllers\AdminController@deleteDepartment')->name('department.destroy');
     Route::delete('/subject/{subject}', 'App\Http\Controllers\AdminController@deleteSubject')->name('subject.destroy');
     Route::get('/section/list/{class_id}', 'App\Http\Controllers\AdminController@fetchSections')->name('section.list');
@@ -108,7 +111,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/galleries/{id}/add-photo', [App\Http\Controllers\AdminController::class, 'addPhoto'])->name('addPhotoToGallery');
     Route::delete('/delete/gallery/images/{id}', [App\Http\Controllers\AdminController::class, 'deleteImage'])->name('deleteImage');
     Route::delete('/galleries/{id}', [App\Http\Controllers\AdminController::class, 'deleteGallery'])->name('deleteGallery');
-
+    Route::post('/add_timetable', [App\Http\Controllers\AdminController::class, 'addClassTimetable'])->name('addTimetable');
 
 });
 

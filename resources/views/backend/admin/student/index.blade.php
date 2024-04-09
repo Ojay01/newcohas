@@ -67,7 +67,7 @@
 <script>
 
 function classWiseSection(classId) {
-    var classId = $('#class_id').val(); // Get the selected class ID
+    var classId = $('#class_id').val(); 
  if (!classId) {
         $('#section_id').empty(); // Clear existing options
         $('#section_id').append($('<option>', { value: '', text: 'No Section Found' })); // Add default option

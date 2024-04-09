@@ -3,36 +3,34 @@
         <tr style="background-color: #313a46; color: #ababab;">
             <th>Name</th>
             <th>Email</th>
-            <th>Admin Of</th>
+            <th>Details</th>
             <th>Options</th>
         </tr>
     </thead>
     <tbody>
+    @foreach ($admins as $admin)
             <tr>
-                <td>Name</td>
-                <td>Email</td>
+                <td>{{$admin->name}}</td>
+                <td>{{$admin->email}}</td>
                 <td>
-                     <br><small> <strong>Phone</strong>: Phone</small>
-                     <br><small> <strong>Address; </strong>: Address</small>
+                     <br><small> <strong>Phone</strong>: {{$admin->phone}}</small>
+                     <br><small> <strong>Address; </strong>: {{$admin->address}}</small>
                 </td>
                 <td>
                     <div class="dropdown text-center">
                         <button type="button" class="btn btn-sm btn-icon btn-rounded btn-outline-secondary dropdown-btn dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-vertical"></i></button>
                         <div class="dropdown-menu dropdown-menu-end">
                             <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item" onclick="openeditAdminModal()">Edit</a>
+                            <a href="javascript:void(0);" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editAdminModal{{ $admin->id }}">Edit</a>
                             <!-- item-->
                             <a href="javascript:void(0);" class="dropdown-item" onclick="confirmModal('#', showAllAdmins )">Delete</a>
                         </div>
                     </div>
                 </td>
             </tr>
-    </tbody>
-</table>
-@include('backend.admin.empty')
 
-<!-- Modal for Edit Admin -->
-<div class="modal fade mt-3" id="editAdminModal" tabindex="-1" aria-labelledby="editAdminModalLabel" aria-hidden="true">
+        <!-- Modal for Edit Admin -->
+<div class="modal fade mt-3" id="editAdminModal{{ $admin->id }}" tabindex="-1" aria-labelledby="editAdminModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -45,6 +43,11 @@
         </div>
     </div>
 </div>
+            @endforeach
+    </tbody>
+</table>
+
+
 
 <script>
     function openeditAdminModal() {

@@ -24,19 +24,25 @@
 				<div class="col-md-4 mb-1">
 					<select name="class" id="class_id" class="form-control select2" data-bs-toggle="select2" required onchange="classWiseSection(this.value)">
 						<option value="">Select a Class</option>
-							<option value="#">
-								Class Name
-								11
-							</option>
+							@foreach ($classes as $class)
+                            <option value="{{ $class->id }}">{{ $class->name }}</option>
+                        @endforeach
 					</select>
 				</div>
 				<div class="col-md-4 mb-1">
 					<select name="section" id="section_id" class="form-control select2" data-bs-toggle="select2" required>
 						<option value="">Select Section</option>
+                         @if ($class_id != "")
+            @foreach ($sections as $section)
+                
+                    <option value="{{ $section->id }}">{{ $section->name }}</option>
+               
+            @endforeach
+        @endif
 					</select>
 				</div>
 				<div class="col-md-2">
-					<button class="btn btn-block btn-secondary" onclick="filter_class_routine()" >Filter</button>
+					<button class="btn btn-block btn-secondary" >Filter</button>
 				</div>
 			</div>
 			<div class="card-body class_routine_content">
@@ -48,14 +54,7 @@
 
 <script>
 
-function classWiseSection(classId) {
-	$.ajax({
-		url: "#",
-		success: function(response){
-			$('#section_id').html(response);
-		}
-	});
-}
+
 
 function filter_class_routine(){
 	var class_id = $('#class_id').val();

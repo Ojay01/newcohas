@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Teacher Settings')
+@section('title', 'Classrooms')
 @section('content')
 
 

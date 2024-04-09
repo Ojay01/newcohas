@@ -22,4 +22,9 @@ class SchoolClass extends Model
     {
         return $this->hasMany(Section::class, 'class_id');
     }
+
+     public function enrolments()
+    {
+        return $this->hasMany(Enrollment::class, 'class_id');
+    }
 }

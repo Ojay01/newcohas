@@ -32,7 +32,7 @@
                             <!-- item-->
                             <a href="javascript:void(0);" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editModal{{ $class->id }}">Edit</a>
                             <!-- item-->
-                            <button class="dropdown-item delete-class" data-url="{{ route('classes.destroy', $class) }}">Delete</button>
+                            <button class="dropdown-item delete-class" onclick="confirmDelete('{{route('classes.destroy', ['class' => $class->id])}}')">Delete</button>
                         </div>
                     </div>
                 </td>
@@ -73,8 +73,8 @@
            @endforelse
     </tbody>
 </table>
-<!-- Info Alert Modal -->
-<div id="class_delete" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div id="confirmationModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-body p-4">
@@ -83,12 +83,22 @@
                     <h4 class="mt-2">Heads Up!</h4>
                     <p class="mt-3">Are you sure?</p>
                     <button type="button" class="btn btn-info my-2" data-bs-dismiss="modal">Cancel</button>
-                    <a href="" id="class_delete-url" class="btn btn-danger my-2">Continue</a>
+                   <form id="deleteForm" method="POST" action="">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger my-2">Delete</button>
+                </form>
                 </div>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<script>
+    function confirmDelete(url) {
+        $('#deleteForm').attr('action', url);
+        $('#confirmationModal').modal('show');
+    }
+</script>
 
     <script>
     $(document).ready(function() {

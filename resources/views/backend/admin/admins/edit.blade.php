@@ -3,25 +3,19 @@
     <div class="form-row">
         <div class="form-group mb-1">
             <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" name = "name" required>
+            <input type="text" class="form-control" id="name" name = "name" value="{{$admin->name}}" required>
             <small id="" class="form-text text-muted">Provide Admin Name</small>
         </div>
 
         <div class="form-group mb-1">
             <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" name = "email" required>
+            <input type="email" class="form-control" id="email" name = "email" value="{{$admin->email}}" required>
             <small id="" class="form-text text-muted">Provide Admin Email</small>
         </div>
 
         <div class="form-group mb-1">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" name = "password" required>
-            <small id="" class="form-text text-muted">Provide Admin Password</small>
-        </div>
-
-        <div class="form-group mb-1">
             <label for="phone">Phone Number</label>
-            <input type="text" class="form-control" id="phone" name = "phone" required>
+            <input type="text" class="form-control" id="phone" name = "phone" value="{{$admin->phone}}" required>
             <small id="" class="form-text text-muted">Provide Admin Number</small>
         </div>
 
@@ -39,7 +33,7 @@
 
         <div class="form-group mb-1">
             <label for="phone">Address</label>
-            <textarea class="form-control" id="address" name = "address" rows="5" required></textarea>
+            <textarea class="form-control" id="address" name = "address" rows="5" required> {{$admin->address}}</textarea>
             <small id="" class="form-text text-muted">Provide Admin Address</small>
         </div>
 

@@ -17,6 +17,8 @@ use App\Models\Teacher;
 use App\Models\Permission;
 use App\Models\Gallery;
 use App\Models\GalleryImage;
+use App\Models\ClassRoom;
+use App\Models\Timetable;
 
 class AdminController extends Controller
 {
@@ -100,6 +102,20 @@ class AdminController extends Controller
     return redirect()->back()->with('success', 'Class added successfully.');
 }
 
+    public function addClassRoom(Request $request)
+{
+    $validatedData = $request->validate([
+        'name' => 'required|string',
+    ]);
+
+    $classroom = new ClassRoom();
+        $classroom->name = $validatedData['name'];
+        // $class->description = $validatedData['description'];
+        $classroom->save();
+
+    return redirect()->back()->with('success', 'Classroom added successfully.');
+}
+
 
     public function addSection(Request $request, $class_id)
     {
@@ -153,6 +169,28 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Class updated successfully');
     }
 
+    public function updateClassroom(Request $request, $id)
+    {
+        // Validate the request data if needed
+        $request->validate([
+            'name' => 'required|string|max:25',
+            // Add more validation rules if needed
+        ]);
+
+        // Find the class by ID
+        $classroom = ClassRoom::findOrFail($id);
+
+        // Update class name
+        $classroom->name = $request->input('name');
+        // Update other class properties if needed
+
+        // Save the updated class
+        $classroom->save();
+
+        // Redirect back with a success message or any other response
+        return redirect()->back()->with('success', 'Classroom updated successfully');
+    }
+
     public function addDepartment(Request $request)
     {
         $validatedData = $request->validate([
@@ -187,20 +225,50 @@ class AdminController extends Controller
 
     public function deleteSection(Section $section)
     {
+        $enrolmentsCount = $section->enrolments()->count();
+
+        if ($enrolmentsCount > 0) {
+            // Enrolments exist, so class cannot be deleted
+            return redirect()->back()->with('error', 'Cannot delete a section with students');
+        }
+
         $section->delete();
 
         return redirect()->back()->with('success', 'Section deleted successfully.');
     }
 
     public function deleteClass(SchoolClass $class)
-    {
-        $class->delete();
+{
+    // Check if any enrolments exist for this class
+    $enrolmentsCount = $class->enrolments()->count();
 
-        return response()->json(['message' => 'Class deleted successfully']);
+    if ($enrolmentsCount > 0) {
+        // Enrolments exist, so class cannot be deleted
+        return redirect()->back()->with('error', 'Cannot delete class with students');
+    }
+
+    // No enrolments exist, proceed with deletion
+    $class->delete();
+
+    return  redirect()->back()->with('success', 'Class deleted successfully');
+}
+
+
+    public function deleteClassroom(ClassRoom $classroom)
+    {
+        $classroom->delete();
+
+        return redirect()->back()->with('success', 'Classroom deleted successfully');
     }
 
     public function deleteDepartment(Department $department)
     {
+        $teachersCount = $department->teachers()->count();
+
+    if ($teachersCount > 0) {
+        // Enrolments exist, so class cannot be deleted
+        return redirect()->back()->with('error', 'Cannot delete Department with teachers');
+    }
         $department->delete();
 
         return response()->json(['message' => 'department deleted successfully']);
@@ -408,5 +476,32 @@ public function filterTeachers(Request $request)
         $gallery->images()->delete();
         $gallery->delete();
         return redirect()->back()->with('success', 'Gallery deleted successfully.');
+    }
+
+    public function addClassTimetable(Request $request)
+    {
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'class_id' => 'required',
+            'section_id' => 'required',
+            'subject_id' => 'required',
+            'teacher_id' => 'required',
+            'room_id' => 'required',
+            'day' => 'required',
+            'starting_hour' => 'required',
+            'starting_minute' => 'required',
+            'ending_hour' => 'required',
+            'ending_minute' => 'required',
+        ]);
+
+        // Create a new timetable instance and fill it with validated data
+        $timetable = new Timetable();
+        $timetable->fill($validatedData);
+        
+        // Save the timetable to the database
+        $timetable->save();
+
+        // Optionally, you can return a response to the client
+        return redirect()->back()->with('success',  'Timetable added successfully');
     }
 }
