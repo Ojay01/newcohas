@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Middleware\Admin;
+use App\Http\Controllers\TeacherController;
 
 Route::get('/', [App\Http\Controllers\Controller::class, 'index']);
 Route::get('/about_us', [App\Http\Controllers\Controller::class, 'about'])->name('about');
@@ -26,7 +27,7 @@ Route::get('/gallery/{id}/images/', [App\Http\Controllers\Controller::class, 'ga
     
 
 
-Route::prefix('admin')->group(function () {
+Route::middleware(Admin::class)->prefix('admin')->group(function () {
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/profile', [App\Http\Controllers\HomeController::class, 'profile'])->name('profile');
@@ -69,6 +70,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/student_promotion', [App\Http\Controllers\HomeController::class, 'promotion'])->name('promotion');
     Route::get('/student_exam', [App\Http\Controllers\HomeController::class, 'adminExam'])->name('admin.exam');
     Route::get('/student_marks', [App\Http\Controllers\HomeController::class, 'adminMarks'])->name('admin.marks');
+    Route::get('/academic_years', [App\Http\Controllers\HomeController::class, 'academicYear'])->name('academic.year');
     Route::get('/edit_student/{id} ', [App\Http\Controllers\HomeController::class, 'editStudent'])->name('admin.edit.student');
 
 
@@ -105,6 +107,8 @@ Route::prefix('admin')->group(function () {
     Route::get('/section/list/{class_id}', 'App\Http\Controllers\AdminController@fetchSections')->name('section.list');
     Route::get('/filter-students', 'App\Http\Controllers\AdminController@filterStudents')->name('filterStudents');
     Route::get('/filter_teachers_permission', 'App\Http\Controllers\AdminController@filterTeachers')->name('filterTeachers');
+    Route::get('/promote_students', 'App\Http\Controllers\AdminController@promoteStudents')->name('promoteStudents');
+    Route::get('/class_routine', 'App\Http\Controllers\AdminController@classRoutine')->name('classRoutine');
     Route::post('/toggle-permission', 'App\Http\Controllers\AdminController@togglePermission')->name('toggle.permission');
     Route::post('/create_gallery', 'App\Http\Controllers\AdminController@createGallery')->name('create.gallery');
     Route::post('/galleries/{id}', [App\Http\Controllers\AdminController::class, 'updateGallery'])->name('updateGallery');
@@ -112,12 +116,29 @@ Route::prefix('admin')->group(function () {
     Route::delete('/delete/gallery/images/{id}', [App\Http\Controllers\AdminController::class, 'deleteImage'])->name('deleteImage');
     Route::delete('/galleries/{id}', [App\Http\Controllers\AdminController::class, 'deleteGallery'])->name('deleteGallery');
     Route::post('/add_timetable', [App\Http\Controllers\AdminController::class, 'addClassTimetable'])->name('addTimetable');
+    Route::post('/create_exam', [App\Http\Controllers\AdminController::class, 'createExam'])->name('exam.create');
+    Route::post('/create_academic_year', [App\Http\Controllers\AdminController::class, 'createAcademicYear'])->name('academic.year.create');
+    Route::post('/update_exam/{id}', [App\Http\Controllers\AdminController::class, 'updateExam'])->name('exam.update');
+    Route::delete('/exams/{exam}', 'App\Http\Controllers\AdminController@deleteExam')->name('exam.delete');
+    Route::post('/update-academic-year-status', 'App\Http\Controllers\AdminController@activateAcademicYear')->name('update.academic.year.status');
+
+
 
 });
 
 
 Route::prefix('teacher')->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('teacher');
-
+    Route::get('/teachers', [TeacherController::class, 'teachers'])->name('teacher.teachers');
+    Route::get('/assigments', [TeacherController::class, 'assignments'])->name('teacher.assignments');
+    Route::get('/tutorials', [TeacherController::class, 'tutorials'])->name('teacher.tutorials');
+    Route::get('/subjects', [TeacherController::class, 'subjects'])->name('teacher.subjects');
+    Route::get('/all_classes', [TeacherController::class, 'classes'])->name('teacher.classes');
+    Route::get('/class_rooms', [TeacherController::class, 'classrooms'])->name('teacher.classroom');
+    Route::get('/exams', [TeacherController::class, 'exams'])->name('teacher.exams');
+    Route::get('/my_profile', [TeacherController::class, 'profile'])->name('teacher.profile');
+    
+    Route::post('profile/update', 'App\Http\Controllers\TeacherController@updateteacher')->name('update_teacher_profile');
+    Route::post('profile/update-password', 'App\Http\Controllers\TeacherController@updateteacherPassword')->name('teacher.update_password');
    
 });

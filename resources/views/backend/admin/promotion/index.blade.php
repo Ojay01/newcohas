@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Teacher Settings')
+@section('title', 'Promote Students')
 @section('content')
 
 <!-- start page title -->
@@ -25,8 +25,11 @@
           <div class="col-xl-2 col-lg-2 col-md-12 col-sm-12 mb-3 mb-lg-0">
             <label for="session_from">Current Session</label>
             <select class="form-control select2" data-toggle = "select2" id = "session_from" name="session_from">
-              <option value="">Session from</option>
-              <option value="#">session Name</option>
+              @foreach ($sessions as $session)
+              @if ($session->status == 1)
+              <option value="{{$session->id}}">{{$session->name}}</option>
+              @endif
+              @endforeach
           </select>
         </div>
 
@@ -34,18 +37,23 @@
           <label for="session_to">Next Session</label>
           <select class="form-control select2" data-toggle = "select2" id = "session_to" name="session_to">
             <option value="">Session to</option>
-            <option value="#">session name</option>
+            @foreach ($sessions as $session)
+              @if ($session->status != 1)
+              <option value="{{$session->id}}">{{$session->name}}</option>
+              @endif
+              @endforeach
         </select>
       </div>
 
       <div class="col-xl-2 col-lg-2 col-md-12 col-sm-12 mb-3 mb-lg-0">
         <label for="class_id_from">Promoting from</label>
-        <select name="class_id_from select2" data-toggle = "select2" id="class_id_from" class="form-control" required>
+        <select name="class_id_from" data-toggle = "select2" id="class_id_from" class="form-control" required>
           <option value="">Promoting from</option>
-          <option value="#">
-            Class Name
-            22
+          @foreach ($classes as $class)
+          <option value="{{$class->id}}">
+            {{$class->name}}
           </option>
+          @endforeach
       </select>
     </div>
 
@@ -53,7 +61,11 @@
       <label for="class_id_to">Promoting to</label>
       <select name="class_id_to" class="form-control select2" data-toggle = "select2" id="class_id_to" required>
         <option value="">Promoting to</option>
-        <option value="#">class name</option>
+        @foreach ($classes as $class)
+          <option value="{{$class->id}}">
+            {{$class->name}}
+          </option>
+          @endforeach
     </select>
   </div>
 
@@ -62,10 +74,12 @@
     <button type="button" class="btn btn-icon btn-secondary form-control" id = "manage_student" onclick="manageStudent()">Manage Promotion</button>
   </div>
 </div>
-
 <div class="table-responsive-sm student_to_promote_content">
+@if ($class_id_from = '')
   @include('backend.admin.promotion.list')
+@endif
 </div>
+
 </div> <!-- end card body-->
 </div> <!-- end card -->
 </div><!-- end col-->
@@ -77,23 +91,28 @@ $('document').ready(function(){
 });
 
 function manageStudent() {
-  var session_from   = $('#session_from').val();
-  var session_to     = $('#session_to').val();
-  var class_id_from  = $('#class_id_from').val();
-  var class_id_to    = $('#class_id_to').val();
-  if(session_from > 0 && session_to > 0 && class_id_from > 0 && class_id_to > 0 ) {
-    var url = '#';
+    var classId = $('#class_id_from').val();
+    var classIdTo = $('#class_id_to').val();
+    var sessionFrom = $('#session_from').val();
+    var sessionTo = $('#session_to').val();
     $.ajax({
-      type : 'POST',
-      url: url,
-      data : { session_from : session_from, session_to : session_to, class_id_from : class_id_from, class_id_to : class_id_to, _token : '{{ @csrf_token() }}' },
-      success : function(response) {
-        $('.student_to_promote_content').html(response);
-      }
+        url: "{{ route('promoteStudents') }}",
+        method: 'GET',
+        data: {
+            class_id: classId,
+            class_id_to: classIdTo,
+            session_from: sessionFrom,
+            session_to: sessionTo,
+        },
+        success: function(response) {
+            // Handle successful response here
+              $('.student_to_promote_content').html(response);
+        },
+        error: function(xhr, status, error) {
+            // Handle error here
+            // console.error(xhr.responseText);
+        }
     });
-  }else {
-    toastr.error('#');
-  }
 }
 
 function enrollStudent(promotion_data, enroll_id) {

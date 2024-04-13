@@ -19,6 +19,8 @@ use App\Models\Gallery;
 use App\Models\GalleryImage;
 use App\Models\ClassRoom;
 use App\Models\Timetable;
+use App\Models\Exam;
+use App\Models\AcademicYear;
 
 class AdminController extends Controller
 {
@@ -299,15 +301,69 @@ public function filterStudents(Request $request)
 
     // Check if class ID or section ID is invalid
     if (!$classId || !$sectionId) {
-        return view('backend.admin.empty') ;
+        return view('backend.admin.empty');
     }
 
-    // Retrieve students based on class and section IDs
+    // Get the ID of the active academic year
+    $activeAcademicYearId = AcademicYear::where('status', 1)->value('id');
+
+    // Retrieve students based on class, section, and active academic year
     $students = Enrollment::where('class_id', $classId)
-                       ->where('section_id', $sectionId)
-                       ->get();
+                          ->where('section_id', $sectionId)
+                          ->where('session_id', $activeAcademicYearId)
+                          ->get();
 
     return view('backend.admin.student.list', compact('students'));
+}
+
+public function promoteStudents(Request $request)
+{
+    $classFrom = $request->input('class_id');
+    $classTo = $request->input('class_id_to');
+    $sessionFrom = $request->input('session_from');
+    $sessionTo = $request->input('session_to');
+
+    // Check if class ID or section ID is invalid
+    if (!$classFrom || !$classTo || !$sessionFrom || !$sessionTo) {
+        return view('backend.admin.empty');
+    }
+
+    // Get the ID of the active academic year
+    $activeAcademicYearId = AcademicYear::where('status', 1)->value('id');
+
+    // Retrieve students based on class, section, and active academic year
+    $students = Enrollment::where('class_id', $classFrom)
+                          ->where('session_id', $activeAcademicYearId)
+                          ->get();
+
+     $classToName = SchoolClass::where('id', $classTo)->value('name');
+     $classFromName = SchoolClass::where('id', $classFrom)->value('name');
+     $sessionFromName = AcademicYear::where('id', $sessionFrom)->value('name');
+     $sessionToName = AcademicYear::where('id', $sessionTo)->value('name');
+
+    return view('backend.admin.promotion.list', compact('students', 'classFromName', 'classToName', 'sessionFromName', 'sessionToName'));
+}
+
+public function classRoutine(Request $request)
+{
+    $class = $request->input('class_id');
+    $section = $request->input('section_id');
+
+    // Check if class ID or section ID is invalid
+    if (!$class || !$section) {
+        return view('backend.admin.empty');
+    }
+
+    // Get the ID of the active academic year
+    $activeAcademicYearId = AcademicYear::where('status', 1)->value('id');
+
+    // Retrieve students based on class, section, and active academic year
+    $timetables = Timetable::where('class_id', $class)
+                        ->where('section_id', $section)
+                          ->where('session_id', $activeAcademicYearId)
+                          ->get();
+
+    return view('backend.admin.routine.list', compact('timetables'));
 }
 
 
@@ -479,29 +535,150 @@ public function filterTeachers(Request $request)
     }
 
     public function addClassTimetable(Request $request)
-    {
-        // Validate the incoming request data
-        $validatedData = $request->validate([
-            'class_id' => 'required',
-            'section_id' => 'required',
-            'subject_id' => 'required',
-            'teacher_id' => 'required',
-            'room_id' => 'required',
-            'day' => 'required',
-            'starting_hour' => 'required',
-            'starting_minute' => 'required',
-            'ending_hour' => 'required',
-            'ending_minute' => 'required',
-        ]);
+{
+    // Validate the incoming request data
+    $validatedData = $request->validate([
+        'class_id' => 'required',
+        'section_id' => 'required',
+        'subject_id' => 'required',
+        'teacher_id' => 'required',
+        'room_id' => 'required',
+        'day' => 'required',
+        'starting_hour' => 'required',
+        'starting_minute' => 'required',
+        'ending_hour' => 'required',
+        'ending_minute' => 'required',
+    ]);
 
-        // Create a new timetable instance and fill it with validated data
-        $timetable = new Timetable();
-        $timetable->fill($validatedData);
-        
-        // Save the timetable to the database
-        $timetable->save();
+    // Get the ID of the active academic year
+    $activeAcademicYearId = AcademicYear::where('status', 1)->value('id');
 
-        // Optionally, you can return a response to the client
-        return redirect()->back()->with('success',  'Timetable added successfully');
+    // Create a new timetable instance with provided data
+    $timetable = Timetable::create([
+        'class_id' => $validatedData['class_id'],
+        'section_id' => $validatedData['section_id'],
+        'subject_id' => $validatedData['subject_id'],
+        'teacher_id' => $validatedData['teacher_id'],
+        'room_id' => $validatedData['room_id'],
+        'day' => $validatedData['day'],
+        'starting_hour' => $validatedData['starting_hour'],
+        'starting_minute' => $validatedData['starting_minute'],
+        'ending_hour' => $validatedData['ending_hour'],
+        'ending_minute' => $validatedData['ending_minute'],
+        'session_id' => $activeAcademicYearId,
+    ]);
+
+    // Check if timetable was created successfully
+    if ($timetable) {
+        // If created successfully, redirect back with success message
+        return redirect()->back()->with('success', 'Timetable added successfully');
+    } else {
+        // If there's an error during creation, redirect back with error message
+        return redirect()->back()->with('error', 'Failed to add timetable');
     }
+}
+
+
+   public function createExam(Request $request)
+{
+    // Validate the incoming request data
+    $validatedData = $request->validate([
+        'exam_name' => 'required|string|max:255',
+        'starting_date' => 'required|date_format:d-m-Y',
+        'ending_date' => 'required|date_format:d-m-Y|after:starting_date',
+    ]);
+
+    // Format the dates to 'Y-m-d' format for MySQL
+    $starting_date = \DateTime::createFromFormat('d-m-Y', $validatedData['starting_date'])->format('Y-m-d');
+    $ending_date = \DateTime::createFromFormat('d-m-Y', $validatedData['ending_date'])->format('Y-m-d');
+    $activeAcademicYearId = AcademicYear::where('status', 1)->value('id');
+    // Create the exam using the validated data
+    $exam = Exam::create([
+        'name' => $validatedData['exam_name'],
+        'starting_date' => $starting_date,
+        'ending_date' => $ending_date,
+        'session_id' => $activeAcademicYearId,
+        // You can add more fields here if needed
+    ]);
+
+    // Return a response indicating success or failure
+    if ($exam) {
+        return redirect()->back()->with('success', 'Exam created successfully');
+    } else {
+        return redirect()->back()->with('error', 'Failed to create exam');
+    }
+}
+
+   public function createAcademicYear(Request $request)
+{
+    // Validate the incoming request data
+    $validatedData = $request->validate([
+        'name' => 'required|string|max:50',
+    ]);
+
+    // Create the exam using the validated data
+    $academicYear = AcademicYear::create([
+        'name' => $validatedData['name'],
+    ]);
+
+    // Return a response indicating success or failure
+    if ($academicYear) {
+        return redirect()->back()->with('success', 'academic Year created successfully');
+    } else {
+        return redirect()->back()->with('error', 'Failed to create academic Year');
+    }
+}
+
+public function updateExam(Request $request, $id)
+{
+    // Find the exam by ID
+    $exam = Exam::findOrFail($id);
+
+    // Validate the incoming request data
+    $validatedData = $request->validate([
+        'exam_name' => 'required|string|max:255',
+        'starting_date' => 'required|date_format:d-m-Y',
+        'ending_date' => 'required|date_format:d-m-Y|after:starting_date',
+    ]);
+
+    // Update the exam using the validated data
+    $exam->update([
+        'name' => $validatedData['exam_name'],
+        'starting_date' => \DateTime::createFromFormat('d-m-Y', $validatedData['starting_date'])->format('Y-m-d'),
+        'ending_date' => \DateTime::createFromFormat('d-m-Y', $validatedData['ending_date'])->format('Y-m-d'),
+        // You can add more fields here if needed
+    ]);
+
+    // Return a response indicating success or failure
+    if ($exam) {
+        return redirect()->back()->with('success', 'Exam updated successfully');
+    } else {
+        return redirect()->back()->with('error', 'Failed to update exam');
+    }
+}
+
+public function deleteExam($id)
+{
+    $exam = Exam::findOrFail($id);
+    $exam->delete();
+
+    // Optionally, you can redirect to a specific route after deletion
+    return redirect()->back()->with('success', 'Exam deleted successfully');
+}
+
+public function activateAcademicYear(Request $request)
+{
+    $selectedSessionId = $request->id;
+
+    // Update status of all academic years to 0
+    AcademicYear::where('status', 1)->update(['status' => 0]);
+
+    // Set the status of the selected academic year to 1
+    $academicYear = AcademicYear::findOrFail($selectedSessionId);
+    $academicYear->status = 1;
+    $academicYear->save();
+
+    return redirect()->back()->with('success', 'Academic Year Activated');
+}
+
 }

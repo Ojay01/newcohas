@@ -18,6 +18,8 @@ use App\Models\Permission;
 use App\Models\Gallery;
 use App\Models\ClassRoom;
 use App\Models\Timetable;
+use App\Models\Exam;
+use App\Models\AcademicYear;
 
 
 class HomeController extends Controller
@@ -40,9 +42,10 @@ class HomeController extends Controller
     public function index()
     {
         $user = auth()->user(); // Retrieve the currently logged-in user
+    $activeAcademicYearId = AcademicYear::where('status', 1)->value('id');
 
     if ($user->role == 'admin') {
-        $studentCount = User::where('role', 'student')->count();
+        $studentCount = Enrollment::where('session_id', $activeAcademicYearId)->count();
         $teacherCount = User::where('role', 'teacher')->count();
         $parentCount = User::where('role', 'parent')->count();
 
@@ -71,7 +74,12 @@ class HomeController extends Controller
 
     public function submittedMarks()
     {
-        return view('backend.admin.submitted_marks.index');
+          $activeAcademicYearId = AcademicYear::where('status', 1)->value('id');
+        $exams = Exam::where('session_id', $activeAcademicYearId)->get();
+        $classes = SchoolClass::all();
+        $sections = Section::all();
+        $class_id = '';
+        return view('backend.admin.submitted_marks.index', compact('exams', 'classes', 'sections', 'class_id'));
     }
 
     public function websiteSettings()
@@ -261,8 +269,7 @@ class HomeController extends Controller
         $subjects = Subject::all();
         $teachers = Teacher::all();
         $classrooms = ClassRoom::all();
-        $timetables = Timetable::all();
-        return view('backend.admin.routine.index', compact('classes', 'sections', 'class_id', 'subjects', 'teachers', 'classrooms', 'timetables'));
+        return view('backend.admin.routine.index', compact('classes', 'sections', 'class_id', 'subjects', 'teachers', 'classrooms'));
     }
     
     public function classRoom()
@@ -320,17 +327,35 @@ class HomeController extends Controller
 
     public function promotion()
     {
-        return view('backend.admin.promotion.index');
+        $sessions = AcademicYear::all();
+        $classes = SchoolClass::all();
+        $class_id_from = [];
+        return view('backend.admin.promotion.index', compact('sessions', 'classes', 'class_id_from'));
+    }
+
+
+    public function academicYear()
+    {
+        $academicyears = AcademicYear::all();
+        return view('backend.admin.academic_year.index', compact('academicyears'));
     }
 
     public function adminExam()
     {
-        return view('backend.admin.exam.index');
+        $activeAcademicYearId = AcademicYear::where('status', 1)->value('id');
+        $exams = Exam::where('session_id', $activeAcademicYearId)->get();
+        return view('backend.admin.exam.index', compact('exams'));
     }
 
     public function adminMarks()
     {
-        return view('backend.admin.marks.index');
+        $activeAcademicYearId = AcademicYear::where('status', 1)->value('id');
+        $exams = Exam::where('session_id', $activeAcademicYearId)->get();
+        $classes = SchoolClass::all();
+        $sections = Section::all();
+        $subjects = Subject::all();
+        $class_id = '';
+        return view('backend.admin.marks.index', compact('exams', 'classes', 'sections', 'subjects', 'class_id'));
     }
 
     public function editStudent($id) {

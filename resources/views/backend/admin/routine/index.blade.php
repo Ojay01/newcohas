@@ -22,7 +22,7 @@
 			<div class="row mt-3">
 				<div class="col-md-1 mb-1"></div>
 				<div class="col-md-4 mb-1">
-					<select name="class" id="class_id" class="form-control select2" data-bs-toggle="select2" required onchange="classWiseSection(this.value)">
+					<select name="class" id="class_id" class="form-control " data-bs-toggle="select2" required onchange="classWiseSection(this.value)">
 						<option value="">Select a Class</option>
 							@foreach ($classes as $class)
                             <option value="{{ $class->id }}">{{ $class->name }}</option>
@@ -30,7 +30,7 @@
 					</select>
 				</div>
 				<div class="col-md-4 mb-1">
-					<select name="section" id="section_id" class="form-control select2" data-bs-toggle="select2" required>
+					<select name="section" id="section_id" class="form-control " data-bs-toggle="select2" required>
 						<option value="">Select Section</option>
                          @if ($class_id != "")
             @foreach ($sections as $section)
@@ -42,11 +42,13 @@
 					</select>
 				</div>
 				<div class="col-md-2">
-					<button class="btn btn-block btn-secondary" >Filter</button>
+					<button class="btn btn-block btn-secondary" onclick="filter_class_routine()">Filter</button>
 				</div>
 			</div>
 			<div class="card-body class_routine_content">
+                         @if ($class_id != "")
 				@include('backend.admin.routine.list')
+                @endif
 			</div>
 		</div>
 	</div>
@@ -59,11 +61,22 @@
 function filter_class_routine(){
 	var class_id = $('#class_id').val();
 	var section_id = $('#section_id').val();
-	if(class_id != "" && section_id!= ""){
-		getFilteredClassRoutine();
-	}else{
-		toastr.error('#');
-	}
+    $.ajax({
+        url: "{{ route('classRoutine') }}",
+        method: 'GET',
+        data: {
+            class_id: class_id,
+            section_id: section_id,
+        },
+        success: function(response) {
+            // Handle successful response here
+              $('.class_routine_content').html(response);
+        },
+        error: function(xhr, status, error) {
+            // Handle error here
+            // console.error(xhr.responseText);
+        }
+    });
 }
 
 var getFilteredClassRoutine = function() {

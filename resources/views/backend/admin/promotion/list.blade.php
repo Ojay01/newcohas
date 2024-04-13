@@ -4,8 +4,8 @@
                     <div class="card-body">
                         <div class="toll-free-box text-center">
                             <h4> <i class="mdi mdi-chart-bar-stacked"></i> Promote Student</h4>
-                            <h5>Class From : Name To : Name</h5>
-                            <h5>Session From : Name to : Name</h5>
+                            <h5>Class From : {{$classFromName}} - To : {{$classToName}}</h5>
+                            <h5>Session From : {{$sessionFromName}} - To : {{$sessionToName}}</h5>
                         </div>
                     </div>
                 </div>
@@ -26,27 +26,33 @@
                         </tr>
                         </thead>
                         <tbody>
+                        @foreach($students as $student)
                               <tr>
                                   <td class="text-center">
-                                    <img src="#" height="50" alt=""><br>
+                                    @if($student->user->profile_image)                
+                <img class="rounded-circle" width="50" height="50" src="{{ asset('storage/app/public/profiles/' . $student->user->profile_image) }}">
+                @else
+                <img class="rounded-circle" width="50" height="50" src="{{ asset('/public/images/placeholder.jpg')}}">                
+                @endif
                                   </td>
                                   <td>
-                                    Student Name
+                                    {{$student->user->name}}
                                     <br>
-                                    <small><b>Stdent Code:</b>Code</small>
+                                    <small><b>Student Code:</b> COH{{$student->user->id}}</small>
                                   </td>
                                   <td>
-                                    Name
+                                     {{$student->section->name}}
                                   </td>
                                   <td style="text-align: center;">
                                       <span class="badge badge-info-lighten" id = "success_#" style="display: none;">Promoted</span>
                                       <span class="badge bg-secondary"  id = "danger_#">Not Promoted Yet</span>
                                   </td>
                                   <td style="text-align: center;">
-                                      <button type="button" class="btn btn-icon btn-success btn-sm" onclick="enrollStudent('#', '#')"> Enroll to <strong> Name </strong> </button>
-                                      <button type="button" class="btn btn-icon btn-secondary btn-sm" onclick="enrollStudent('#', '#')"> Enroll to <strong> Name </strong> </button>
+                                      <button type="button" class="btn btn-icon btn-success btn-sm" onclick="enrollStudent('#', '#')"> Enroll to <strong> {{$classToName}} </strong> </button>
+                                      <button type="button" class="btn btn-icon btn-secondary btn-sm" onclick="enrollStudent('#', '#')"> Enroll from <strong> {{$student->class->name}} </strong> </button>
                                   </td>
                               </tr>
+                              @endforeach
                         </tbody>
                     </table>
                 </div>

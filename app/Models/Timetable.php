@@ -20,6 +20,7 @@ class Timetable extends Model
         'day',
         'teacher_id',
         'room_id',
+        'session_id',
     ];
 
     public function classes()

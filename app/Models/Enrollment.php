@@ -44,4 +44,9 @@ class Enrollment extends Model
     {
         return $this->hasMany(Teacher::class);
     }
+
+     public function academicYear()
+    {
+        return $this->belongsTo(AcademicYear::class, 'session_id');
+    }
 }

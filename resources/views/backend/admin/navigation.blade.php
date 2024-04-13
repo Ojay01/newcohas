@@ -152,6 +152,9 @@
                                           <li>
                                     <a href="{{route('noticeboardSettings')}}">Noticeboard</a>
                 </li>
+                                          <li>
+                                    <a href="{{route('academic.year')}}">Academic Year</a>
+                </li>
                                     </ul>
         </div>
 

@@ -45,21 +45,12 @@ $title = \App\Models\Setting::first()->system_title;
                     </div>
 
                     <!-- item-->
-                    <a href="{{route('profile')}}" class="dropdown-item notify-item">
+                    <a href="{{route('teacher.profile')}}" class="dropdown-item notify-item">
                         <i class="mdi mdi-account-circle me-1"></i>
                         <span>My account</span>
                     </a>
                                             <!-- item-->
-                        <a href="{{route('setting')}}" class="dropdown-item notify-item">
-                            <i class="mdi mdi-account-edit me-1"></i>
-                            <span>Settings</span>
-                        </a>
-                    
-                                            <!-- item-->
-                        <a href="mailto:support@ameneacademy.com?Subject=Help%20On%20This" target="_blank" class="dropdown-item notify-item">
-                            <i class="mdi mdi-lifebuoy me-1"></i>
-                            <span>Support</span>
-                        </a>
+                       
                     
                     <!-- item-->
                     <a href="{{route('logout')}}" class="dropdown-item notify-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

@@ -22,23 +22,30 @@
                 <div class="col-md-2 mb-1">
                     <select name="exam" id="exam_id" class="form-control select2" data-toggle = "select2" required>
                         <option value="">Select Exam</option>
-
-                            <option value="#">Exam Name</option>
+                    @foreach ($exams as $exam)
+                            <option value="{{$exam->id}}">{{$exam->name}}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="col-md-2 mb-1">
-                    <select name="class" id="class_id" class="form-control select2" data-toggle = "select2" required >
+                    <select name="class" id="class_id" class="form-control select2" data-toggle = "select2" required onchange="classWiseSection(this.value)">
                         <option value="">Select Class</option>
-                        
-                            <option value="#">
-                               class Nme
-                                11
+                             @foreach ($classes as $class)
+                            <option value="{{$class->id}}">
+                                {{$class->name}}
                             </option>
+                            @endforeach
                     </select>
                 </div>
                 <div class="col-md-2 mb-1">
                     <select name="section" id="section_id" class="form-control select2" data-toggle = "select2" required>
-                        <option value="">Section ID</option>
+                        <option value="">Select Class</option>
+
+                              @if ($class_id != "")
+                            @foreach ($sections as $section)
+                                    <option value="{{ $section->id }}">{{ $section->name }}</option>
+                            @endforeach
+                        @endif
                     </select>
                 </div>
                 
@@ -57,6 +64,28 @@
     </div>
 </div>
 
+
+<script>
+
+function classWiseSection(classId) {
+    var classId = $('#class_id').val(); // Get the selected class ID
+ if (!classId) {
+        $('#section_id').empty(); // Clear existing options
+        $('#section_id').append($('<option>', { value: '', text: 'No Section Found' })); // Add default option
+        return; // Exit the function
+    }
+    $.ajax({
+        url: "{{ route('section.list', ['class_id' => ':class_id']) }}".replace(':class_id', classId),
+        success: function(response){
+            $('#section_id').empty(); // Clear existing options
+            $.each(response, function (index, section) {
+                $('#section_id').append($('<option>', { value: section.id, text: section.name }));
+            });
+             $('#subject_select_wrapper').show(); 
+        }
+    });
+}
+</script>
 @extends('backend.admin.header')
 @extends('backend.admin.navigation')
 @extends('backend.admin.footer')
