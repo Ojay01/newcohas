@@ -9,7 +9,7 @@ $title = \App\Models\Setting::first()->system_title;
     <div class="container-fluid">
 
         <!-- LOGO -->
-        <a href="{{route('home')}}" class="topnav-logo" style = "min-width: unset;">
+        <a href="/" class="topnav-logo" style = "min-width: unset;">
             <span class="topnav-logo-lg">
                 <img src="{{ asset('storage/app/public/logos/' . $lightlogo) }}" alt="" height="40">
             </span>

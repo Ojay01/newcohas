@@ -46,7 +46,7 @@
           <ul class="side-nav-second-level">
                        
                                           <li>
-                                    <a href="{{route('students')}}">Student</a>
+                                    <a href="{{route('teacher.students')}}">Student</a>
                 </li>
                        
                                           <li>
@@ -65,7 +65,7 @@
           <ul class="side-nav-second-level">
                                        
                                           <li>
-                                    <a href="{{route('routine')}}">Class Routine / Timetable</a>
+                                    <a href="{{route('teacher.routine')}}">Class Routine / Timetable</a>
                 </li>
                                           <li>
                                     <a href="{{route('teacher.subjects')}}">Subjects</a>
@@ -96,7 +96,7 @@
         <div class="collapse" id="exam">
           <ul class="side-nav-second-level">
                                         <li>
-                                    <a href="{{route('admin.marks')}}">Marks</a>
+                                    <a href="{{route('teacher.marks')}}">Marks</a>
                 </li>
                                           <li>
                                     <a href="{{route('teacher.exams')}}">Exam</a>

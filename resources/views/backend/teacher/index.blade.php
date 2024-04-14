@@ -28,12 +28,13 @@
                 <div class="float-end">
                   <i class="mdi mdi-account-multiple widget-icon"></i>
                 </div>
-                <h5 class="text-muted font-weight-normal mt-0" title="Number of Student"> <i class="mdi mdi-account-group title_icon"></i>  Students <a href="{{route('students')}}" style="color: #6c757d; display: none;" id = "student_list"><i class = "mdi mdi-export"></i></a></h5>
+                <h5 class="text-muted font-weight-normal mt-0" title="Number of Student"> <i class="mdi mdi-account-group title_icon"></i> My Students <a href="{{route('teacher.students')}}" style="color: #6c757d; display: none;" id = "student_list"><i class = "mdi mdi-export"></i></a></h5>
                 <h3 class="mt-3 mb-3">
-              
+             {{$totalEnrollmentCount}}
+
                 </h3>
                 <p class="mb-0 text-muted">
-                  <span class="text-nowrap">{{('Total number of Students')}}</span>
+                  <span class="text-nowrap">{{('Total number of my Students')}}</span>
                 </p>
               </div> <!-- end card-body-->
             </div> <!-- end card-->
@@ -45,9 +46,9 @@
                 <div class="float-end">
                   <i class="mdi mdi-account-multiple widget-icon"></i>
                 </div>
-                <h5 class="text-muted font-weight-normal mt-0" title="Number of Teacher"> <i class="mdi mdi-account-group title_icon"></i>Teachers  <a href="{{ route('admin.teachers') }}" style="color: #6c757d; display: none;" id = "teacher_list"><i class = "mdi mdi-export"></i></a></h5>
+                <h5 class="text-muted font-weight-normal mt-0" title="Number of Teacher"> <i class="mdi mdi-account-group title_icon"></i>Teachers  <a href="{{ route('teacher.teachers') }}" style="color: #6c757d; display: none;" id = "teacher_list"><i class = "mdi mdi-export"></i></a></h5>
                 <h3 class="mt-3 mb-3">
-            
+                {{$teacherCount}}
                 </h3>
                 <p class="mb-0 text-muted">
                   <span class="text-nowrap">total number of teachers</span>
@@ -57,7 +58,7 @@
           </div> <!-- end col-->
         </div> <!-- end row -->
 
-        <div class="row">
+        <!--div class="row">
           <div class="col-lg-6">
             <div class="card widget-flat" id = "parent">
               <div class="card-body">
@@ -71,8 +72,8 @@
                 <p class="mb-0 text-muted">
                   <span class="text-nowrap">total number of parents</span>
                 </p>
-              </div> <!-- end card-body-->
-            </div> <!-- end card-->
+              </div> <!-- end card-body->
+            </div> <!-- end card->
           </div> <!-- end col-->
 
           
@@ -94,12 +95,12 @@
             </div>
           </div>
         </div>
-        <div class="card">
+        <!--div class="card">
           <div class="card-body">
             <h4 class="header-title">{{('Recent Events')}}<a href="#" style="color: #6c757d;"><i class = "mdi mdi-export"></i></a></h4>
             @include('backend.admin.events')
           </div>
-        </div>
+        </div-->
       </div>
     </div>
   </div><!-- end col-->

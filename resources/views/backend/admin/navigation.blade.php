@@ -34,7 +34,6 @@
     <li class="side-nav-item">          <a href="{{route('submitted.marks')}}" class="side-nav-link">
             <i class="dripicons-to-do"></i>
             <span> Submitted Marks</span>
-                          <span class="badge bg-danger float-end">0</span>
                       </a>
         </li>
       <li class="side-nav-item">        <a data-bs-toggle="collapse" href="#users" aria-expanded="false" aria-controls="users" class="side-nav-link py-2">

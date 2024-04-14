@@ -22,14 +22,10 @@ Route::get('/gallery/{id}/images/', [App\Http\Controllers\Controller::class, 'ga
 
     Auth::routes();
 
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    
-    
-
+    Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::middleware(Admin::class)->prefix('admin')->group(function () {
 
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/profile', [App\Http\Controllers\HomeController::class, 'profile'])->name('profile');
     Route::get('/system-setting', [App\Http\Controllers\HomeController::class, 'systemSetting'])->name('setting');
     Route::get('/online-admission', [App\Http\Controllers\HomeController::class, 'onlineAdmission'])->name('admission');
@@ -72,6 +68,10 @@ Route::middleware(Admin::class)->prefix('admin')->group(function () {
     Route::get('/student_marks', [App\Http\Controllers\HomeController::class, 'adminMarks'])->name('admin.marks');
     Route::get('/academic_years', [App\Http\Controllers\HomeController::class, 'academicYear'])->name('academic.year');
     Route::get('/edit_student/{id} ', [App\Http\Controllers\HomeController::class, 'editStudent'])->name('admin.edit.student');
+    Route::get('/submitted-marks', 'App\Http\Controllers\HomeController@allSubmittedMarks')->name('admin.submitted.marks');
+    Route::get('/download-marks', 'App\Http\Controllers\HomeController@downloadMarks')->name('admin.download.marks');
+    Route::get('/students_marks', 'App\Http\Controllers\HomeController@manageMarks')->name('admin.manageMarks');
+
 
 
     Route::post('profile/update', 'App\Http\Controllers\AdminController@update')->name('update-profile');
@@ -128,7 +128,7 @@ Route::middleware(Admin::class)->prefix('admin')->group(function () {
 
 
 Route::prefix('teacher')->group(function () {
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('teacher');
+    Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('teacher');
     Route::get('/teachers', [TeacherController::class, 'teachers'])->name('teacher.teachers');
     Route::get('/assigments', [TeacherController::class, 'assignments'])->name('teacher.assignments');
     Route::get('/tutorials', [TeacherController::class, 'tutorials'])->name('teacher.tutorials');
@@ -137,8 +137,16 @@ Route::prefix('teacher')->group(function () {
     Route::get('/class_rooms', [TeacherController::class, 'classrooms'])->name('teacher.classroom');
     Route::get('/exams', [TeacherController::class, 'exams'])->name('teacher.exams');
     Route::get('/my_profile', [TeacherController::class, 'profile'])->name('teacher.profile');
+    Route::get('/students', [TeacherController::class, 'students'])->name('teacher.students');
+    Route::get('/my_timetable', [TeacherController::class, 'routine'])->name('teacher.routine');
+    Route::get('/manage_marks', [TeacherController::class, 'marks'])->name('teacher.marks');
     
     Route::post('profile/update', 'App\Http\Controllers\TeacherController@updateteacher')->name('update_teacher_profile');
     Route::post('profile/update-password', 'App\Http\Controllers\TeacherController@updateteacherPassword')->name('teacher.update_password');
-   
+    Route::get('/section/list/{class_id}', 'App\Http\Controllers\TeacherController@fetchSections')->name('teacher.section.list');
+    Route::get('/filter-students', 'App\Http\Controllers\TeacherController@filterStudents')->name('teacher.filterStudents');
+    Route::get('/class_routine', 'App\Http\Controllers\TeacherController@classRoutine')->name('teacher.classRoutine');
+    Route::get('/student_marks', 'App\Http\Controllers\TeacherController@manageMarks')->name('teacher.manageMarks');
+   Route::post('/submit-marks', 'App\Http\Controllers\TeacherController@submitMarks')->name('teacher.submit.marks');
+
 });

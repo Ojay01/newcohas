@@ -7,6 +7,8 @@
     <span>Subject : {{$subjectName}} </span>
   </div>
 </div>
+@if ($permission)
+<div>Submission Dateline: {{ \Carbon\Carbon::parse($examEndingDate)->format('d F Y') }}</div>
 
 <form id="marksForm" action="{{ route('teacher.submit.marks') }}" method="POST">
     @csrf
@@ -24,7 +26,7 @@
                     <tr>
                       <td>{{ $marks['name'] }}</td>
                      <td>
-              <input class="form-control {{ $marks['total_marks'] >= 10 ? 'text-success' : 'text-danger' }}" type="number" id="mark-{{ $marks['id'] }}" max="20" name="mark_obtained[{{ $marks['id'] }}]" placeholder="mark" min="0"  step="any" value="{{ $marks['total_marks'] }}" required  onchange="updateColor(this)"
+              <input class="form-control {{ $marks['total_marks'] >= 10 ? 'text-success' : 'text-danger' }}" type="number" id="mark-{{ $marks['id'] }}" max="20" name="mark_obtained[{{ $marks['id'] }}]" placeholder="mark" min="0"  step="any" value="{{ $marks['total_marks'] }}" required {{ $examDatePassed ? 'readonly' : '' }} onchange="updateColor(this)"
        oninput="updateColor(this)">
 
             </td>
@@ -38,7 +40,15 @@
         <button class="btn btn-success" onclick="submit_marks()">Submit</button>
     </div>
     </form>
-
+@else
+<div class="col-md-12 text-center">
+                <div class="alert alert-danger" role="alert">
+                    <h4 class="alert-heading">Access Denied!</h4>
+                    <hr>
+                    <p class="mb-0">Sorry, you are not permitted to manage this class Marks <br> Ask Permission from school Admin</p>
+                </div>
+            </div>
+            @endif
         
 <script>
     function submitMarks() {

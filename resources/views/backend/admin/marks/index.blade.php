@@ -55,18 +55,20 @@
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <button class="btn btn-block btn-secondary" onclick="filter_attendance()" >Filter</button>
+                    <button class="btn btn-block btn-secondary" onclick="manageMarks()" >Filter</button>
                 </div>
             </div>
-
-        @include('backend.admin.marks.list')
-
+                             
             <div class="card-body mark_content">
+                  @if ($class_id != "")
+        @include('backend.admin.marks.list')
+            @else
                 <div class="empty_box text-center">
                     <img class="mb-3" width="150px" src="/public/assets/backend/images/empty_box.png" />
                     <br>
                     <span class="">No Date Found</span>
                 </div>
+                @endif
             </div>
         </div>
     </div>
@@ -103,6 +105,32 @@ function filter_attendance(){
     }else{
         toastr.error('#');
     }
+}
+
+
+function manageMarks(){
+	var class_id = $('#class_id').val();
+	var section_id = $('#section_id').val();
+	var exam_id = $('#exam_id').val();
+	var subject_id = $('#subject_id').val();
+    $.ajax({
+        url: "{{ route('admin.manageMarks') }}",
+        method: 'GET',
+        data: {
+            class_id: class_id,
+            section_id: section_id,
+            exam_id: exam_id,
+            subject_id: subject_id,
+        },
+        success: function(response) {
+            // Handle successful response here
+              $('.mark_content').html(response);
+        },
+        error: function(xhr, status, error) {
+            // Handle error here
+            // console.error(xhr.responseText);
+        }
+    });
 }
 
 

@@ -20,6 +20,8 @@ use App\Models\ClassRoom;
 use App\Models\Timetable;
 use App\Models\Exam;
 use App\Models\AcademicYear;
+use App\Models\Mark;
+use Carbon\Carbon;
 
 
 class HomeController extends Controller
@@ -51,7 +53,30 @@ class HomeController extends Controller
 
             return view('backend.admin.index', compact('studentCount', 'teacherCount', 'parentCount'));
         } else {
-        return view('backend.teacher.index');
+        $teacherCount = User::where('role', 'teacher')->count();
+         $teacherId = auth()->user()->id;
+
+    // Retrieve section IDs where the teacher is permitted to see
+   // Retrieve unique section IDs without duplicates
+$sectionIds = Permission::where('user_id', $teacherId)
+    ->where('marks', 1)
+    ->pluck('section_id')
+    ->unique()
+    ->values();
+
+    // Initialize a variable to store the total enrollment count
+    $totalEnrollmentCount = 0;
+
+    // Calculate total enrollment count across all sections
+    foreach ($sectionIds as $sectionId) {
+        $enrollmentCount = Enrollment::where('section_id', $sectionId)
+            ->count();
+
+        // Add the enrollment count to the total count
+        $totalEnrollmentCount += $enrollmentCount;
+    }
+        return view('backend.teacher.index', compact('teacherCount', 'totalEnrollmentCount'));
+
         }
     }
 
@@ -362,6 +387,86 @@ class HomeController extends Controller
     $user = User::findOrFail($id);
     return view('backend.admin.student.update', compact('user'));
 }
+
+         public function allSubmittedMarks(Request $request)
+{
+    // Get the selected exam ID from the request
+    $examId = $request->input('exam_id');
+        $classId = $request->input('class_id');
+        $sectionId = $request->input('section_id');
+
+    // Retrieve the submitted subjects and their corresponding class and section IDs
+    // Retrieve the submitted subjects and their corresponding class and section IDs
+$submittedSubjects = Mark::select('subjects.name', 'enrollments.class_id', 'enrollments.section_id')
+    ->join('enrollments', 'marks.student_id', '=', 'enrollments.id')
+    ->join('subjects', 'marks.subject_id', '=', 'subjects.id') // Join subjects table to get the subject name
+    ->where('marks.exam_id', $examId)
+    ->where('enrollments.class_id', $classId)
+    ->where('enrollments.section_id', $sectionId)
+    ->distinct()
+    ->get();
+
+
+
+    // Pass the submitted subjects to the view for display
+    return view('backend.admin.submitted_marks.list', compact('submittedSubjects', 'examId', 'classId', 'sectionId'));
+}
+
+public function manageMarks(Request $request)
+    {
+        $class = $request->input('class_id');
+        $section = $request->input('section_id');
+        $exam = $request->input('exam_id');
+        $subject = $request->input('subject_id');
+
+        // Check if class ID, section ID, exam ID, or subject ID is invalid
+        if (!$class || !$section || !$exam || !$subject) {
+            return view('backend.admin.empty');
+        }
+
+        // Retrieve the class name, section name, and subject name
+        $className = SchoolClass::find($class)->name;
+        $sectionName = Section::find($section)->name;
+        $subjectName = Subject::find($subject)->name;
+        $examEndingDate = Exam::find($exam)->ending_date;
+        $examDatePassed = Carbon::now()->gt(Carbon::parse($examEndingDate));
+        // Get the ID of the active academic year
+        $activeAcademicYearId = AcademicYear::where('status', 1)->value('id');
+
+        // Retrieve the authenticated user's ID
+        $teacherId = auth()->user()->id;
+
+
+        // Retrieve students (enrollments) of the specified class, section, and academic year
+        $students = Enrollment::where('class_id', $class)
+            ->where('section_id', $section)
+            ->where('session_id', $activeAcademicYearId)
+            ->get();
+
+        // Prepare a collection of students with their marks obtained (or 0 if no mark exists)
+        $studentsWithMarks = [];
+        foreach ($students as $student) {
+            $studentId = $student->id;
+
+            // Retrieve marks for the specified exam and student
+            $marks = Mark::where('exam_id', $exam)
+                ->where('student_id', $studentId)
+                ->where('subject_id', $subject)
+                ->get();
+
+            // Calculate total marks obtained for the student
+            $totalMarks = $marks->sum('mark_obtained');
+
+            // Append the student's information and marks to the collection
+            $studentsWithMarks[] = [
+                'id' => $studentId,
+                'name' => $student->user->name,
+                'total_marks' => $totalMarks,
+            ];
+        }
+
+        return view('backend.admin.marks.list', compact('studentsWithMarks', 'className', 'sectionName', 'subjectName', 'examEndingDate', 'examDatePassed', 'exam', 'subject'));
+    }
 
 
 }

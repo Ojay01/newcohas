@@ -50,15 +50,19 @@
                 </div>
                 
                 <div class="col-md-2">
-                    <button class="btn btn-block btn-secondary" onclick="filter_attendance()" >Filter</button>
+                    <button class="btn btn-block btn-secondary" onclick="submitedMarks()" >Filter</button>
                 </div>
             </div>
             <div class="card-body mark_content">
-                <div class="empty_box text-center">
-                    <img class="mb-3" width="150px" src="/public/assets/backend/images/empty_box.png" />
-                    <br>
-                    <span class="">No Data Found</span>
-                </div>
+                 @if ($class_id != "")
+				@include('backend.admin.submitted_marks.list')
+                @else
+                        <div class="empty_box text-center">
+                             <img class="mb-3" width="150px" src="/public/assets/backend/images/empty_box.png" />
+                            <br>
+                            <span class="">No Data Found</span>
+                        </div>
+                    @endif
             </div>
         </div>
     </div>
@@ -82,6 +86,29 @@ function classWiseSection(classId) {
                 $('#section_id').append($('<option>', { value: section.id, text: section.name }));
             });
              $('#subject_select_wrapper').show(); 
+        }
+    });
+}
+
+function submitedMarks(){
+	var class_id = $('#class_id').val();
+	var section_id = $('#section_id').val();
+	var exam_id = $('#exam_id').val();
+    $.ajax({
+        url: "{{ route('admin.submitted.marks') }}",
+        method: 'GET',
+        data: {
+            class_id: class_id,
+            section_id: section_id,
+            exam_id: exam_id,
+        },
+        success: function(response) {
+            // Handle successful response here
+              $('.mark_content').html(response);
+        },
+        error: function(xhr, status, error) {
+            // Handle error here
+            // console.error(xhr.responseText);
         }
     });
 }
