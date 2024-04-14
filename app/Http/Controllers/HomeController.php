@@ -44,39 +44,38 @@ class HomeController extends Controller
     public function index()
     {
         $user = auth()->user(); // Retrieve the currently logged-in user
-    $activeAcademicYearId = AcademicYear::where('status', 1)->value('id');
+        $activeAcademicYearId = AcademicYear::where('status', 1)->value('id');
 
-    if ($user->role == 'admin') {
-        $studentCount = Enrollment::where('session_id', $activeAcademicYearId)->count();
-        $teacherCount = User::where('role', 'teacher')->count();
-        $parentCount = User::where('role', 'parent')->count();
+        if ($user->role == 'admin') {
+            $studentCount = Enrollment::where('session_id', $activeAcademicYearId)->count();
+            $teacherCount = User::where('role', 'teacher')->count();
+            $parentCount = User::where('role', 'parent')->count();
 
             return view('backend.admin.index', compact('studentCount', 'teacherCount', 'parentCount'));
         } else {
-        $teacherCount = User::where('role', 'teacher')->count();
-         $teacherId = auth()->user()->id;
+            $teacherCount = User::where('role', 'teacher')->count();
+            $teacherId = auth()->user()->id;
 
-    // Retrieve section IDs where the teacher is permitted to see
-   // Retrieve unique section IDs without duplicates
-$sectionIds = Permission::where('user_id', $teacherId)
-    ->where('marks', 1)
-    ->pluck('section_id')
-    ->unique()
-    ->values();
+            // Retrieve section IDs where the teacher is permitted to see
+            // Retrieve unique section IDs without duplicates
+            $sectionIds = Permission::where('user_id', $teacherId)
+                ->where('marks', 1)
+                ->pluck('section_id')
+                ->unique()
+                ->values();
 
-    // Initialize a variable to store the total enrollment count
-    $totalEnrollmentCount = 0;
+            // Initialize a variable to store the total enrollment count
+            $totalEnrollmentCount = 0;
 
-    // Calculate total enrollment count across all sections
-    foreach ($sectionIds as $sectionId) {
-        $enrollmentCount = Enrollment::where('section_id', $sectionId)
-            ->count();
+            // Calculate total enrollment count across all sections
+            foreach ($sectionIds as $sectionId) {
+                $enrollmentCount = Enrollment::where('section_id', $sectionId)
+                    ->count();
 
-        // Add the enrollment count to the total count
-        $totalEnrollmentCount += $enrollmentCount;
-    }
-        return view('backend.teacher.index', compact('teacherCount', 'totalEnrollmentCount'));
-
+                // Add the enrollment count to the total count
+                $totalEnrollmentCount += $enrollmentCount;
+            }
+            return view('backend.teacher.index', compact('teacherCount', 'totalEnrollmentCount'));
         }
     }
 
@@ -99,7 +98,7 @@ $sectionIds = Permission::where('user_id', $teacherId)
 
     public function submittedMarks()
     {
-          $activeAcademicYearId = AcademicYear::where('status', 1)->value('id');
+        $activeAcademicYearId = AcademicYear::where('status', 1)->value('id');
         $exams = Exam::where('session_id', $activeAcademicYearId)->get();
         $classes = SchoolClass::all();
         $sections = Section::all();
@@ -110,15 +109,15 @@ $sectionIds = Permission::where('user_id', $teacherId)
     public function websiteSettings()
     {
         $settings = GeneralSetting::first();
-    
+
         return view('backend.admin.website_settings.general_settings', [
-        'settings' => $settings,
-    ]);
+            'settings' => $settings,
+        ]);
     }
 
     public function aboutUsSettings()
     {
-                $settings = GeneralSetting::first();
+        $settings = GeneralSetting::first();
         return view('backend.admin.website_settings.about_us', compact('settings'));
     }
 
@@ -165,43 +164,43 @@ $sectionIds = Permission::where('user_id', $teacherId)
 
     public function homepageSettings()
     {
-        $sliderSettings = GeneralSetting::first();        
-         $sliderImages = $sliderSettings->slider_images;
-            $sliderImages = json_decode($sliderImages, true);
+        $sliderSettings = GeneralSetting::first();
+        $sliderImages = $sliderSettings->slider_images;
+        $sliderImages = json_decode($sliderImages, true);
         return view('backend.admin.website_settings.homepage_settings', [
-        'sliderImages' => $sliderImages,
-    ]);
+            'sliderImages' => $sliderImages,
+        ]);
     }
 
 
     public function schoolSettings()
     {
-         $schoolSettings = SchoolSetting::first();
+        $schoolSettings = SchoolSetting::first();
         return view('backend.admin.website_settings.school_settings', compact('schoolSettings'));
     }
 
     public function teachers()
-{
-    $teachers = Teacher::all();
-    $socialLinks = [];
+    {
+        $teachers = Teacher::all();
+        $socialLinks = [];
 
-    foreach ($teachers as $teacher) {
-        $decodedLinks = json_decode($teacher->social_links, true);
-        $twitter = $decodedLinks['twitter'] ?? '';
-        $facebook = $decodedLinks['facebook'] ?? '';
-        $linkedin = $decodedLinks['linkedin'] ?? '';
+        foreach ($teachers as $teacher) {
+            $decodedLinks = json_decode($teacher->social_links, true);
+            $twitter = $decodedLinks['twitter'] ?? '';
+            $facebook = $decodedLinks['facebook'] ?? '';
+            $linkedin = $decodedLinks['linkedin'] ?? '';
 
-        // Store the social links in an array for each teacher
-        $socialLinks[$teacher->id] = [
-            'twitter' => $twitter,
-            'facebook' => $facebook,
-            'linkedin' => $linkedin,
-        ];
-        $teacherPermissions[$teacher->user_id] = Permission::where('user_id', $teacher->user_id)->get();
+            // Store the social links in an array for each teacher
+            $socialLinks[$teacher->id] = [
+                'twitter' => $twitter,
+                'facebook' => $facebook,
+                'linkedin' => $linkedin,
+            ];
+            $teacherPermissions[$teacher->user_id] = Permission::where('user_id', $teacher->user_id)->get();
+        }
+
+        return view('backend.admin.teacher.index', compact('teachers', 'socialLinks', 'teacherPermissions'));
     }
-
-    return view('backend.admin.teacher.index', compact('teachers', 'socialLinks', 'teacherPermissions'));
-}
 
 
     public function students()
@@ -215,42 +214,42 @@ $sectionIds = Permission::where('user_id', $teacherId)
 
     public function labSettings()
     {
-        $sliderSettings = GeneralSetting::first();        
-         $sliderImages = $sliderSettings->physics_lab;
-            $sliderImages = json_decode($sliderImages, true);
+        $sliderSettings = GeneralSetting::first();
+        $sliderImages = $sliderSettings->physics_lab;
+        $sliderImages = json_decode($sliderImages, true);
         return view('backend.admin.website_settings.lab_settings', [
-        'sliderImages' => $sliderImages,
-    ]);
+            'sliderImages' => $sliderImages,
+        ]);
     }
 
     public function bioLab()
     {
-        $sliderSettings = GeneralSetting::first();        
-         $sliderImages = $sliderSettings->biology_lab;
-            $sliderImages = json_decode($sliderImages, true);
+        $sliderSettings = GeneralSetting::first();
+        $sliderImages = $sliderSettings->biology_lab;
+        $sliderImages = json_decode($sliderImages, true);
         return view('backend.admin.website_settings.biology_lab', [
-        'sliderImages' => $sliderImages,
-    ]);
+            'sliderImages' => $sliderImages,
+        ]);
     }
 
     public function chemLab()
     {
-        $sliderSettings = GeneralSetting::first();        
-         $sliderImages = $sliderSettings->chemistry_lab;
-            $sliderImages = json_decode($sliderImages, true);
+        $sliderSettings = GeneralSetting::first();
+        $sliderImages = $sliderSettings->chemistry_lab;
+        $sliderImages = json_decode($sliderImages, true);
         return view('backend.admin.website_settings.chemistry_lab', [
-        'sliderImages' => $sliderImages,
-    ]);
+            'sliderImages' => $sliderImages,
+        ]);
     }
 
     public function comLab()
     {
-        $sliderSettings = GeneralSetting::first();        
-         $sliderImages = $sliderSettings->computer_lab;
-            $sliderImages = json_decode($sliderImages, true);
+        $sliderSettings = GeneralSetting::first();
+        $sliderImages = $sliderSettings->computer_lab;
+        $sliderImages = json_decode($sliderImages, true);
         return view('backend.admin.website_settings.computer_lab', [
-        'sliderImages' => $sliderImages,
-    ]);
+            'sliderImages' => $sliderImages,
+        ]);
     }
 
     public function studentAdmission()
@@ -277,7 +276,7 @@ $sectionIds = Permission::where('user_id', $teacherId)
         $admins = User::where('role', 'admin')->get();
         return view('backend.admin.admins.index', compact('admins'));
     }
-    
+
     public function classes()
     {
         $classes = SchoolClass::all();
@@ -285,10 +284,10 @@ $sectionIds = Permission::where('user_id', $teacherId)
         return view('backend.admin.class.index', compact('classes', 'sections'));
     }
 
-    
+
     public function routine()
     {
-         $classes = SchoolClass::all();
+        $classes = SchoolClass::all();
         $sections = Section::all();
         $class_id = '';
         $subjects = Subject::all();
@@ -296,7 +295,7 @@ $sectionIds = Permission::where('user_id', $teacherId)
         $classrooms = ClassRoom::all();
         return view('backend.admin.routine.index', compact('classes', 'sections', 'class_id', 'subjects', 'teachers', 'classrooms'));
     }
-    
+
     public function classRoom()
     {
         $classrooms = ClassRoom::all();
@@ -383,36 +382,37 @@ $sectionIds = Permission::where('user_id', $teacherId)
         return view('backend.admin.marks.index', compact('exams', 'classes', 'sections', 'subjects', 'class_id'));
     }
 
-    public function editStudent($id) {
-    $user = User::findOrFail($id);
-    return view('backend.admin.student.update', compact('user'));
-}
+    public function editStudent($id)
+    {
+        $user = User::findOrFail($id);
+        return view('backend.admin.student.update', compact('user'));
+    }
 
-         public function allSubmittedMarks(Request $request)
-{
-    // Get the selected exam ID from the request
-    $examId = $request->input('exam_id');
+    public function allSubmittedMarks(Request $request)
+    {
+        // Get the selected exam ID from the request
+        $examId = $request->input('exam_id');
         $classId = $request->input('class_id');
         $sectionId = $request->input('section_id');
 
-    // Retrieve the submitted subjects and their corresponding class and section IDs
-    // Retrieve the submitted subjects and their corresponding class and section IDs
-$submittedSubjects = Mark::select('subjects.name', 'enrollments.class_id', 'enrollments.section_id')
-    ->join('enrollments', 'marks.student_id', '=', 'enrollments.id')
-    ->join('subjects', 'marks.subject_id', '=', 'subjects.id') // Join subjects table to get the subject name
-    ->where('marks.exam_id', $examId)
-    ->where('enrollments.class_id', $classId)
-    ->where('enrollments.section_id', $sectionId)
-    ->distinct()
-    ->get();
+        // Retrieve the submitted subjects and their corresponding class and section IDs
+        // Retrieve the submitted subjects and their corresponding class and section IDs
+        $submittedSubjects = Mark::select('subjects.name', 'enrollments.class_id', 'enrollments.section_id')
+            ->join('enrollments', 'marks.student_id', '=', 'enrollments.id')
+            ->join('subjects', 'marks.subject_id', '=', 'subjects.id') // Join subjects table to get the subject name
+            ->where('marks.exam_id', $examId)
+            ->where('enrollments.class_id', $classId)
+            ->where('enrollments.section_id', $sectionId)
+            ->distinct()
+            ->get();
 
 
 
-    // Pass the submitted subjects to the view for display
-    return view('backend.admin.submitted_marks.list', compact('submittedSubjects', 'examId', 'classId', 'sectionId'));
-}
+        // Pass the submitted subjects to the view for display
+        return view('backend.admin.submitted_marks.list', compact('submittedSubjects', 'examId', 'classId', 'sectionId'));
+    }
 
-public function manageMarks(Request $request)
+    public function manageMarks(Request $request)
     {
         $class = $request->input('class_id');
         $section = $request->input('section_id');
@@ -467,6 +467,4 @@ public function manageMarks(Request $request)
 
         return view('backend.admin.marks.list', compact('studentsWithMarks', 'className', 'sectionName', 'subjectName', 'examEndingDate', 'examDatePassed', 'exam', 'subject'));
     }
-
-
 }

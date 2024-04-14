@@ -29,29 +29,29 @@ class AdminController extends Controller
         $user = Auth::user();
 
         // Validation rules
-    $rules = [
-        'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-        'phone' => 'nullable|string|max:12|min:9|unique:users,phone,' . $user->id,
-        'address' => 'nullable|string|max:255',
-        'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ];
+        $rules = [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'phone' => 'nullable|string|max:12|min:9|unique:users,phone,' . $user->id,
+            'address' => 'nullable|string|max:255',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ];
 
-    // Custom validation messages
-    $messages = [
-        'email.unique' => 'The email address has already been taken.',
-        'phone.unique' => 'The phone number has already been taken.',
-        'phone.max' => 'The phone number must not be greater than :max digits.',
-        'phone.min' => 'The phone number must be at least :min digits.',
-    ];
+        // Custom validation messages
+        $messages = [
+            'email.unique' => 'The email address has already been taken.',
+            'phone.unique' => 'The phone number has already been taken.',
+            'phone.max' => 'The phone number must not be greater than :max digits.',
+            'phone.min' => 'The phone number must be at least :min digits.',
+        ];
 
-    // Validate the request
-    $validator = Validator::make($request->all(), $rules, $messages);
+        // Validate the request
+        $validator = Validator::make($request->all(), $rules, $messages);
 
-    // If validation fails, redirect back with errors
-    if ($validator->fails()) {
-        return redirect()->back()->withErrors($validator)->withInput();
-    }
+        // If validation fails, redirect back with errors
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
         $user->name = $request->input('name');
         $user->email = $request->input('email');
@@ -59,11 +59,11 @@ class AdminController extends Controller
         $user->address = $request->input('address');
 
         if ($request->hasFile('profile_image')) {
-        $image = $request->file('profile_image');
-        $imageName = time() . '.' . $image->getClientOriginalExtension();
-        $image->storeAs('profiles', $imageName, 'public');
-        $user->profile_image = $imageName;
-    }
+            $image = $request->file('profile_image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('profiles', $imageName, 'public');
+            $user->profile_image = $imageName;
+        }
         // Handle profile image update if needed
 
         $user->save();
@@ -72,51 +72,51 @@ class AdminController extends Controller
     }
 
     public function updatePassword(Request $request)
-{
-    $request->validate([
-        'current_password' => 'required',
-        'password' => 'required|confirmed|min:8',
-    ]);
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'password' => 'required|confirmed|min:8',
+        ]);
 
-    $user = Auth::user();
+        $user = Auth::user();
 
-    if (Hash::check($request->current_password, $user->password)) {
-        $user->password = Hash::make($request->password);
-        $user->save();
+        if (Hash::check($request->current_password, $user->password)) {
+            $user->password = Hash::make($request->password);
+            $user->save();
 
-        return redirect()->back()->with('success', 'Password updated successfully.');
+            return redirect()->back()->with('success', 'Password updated successfully.');
+        }
+
+        return redirect()->back()->withErrors(['current_password' => 'The current password is incorrect.']);
     }
 
-    return redirect()->back()->withErrors(['current_password' => 'The current password is incorrect.']);
-}
-
     public function addClass(Request $request)
-{
-    $validatedData = $request->validate([
-        'name' => 'required|string',
-    ]);
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+        ]);
 
-    $class = new SchoolClass();
+        $class = new SchoolClass();
         $class->name = $validatedData['name'];
         // $class->description = $validatedData['description'];
         $class->save();
 
-    return redirect()->back()->with('success', 'Class added successfully.');
-}
+        return redirect()->back()->with('success', 'Class added successfully.');
+    }
 
     public function addClassRoom(Request $request)
-{
-    $validatedData = $request->validate([
-        'name' => 'required|string',
-    ]);
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+        ]);
 
-    $classroom = new ClassRoom();
+        $classroom = new ClassRoom();
         $classroom->name = $validatedData['name'];
         // $class->description = $validatedData['description'];
         $classroom->save();
 
-    return redirect()->back()->with('success', 'Classroom added successfully.');
-}
+        return redirect()->back()->with('success', 'Classroom added successfully.');
+    }
 
 
     public function addSection(Request $request, $class_id)
@@ -240,20 +240,20 @@ class AdminController extends Controller
     }
 
     public function deleteClass(SchoolClass $class)
-{
-    // Check if any enrolments exist for this class
-    $enrolmentsCount = $class->enrolments()->count();
+    {
+        // Check if any enrolments exist for this class
+        $enrolmentsCount = $class->enrolments()->count();
 
-    if ($enrolmentsCount > 0) {
-        // Enrolments exist, so class cannot be deleted
-        return redirect()->back()->with('error', 'Cannot delete class with students');
+        if ($enrolmentsCount > 0) {
+            // Enrolments exist, so class cannot be deleted
+            return redirect()->back()->with('error', 'Cannot delete class with students');
+        }
+
+        // No enrolments exist, proceed with deletion
+        $class->delete();
+
+        return  redirect()->back()->with('success', 'Class deleted successfully');
     }
-
-    // No enrolments exist, proceed with deletion
-    $class->delete();
-
-    return  redirect()->back()->with('success', 'Class deleted successfully');
-}
 
 
     public function deleteClassroom(ClassRoom $classroom)
@@ -267,10 +267,10 @@ class AdminController extends Controller
     {
         $teachersCount = $department->teachers()->count();
 
-    if ($teachersCount > 0) {
-        // Enrolments exist, so class cannot be deleted
-        return redirect()->back()->with('error', 'Cannot delete Department with teachers');
-    }
+        if ($teachersCount > 0) {
+            // Enrolments exist, so class cannot be deleted
+            return redirect()->back()->with('error', 'Cannot delete Department with teachers');
+        }
         $department->delete();
 
         return response()->json(['message' => 'department deleted successfully']);
@@ -285,156 +285,155 @@ class AdminController extends Controller
 
 
     public function fetchSections(Request $request, $class_id)
-{
-    // Fetch sections based on the provided class ID
-    $sections = Section::where('class_id', $class_id)->get();
-    
-    // Redirect to another route with the sections and the selected class ID
-    return response()->json($sections);
-}
+    {
+        // Fetch sections based on the provided class ID
+        $sections = Section::where('class_id', $class_id)->get();
 
-
-public function filterStudents(Request $request)
-{
-    $classId = $request->input('class_id');
-    $sectionId = $request->input('section_id');
-
-    // Check if class ID or section ID is invalid
-    if (!$classId || !$sectionId) {
-        return view('backend.admin.empty');
+        // Redirect to another route with the sections and the selected class ID
+        return response()->json($sections);
     }
 
-    // Get the ID of the active academic year
-    $activeAcademicYearId = AcademicYear::where('status', 1)->value('id');
 
-    // Retrieve students based on class, section, and active academic year
-    $students = Enrollment::where('class_id', $classId)
-                          ->where('section_id', $sectionId)
-                          ->where('session_id', $activeAcademicYearId)
-                          ->get();
+    public function filterStudents(Request $request)
+    {
+        $classId = $request->input('class_id');
+        $sectionId = $request->input('section_id');
 
-    return view('backend.admin.student.list', compact('students'));
-}
-
-public function promoteStudents(Request $request)
-{
-    $classFrom = $request->input('class_id');
-    $classTo = $request->input('class_id_to');
-    $sessionFrom = $request->input('session_from');
-    $sessionTo = $request->input('session_to');
-
-    // Check if class ID or section ID is invalid
-    if (!$classFrom || !$classTo || !$sessionFrom || !$sessionTo) {
-        return view('backend.admin.empty');
-    }
-
-    // Get the ID of the active academic year
-    $activeAcademicYearId = AcademicYear::where('status', 1)->value('id');
-
-    // Retrieve students based on class, section, and active academic year
-    $students = Enrollment::where('class_id', $classFrom)
-                          ->where('session_id', $activeAcademicYearId)
-                          ->get();
-
-     $classToName = SchoolClass::where('id', $classTo)->value('name');
-     $classFromName = SchoolClass::where('id', $classFrom)->value('name');
-     $sessionFromName = AcademicYear::where('id', $sessionFrom)->value('name');
-     $sessionToName = AcademicYear::where('id', $sessionTo)->value('name');
-
-    return view('backend.admin.promotion.list', compact('students', 'classFromName', 'classToName', 'sessionFromName', 'sessionToName'));
-}
-
-public function classRoutine(Request $request)
-{
-    $class = $request->input('class_id');
-    $section = $request->input('section_id');
-
-    // Check if class ID or section ID is invalid
-    if (!$class || !$section) {
-        return view('backend.admin.empty');
-    }
-
-    // Get the ID of the active academic year
-    $activeAcademicYearId = AcademicYear::where('status', 1)->value('id');
-
-    // Retrieve students based on class, section, and active academic year
-    $timetables = Timetable::where('class_id', $class)
-                        ->where('section_id', $section)
-                          ->where('session_id', $activeAcademicYearId)
-                          ->get();
-
-    return view('backend.admin.routine.list', compact('timetables'));
-}
-
-
-public function filterTeachers(Request $request)
-{
-    $classId = $request->input('class_id');
-    $sectionId = $request->input('section_id');
-    $subjectId = $request->input('subject_id');
-
-    // Check if class ID or section ID is invalid
-    if (!$classId || !$sectionId || !$subjectId) {
-        return view('backend.admin.empty');
-    }
-
-    // Retrieve all teachers
-    $teachers = Teacher::all();
-
-    // Fetch permissions for the given class, section, and subject
-    $permissions = Permission::whereIn('user_id', $teachers->pluck('user_id'))
-        ->where('class_id', $classId)
-        ->where('section_id', $sectionId)
-        ->where('subject_id', $subjectId)
-        ->get();
-
-    // Associate each teacher with their permission (if exists)
-    $teacherPermissions = [];
-    foreach ($teachers as $teacher) {
-        $permission = $permissions->where('user_id', $teacher->user_id)->first();
-        $teacherPermissions[$teacher->user_id] = $permission ?? null;
-    }
-
-    return view('backend.admin.permission.list', compact('teachers', 'teacherPermissions'));
-}
-
-        public function togglePermission(Request $request)
-        {
-            $userId = $request->input('user_id');
-            $classId = $request->input('class_id');
-            $sectionId = $request->input('section_id');
-            $subjectId = $request->input('subject_id');
-            $columnName = $request->input('column_name');
-            $value = $request->input('value');
-
-            // Check if the permission record already exists
-            $permission = Permission::where('user_id', $userId)
-                ->where('class_id', $classId)
-                ->where('section_id', $sectionId)
-                ->where('subject_id', $subjectId)
-                ->first();
-
-            if ($permission) {
-                // Update the specific permission
-                $permission->$columnName = $value;
-                $permission->save();
-            } else {
-                // Create a new permission record
-                $permission = new Permission();
-                $permission->user_id = $userId;
-                $permission->class_id = $classId;
-                $permission->section_id = $sectionId;
-                $permission->subject_id = $subjectId;
-                $permission->$columnName = $value;
-                $permission->save();
-            }
-
-            //  return response()->json(['success' => true]);
-            return response()->json(['success' => true, 'message' => 'Your success message here']);
-
+        // Check if class ID or section ID is invalid
+        if (!$classId || !$sectionId) {
+            return view('backend.admin.empty');
         }
 
-        public function createGallery(Request $request)
+        // Get the ID of the active academic year
+        $activeAcademicYearId = AcademicYear::where('status', 1)->value('id');
+
+        // Retrieve students based on class, section, and active academic year
+        $students = Enrollment::where('class_id', $classId)
+            ->where('section_id', $sectionId)
+            ->where('session_id', $activeAcademicYearId)
+            ->get();
+
+        return view('backend.admin.student.list', compact('students'));
+    }
+
+    public function promoteStudents(Request $request)
+    {
+        $classFrom = $request->input('class_id');
+        $classTo = $request->input('class_id_to');
+        $sessionFrom = $request->input('session_from');
+        $sessionTo = $request->input('session_to');
+
+        // Check if class ID or section ID is invalid
+        if (!$classFrom || !$classTo || !$sessionFrom || !$sessionTo) {
+            return view('backend.admin.empty');
+        }
+
+        // Get the ID of the active academic year
+        $activeAcademicYearId = AcademicYear::where('status', 1)->value('id');
+
+        // Retrieve students based on class, section, and active academic year
+        $students = Enrollment::where('class_id', $classFrom)
+            ->where('session_id', $activeAcademicYearId)
+            ->get();
+
+        $classToName = SchoolClass::where('id', $classTo)->value('name');
+        $classFromName = SchoolClass::where('id', $classFrom)->value('name');
+        $sessionFromName = AcademicYear::where('id', $sessionFrom)->value('name');
+        $sessionToName = AcademicYear::where('id', $sessionTo)->value('name');
+
+        return view('backend.admin.promotion.list', compact('students', 'classFromName', 'classToName', 'sessionFromName', 'sessionToName'));
+    }
+
+    public function classRoutine(Request $request)
+    {
+        $class = $request->input('class_id');
+        $section = $request->input('section_id');
+
+        // Check if class ID or section ID is invalid
+        if (!$class || !$section) {
+            return view('backend.admin.empty');
+        }
+
+        // Get the ID of the active academic year
+        $activeAcademicYearId = AcademicYear::where('status', 1)->value('id');
+
+        // Retrieve students based on class, section, and active academic year
+        $timetables = Timetable::where('class_id', $class)
+            ->where('section_id', $section)
+            ->where('session_id', $activeAcademicYearId)
+            ->get();
+
+        return view('backend.admin.routine.list', compact('timetables'));
+    }
+
+
+    public function filterTeachers(Request $request)
+    {
+        $classId = $request->input('class_id');
+        $sectionId = $request->input('section_id');
+        $subjectId = $request->input('subject_id');
+
+        // Check if class ID or section ID is invalid
+        if (!$classId || !$sectionId || !$subjectId) {
+            return view('backend.admin.empty');
+        }
+
+        // Retrieve all teachers
+        $teachers = Teacher::all();
+
+        // Fetch permissions for the given class, section, and subject
+        $permissions = Permission::whereIn('user_id', $teachers->pluck('user_id'))
+            ->where('class_id', $classId)
+            ->where('section_id', $sectionId)
+            ->where('subject_id', $subjectId)
+            ->get();
+
+        // Associate each teacher with their permission (if exists)
+        $teacherPermissions = [];
+        foreach ($teachers as $teacher) {
+            $permission = $permissions->where('user_id', $teacher->user_id)->first();
+            $teacherPermissions[$teacher->user_id] = $permission ?? null;
+        }
+
+        return view('backend.admin.permission.list', compact('teachers', 'teacherPermissions'));
+    }
+
+    public function togglePermission(Request $request)
+    {
+        $userId = $request->input('user_id');
+        $classId = $request->input('class_id');
+        $sectionId = $request->input('section_id');
+        $subjectId = $request->input('subject_id');
+        $columnName = $request->input('column_name');
+        $value = $request->input('value');
+
+        // Check if the permission record already exists
+        $permission = Permission::where('user_id', $userId)
+            ->where('class_id', $classId)
+            ->where('section_id', $sectionId)
+            ->where('subject_id', $subjectId)
+            ->first();
+
+        if ($permission) {
+            // Update the specific permission
+            $permission->$columnName = $value;
+            $permission->save();
+        } else {
+            // Create a new permission record
+            $permission = new Permission();
+            $permission->user_id = $userId;
+            $permission->class_id = $classId;
+            $permission->section_id = $sectionId;
+            $permission->subject_id = $subjectId;
+            $permission->$columnName = $value;
+            $permission->save();
+        }
+
+        //  return response()->json(['success' => true]);
+        return response()->json(['success' => true, 'message' => 'Your success message here']);
+    }
+
+    public function createGallery(Request $request)
     {
         // Validate the form data
         $request->validate([
@@ -468,63 +467,63 @@ public function filterTeachers(Request $request)
     }
 
     public function updateGallery(Request $request, $id)
-{
-    // Validate the form data
-    $request->validate([
-        // Validation rules...
-    ]);
+    {
+        // Validate the form data
+        $request->validate([
+            // Validation rules...
+        ]);
 
-    // Find the gallery by ID
-    $gallery = Gallery::findOrFail($id);
+        // Find the gallery by ID
+        $gallery = Gallery::findOrFail($id);
 
-    // Update the gallery title, description, and show_on_website status
-    $gallery->title = $request->input('title');
-    $gallery->description = $request->input('description');
-    $gallery->show_on_website = $request->input('show_on_website');
+        // Update the gallery title, description, and show_on_website status
+        $gallery->title = $request->input('title');
+        $gallery->description = $request->input('description');
+        $gallery->show_on_website = $request->input('show_on_website');
 
-    // Check if a new cover image is uploaded
-    if ($request->hasFile('cover_image')) {
-        $coverImage = $request->file('cover_image');
-        $coverImagePath = $coverImage->store('gallery', 'public');
-        $gallery->cover_image = $coverImagePath;
+        // Check if a new cover image is uploaded
+        if ($request->hasFile('cover_image')) {
+            $coverImage = $request->file('cover_image');
+            $coverImagePath = $coverImage->store('gallery', 'public');
+            $gallery->cover_image = $coverImagePath;
+        }
+
+        // Save the updated gallery
+        $gallery->save();
+
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Gallery updated successfully.');
     }
 
-    // Save the updated gallery
-    $gallery->save();
+    public function addPhoto(Request $request, $id)
+    {
+        // Validate the form data
+        $request->validate([
+            'gallery_photo' => 'required|image|mimes:jpeg,png,jpg,gif',
+        ]);
 
-    // Redirect back with a success message
-    return redirect()->back()->with('success', 'Gallery updated successfully.');
-}
+        // Get the gallery
+        $gallery = Gallery::findOrFail($id);
 
-        public function addPhoto(Request $request, $id)
-            {
-                // Validate the form data
-                $request->validate([
-                    'gallery_photo' => 'required|image|mimes:jpeg,png,jpg,gif',
-                ]);
+        // Store the uploaded photo
+        $imagePath = $request->file('gallery_photo')->store('gallery_photos', 'public');
 
-                // Get the gallery
-                $gallery = Gallery::findOrFail($id);
+        // Create a new GalleryImage model
+        $galleryImage = new GalleryImage();
+        $galleryImage->gallery_id = $gallery->id;
+        $galleryImage->image = $imagePath;
+        $galleryImage->save();
 
-                // Store the uploaded photo
-                $imagePath = $request->file('gallery_photo')->store('gallery_photos', 'public');
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Photo added to gallery successfully.');
+    }
 
-                // Create a new GalleryImage model
-                $galleryImage = new GalleryImage();
-                $galleryImage->gallery_id = $gallery->id;
-                $galleryImage->image = $imagePath;
-                $galleryImage->save();
-
-                // Redirect back with a success message
-                return redirect()->back()->with('success', 'Photo added to gallery successfully.');
-            }
-
-            public function deleteImage($id)
-        {
-            $image = GalleryImage::findOrFail($id);
-            $image->delete();
-            return redirect()->back()->with('success', 'Image deleted successfully.');
-        }
+    public function deleteImage($id)
+    {
+        $image = GalleryImage::findOrFail($id);
+        $image->delete();
+        return redirect()->back()->with('success', 'Image deleted successfully.');
+    }
 
     public function deleteGallery($id)
     {
@@ -535,150 +534,149 @@ public function filterTeachers(Request $request)
     }
 
     public function addClassTimetable(Request $request)
-{
-    // Validate the incoming request data
-    $validatedData = $request->validate([
-        'class_id' => 'required',
-        'section_id' => 'required',
-        'subject_id' => 'required',
-        'teacher_id' => 'required',
-        'room_id' => 'required',
-        'day' => 'required',
-        'starting_hour' => 'required',
-        'starting_minute' => 'required',
-        'ending_hour' => 'required',
-        'ending_minute' => 'required',
-    ]);
+    {
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'class_id' => 'required',
+            'section_id' => 'required',
+            'subject_id' => 'required',
+            'teacher_id' => 'required',
+            'room_id' => 'required',
+            'day' => 'required',
+            'starting_hour' => 'required',
+            'starting_minute' => 'required',
+            'ending_hour' => 'required',
+            'ending_minute' => 'required',
+        ]);
 
-    // Get the ID of the active academic year
-    $activeAcademicYearId = AcademicYear::where('status', 1)->value('id');
+        // Get the ID of the active academic year
+        $activeAcademicYearId = AcademicYear::where('status', 1)->value('id');
 
-    // Create a new timetable instance with provided data
-    $timetable = Timetable::create([
-        'class_id' => $validatedData['class_id'],
-        'section_id' => $validatedData['section_id'],
-        'subject_id' => $validatedData['subject_id'],
-        'teacher_id' => $validatedData['teacher_id'],
-        'room_id' => $validatedData['room_id'],
-        'day' => $validatedData['day'],
-        'starting_hour' => $validatedData['starting_hour'],
-        'starting_minute' => $validatedData['starting_minute'],
-        'ending_hour' => $validatedData['ending_hour'],
-        'ending_minute' => $validatedData['ending_minute'],
-        'session_id' => $activeAcademicYearId,
-    ]);
+        // Create a new timetable instance with provided data
+        $timetable = Timetable::create([
+            'class_id' => $validatedData['class_id'],
+            'section_id' => $validatedData['section_id'],
+            'subject_id' => $validatedData['subject_id'],
+            'teacher_id' => $validatedData['teacher_id'],
+            'room_id' => $validatedData['room_id'],
+            'day' => $validatedData['day'],
+            'starting_hour' => $validatedData['starting_hour'],
+            'starting_minute' => $validatedData['starting_minute'],
+            'ending_hour' => $validatedData['ending_hour'],
+            'ending_minute' => $validatedData['ending_minute'],
+            'session_id' => $activeAcademicYearId,
+        ]);
 
-    // Check if timetable was created successfully
-    if ($timetable) {
-        // If created successfully, redirect back with success message
-        return redirect()->back()->with('success', 'Timetable added successfully');
-    } else {
-        // If there's an error during creation, redirect back with error message
-        return redirect()->back()->with('error', 'Failed to add timetable');
+        // Check if timetable was created successfully
+        if ($timetable) {
+            // If created successfully, redirect back with success message
+            return redirect()->back()->with('success', 'Timetable added successfully');
+        } else {
+            // If there's an error during creation, redirect back with error message
+            return redirect()->back()->with('error', 'Failed to add timetable');
+        }
     }
-}
 
 
-   public function createExam(Request $request)
-{
-    // Validate the incoming request data
-    $validatedData = $request->validate([
-        'exam_name' => 'required|string|max:255',
-        'starting_date' => 'required|date_format:d-m-Y',
-        'ending_date' => 'required|date_format:d-m-Y|after:starting_date',
-    ]);
+    public function createExam(Request $request)
+    {
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'exam_name' => 'required|string|max:255',
+            'starting_date' => 'required|date_format:d-m-Y',
+            'ending_date' => 'required|date_format:d-m-Y|after:starting_date',
+        ]);
 
-    // Format the dates to 'Y-m-d' format for MySQL
-    $starting_date = \DateTime::createFromFormat('d-m-Y', $validatedData['starting_date'])->format('Y-m-d');
-    $ending_date = \DateTime::createFromFormat('d-m-Y', $validatedData['ending_date'])->format('Y-m-d');
-    $activeAcademicYearId = AcademicYear::where('status', 1)->value('id');
-    // Create the exam using the validated data
-    $exam = Exam::create([
-        'name' => $validatedData['exam_name'],
-        'starting_date' => $starting_date,
-        'ending_date' => $ending_date,
-        'session_id' => $activeAcademicYearId,
-        // You can add more fields here if needed
-    ]);
+        // Format the dates to 'Y-m-d' format for MySQL
+        $starting_date = \DateTime::createFromFormat('d-m-Y', $validatedData['starting_date'])->format('Y-m-d');
+        $ending_date = \DateTime::createFromFormat('d-m-Y', $validatedData['ending_date'])->format('Y-m-d');
+        $activeAcademicYearId = AcademicYear::where('status', 1)->value('id');
+        // Create the exam using the validated data
+        $exam = Exam::create([
+            'name' => $validatedData['exam_name'],
+            'starting_date' => $starting_date,
+            'ending_date' => $ending_date,
+            'session_id' => $activeAcademicYearId,
+            // You can add more fields here if needed
+        ]);
 
-    // Return a response indicating success or failure
-    if ($exam) {
-        return redirect()->back()->with('success', 'Exam created successfully');
-    } else {
-        return redirect()->back()->with('error', 'Failed to create exam');
+        // Return a response indicating success or failure
+        if ($exam) {
+            return redirect()->back()->with('success', 'Exam created successfully');
+        } else {
+            return redirect()->back()->with('error', 'Failed to create exam');
+        }
     }
-}
 
-   public function createAcademicYear(Request $request)
-{
-    // Validate the incoming request data
-    $validatedData = $request->validate([
-        'name' => 'required|string|max:50',
-    ]);
+    public function createAcademicYear(Request $request)
+    {
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:50',
+        ]);
 
-    // Create the exam using the validated data
-    $academicYear = AcademicYear::create([
-        'name' => $validatedData['name'],
-    ]);
+        // Create the exam using the validated data
+        $academicYear = AcademicYear::create([
+            'name' => $validatedData['name'],
+        ]);
 
-    // Return a response indicating success or failure
-    if ($academicYear) {
-        return redirect()->back()->with('success', 'academic Year created successfully');
-    } else {
-        return redirect()->back()->with('error', 'Failed to create academic Year');
+        // Return a response indicating success or failure
+        if ($academicYear) {
+            return redirect()->back()->with('success', 'academic Year created successfully');
+        } else {
+            return redirect()->back()->with('error', 'Failed to create academic Year');
+        }
     }
-}
 
-public function updateExam(Request $request, $id)
-{
-    // Find the exam by ID
-    $exam = Exam::findOrFail($id);
+    public function updateExam(Request $request, $id)
+    {
+        // Find the exam by ID
+        $exam = Exam::findOrFail($id);
 
-    // Validate the incoming request data
-    $validatedData = $request->validate([
-        'exam_name' => 'required|string|max:255',
-        'starting_date' => 'required|date_format:d-m-Y',
-        'ending_date' => 'required|date_format:d-m-Y|after:starting_date',
-    ]);
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'exam_name' => 'required|string|max:255',
+            'starting_date' => 'required|date_format:d-m-Y',
+            'ending_date' => 'required|date_format:d-m-Y|after:starting_date',
+        ]);
 
-    // Update the exam using the validated data
-    $exam->update([
-        'name' => $validatedData['exam_name'],
-        'starting_date' => \DateTime::createFromFormat('d-m-Y', $validatedData['starting_date'])->format('Y-m-d'),
-        'ending_date' => \DateTime::createFromFormat('d-m-Y', $validatedData['ending_date'])->format('Y-m-d'),
-        // You can add more fields here if needed
-    ]);
+        // Update the exam using the validated data
+        $exam->update([
+            'name' => $validatedData['exam_name'],
+            'starting_date' => \DateTime::createFromFormat('d-m-Y', $validatedData['starting_date'])->format('Y-m-d'),
+            'ending_date' => \DateTime::createFromFormat('d-m-Y', $validatedData['ending_date'])->format('Y-m-d'),
+            // You can add more fields here if needed
+        ]);
 
-    // Return a response indicating success or failure
-    if ($exam) {
-        return redirect()->back()->with('success', 'Exam updated successfully');
-    } else {
-        return redirect()->back()->with('error', 'Failed to update exam');
+        // Return a response indicating success or failure
+        if ($exam) {
+            return redirect()->back()->with('success', 'Exam updated successfully');
+        } else {
+            return redirect()->back()->with('error', 'Failed to update exam');
+        }
     }
-}
 
-public function deleteExam($id)
-{
-    $exam = Exam::findOrFail($id);
-    $exam->delete();
+    public function deleteExam($id)
+    {
+        $exam = Exam::findOrFail($id);
+        $exam->delete();
 
-    // Optionally, you can redirect to a specific route after deletion
-    return redirect()->back()->with('success', 'Exam deleted successfully');
-}
+        // Optionally, you can redirect to a specific route after deletion
+        return redirect()->back()->with('success', 'Exam deleted successfully');
+    }
 
-public function activateAcademicYear(Request $request)
-{
-    $selectedSessionId = $request->id;
+    public function activateAcademicYear(Request $request)
+    {
+        $selectedSessionId = $request->id;
 
-    // Update status of all academic years to 0
-    AcademicYear::where('status', 1)->update(['status' => 0]);
+        // Update status of all academic years to 0
+        AcademicYear::where('status', 1)->update(['status' => 0]);
 
-    // Set the status of the selected academic year to 1
-    $academicYear = AcademicYear::findOrFail($selectedSessionId);
-    $academicYear->status = 1;
-    $academicYear->save();
+        // Set the status of the selected academic year to 1
+        $academicYear = AcademicYear::findOrFail($selectedSessionId);
+        $academicYear->status = 1;
+        $academicYear->save();
 
-    return redirect()->back()->with('success', 'Academic Year Activated');
-}
-
+        return redirect()->back()->with('success', 'Academic Year Activated');
+    }
 }
